@@ -1,0 +1,1384 @@
+{
+  "fixture": true,
+  "id": "2026-11-23-pm",
+  "date": "2026-11-23",
+  "slot": "evening",
+  "publishedAt": "2026-11-23T17:00:00+05:30",
+  "lead": [
+    "rbi-holds-repo-rate",
+    "states-dispute-gst-compensation-formula",
+    "cyclone-landfall-odisha-coast",
+    "geneva-talks-on-shipping-emissions-levy"
+  ],
+  "sections": [
+    {
+      "id": "india",
+      "name": "India",
+      "storyIds": [
+        "states-dispute-gst-compensation-formula",
+        "cyclone-landfall-odisha-coast",
+        "supreme-court-digital-listing-of-cases",
+        "assam-tea-wage-agreement"
+      ]
+    },
+    {
+      "id": "world",
+      "name": "World",
+      "storyIds": [
+        "geneva-talks-on-shipping-emissions-levy",
+        "eu-steel-quota-talks",
+        "uk-rail-strike-ballot-opens"
+      ]
+    },
+    {
+      "id": "business",
+      "name": "Business",
+      "storyIds": [
+        "rbi-holds-repo-rate",
+        "sensex-ends-lower-on-profit-booking",
+        "msme-credit-guarantee-scheme-extended"
+      ]
+    },
+    {
+      "id": "science-tech",
+      "name": "Science & Tech",
+      "storyIds": [
+        "isro-test-flight-crew-module-recovery",
+        "gujarat-chip-pilot-line-begins-operations",
+        "indic-language-model-released-open-weights"
+      ]
+    },
+    {
+      "id": "sports",
+      "name": "Sports",
+      "storyIds": [
+        "india-australia-second-test-day-three",
+        "bengaluru-fc-beat-goa-in-isl"
+      ]
+    },
+    {
+      "id": "health-environment",
+      "name": "Health & Environment",
+      "storyIds": [
+        "delhi-air-quality-severe-grade",
+        "western-ghats-tahr-count"
+      ]
+    },
+    {
+      "id": "bengaluru",
+      "name": "Bengaluru",
+      "storyIds": [
+        "namma-metro-pink-line-trial-runs",
+        "bellandur-lake-froth-restoration",
+        "whitefield-cauvery-supply-cut"
+      ]
+    }
+  ],
+  "stories": [
+    {
+      "id": "rbi-holds-repo-rate",
+      "section": "business",
+      "rank": 1,
+      "headline": "RBI monetary policy committee keeps repo rate at 5.25% and holds its stance as inflation eases",
+      "dek": "The central bank left borrowing costs unchanged for the third straight meeting.",
+      "summary": "The Reserve Bank of India's monetary policy committee kept the repo rate at 5.25 per cent on Monday and retained a neutral stance. Retail inflation has eased for four months, and the committee said it wanted more data on food prices before acting.",
+      "body": [
+        "The Reserve Bank of India's monetary policy committee voted unanimously on Monday to keep the repo rate at 5.25 per cent, leaving the benchmark lending rate unchanged for a third consecutive meeting. The committee also voted to retain its neutral policy stance, according to [the statement](https://example.com/rbi/policy-statement-nov) released in Mumbai after a three-day meeting.",
+        "Retail inflation, which the committee tracks closely, was 2.9 per cent in October, down from 3.4 per cent in September. Food prices, which account for nearly half of the consumer price basket, rose more slowly than in the same month last year as vegetable prices cooled after the monsoon.",
+        "The central bank left its growth forecast for the current financial year at 6.8 per cent. It said manufacturing activity and rural consumption were holding up, while export orders remained uneven because of weak demand in some advanced economies. The central bank said the forecast assumed a normal winter crop and stable global oil prices over the period.",
+        "Analysts polled by news agencies before the announcement had been almost evenly split between a pause and a cut of 25 basis points. Those expecting a cut pointed to the inflation readings. Those expecting a hold said the committee would prefer to see how winter vegetable prices behaved first.",
+        "Banks said the decision meant home-loan and vehicle-loan rates would stay where they were for now. Several lenders have already passed on earlier cuts to borrowers whose loans are linked to the repo rate, and deposit rates have drifted lower over the past year."
+      ],
+      "keyFacts": [
+        "The repo rate stayed at 5.25 per cent.",
+        "The committee's vote was unanimous.",
+        "October retail inflation was 2.9 per cent.",
+        "The growth forecast for the financial year stayed at 6.8 per cent."
+      ],
+      "background": "The committee has cut the repo rate by a cumulative 100 basis points since early last year. It moved to a neutral stance in the middle of this year.",
+      "whyItMatters": "Loan and deposit rates across the banking system take their cue from the repo rate, so a pause means monthly instalments are unlikely to fall for now.",
+      "dateline": "MUMBAI",
+      "image": {
+        "url": "https://picsum.photos/seed/repo/1200/800",
+        "credit": "Business Standard",
+        "sourceUrl": "https://example.com/business-standard/rbi-holds-repo-rate",
+        "alt": "The Reserve Bank of India's headquarters building in Mumbai on a clear morning",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Business Standard",
+          "title": "RBI monetary policy committee keeps repo rate at 5.25% and holds its stance as inflation eases",
+          "url": "https://example.com/business-standard/rbi-holds-repo-rate",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Mint",
+          "title": "The central bank left borrowing costs unchanged for the third straight meeting",
+          "url": "https://example.com/mint/rbi-holds-repo-rate",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Hindustan Times",
+          "title": "RBI monetary policy committee keeps repo rate at 5.25% and holds its: key points",
+          "url": "https://example.com/hindustan-times/rbi-holds-repo-rate",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Reuters",
+          "title": "What we know so far | The central bank left borrowing costs unchanged for the third straight meeting",
+          "url": "https://example.com/reuters/rbi-holds-repo-rate",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "The Hindu",
+          "title": "RBI monetary policy committee keeps repo rate at 5.25% and holds its stance as inflation eases",
+          "url": "https://example.com/the-hindu/rbi-holds-repo-rate",
+          "leaning": "centre-left"
+        }
+      ],
+      "tags": [
+        "rbi",
+        "repo-rate",
+        "inflation"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "states-dispute-gst-compensation-formula",
+      "section": "india",
+      "rank": 2,
+      "headline": "Several states reject Centre's proposed formula for sharing GST revenue shortfall",
+      "dek": "A group of finance ministers said the formula would leave them worse off; the Union government said it was revenue-neutral.",
+      "summary": "Finance ministers from six states walked out of a pre-meeting on Monday after the Union government presented a new formula for covering GST revenue shortfalls. Officials from the Centre said the formula was revenue-neutral and would be refined.",
+      "body": [
+        "Finance ministers from six states left a preparatory meeting of the Goods and Services Tax Council on Monday after the Union finance ministry presented a new formula for covering shortfalls in state GST collections. The council is due to meet on Thursday, and officials said the formula had not been put to a vote.",
+        "Under the proposal, states whose collections fall below a projected baseline would receive compensation from a pooled fund rather than from borrowings backed by the Centre. The fund would be financed by a levy on luxury goods and tobacco, which officials said would raise about 45,000 crore rupees a year.",
+        "The six states, which are governed by opposition parties and which together account for about a third of GST collections, said the baseline was set too low. Their representatives said the formula would shift risk from the Centre to the states, and asked for a detailed model to be shared in writing.",
+        "Union finance ministry officials said the formula had been tested against five years of data and was designed to leave total transfers unchanged. They said states would receive the full model before Thursday and that the baseline could be adjusted if the council agreed.",
+        "Independent tax economists said the dispute turned on assumptions about future growth. A baseline that assumes high growth makes shortfalls more likely, while a lower one reduces the Centre's exposure. The council usually decides by consensus, though its rules allow a vote weighted by state size."
+      ],
+      "keyFacts": [
+        "Six states left the preparatory meeting.",
+        "The GST Council meets on Thursday.",
+        "The pooled fund would raise about 45,000 crore rupees a year, officials said.",
+        "The council's rules allow a weighted vote if consensus fails."
+      ],
+      "background": "The original five-year compensation arrangement ended after the transition to the GST regime. Since then, states have asked for a durable mechanism.",
+      "whyItMatters": "GST accounts for a large share of state revenue, and the way shortfalls are covered affects how much states can spend on salaries, roads and welfare.",
+      "perspectives": [
+        {
+          "label": "Government and supporters",
+          "summary": "The Union government said the formula is revenue-neutral and protects states from sudden drops in collections. Supporters said a pooled fund is more predictable than borrowing.",
+          "outlets": [
+            "Swarajya",
+            "Firstpost",
+            "News18"
+          ]
+        },
+        {
+          "label": "Opposition and critics",
+          "summary": "Opposition-ruled states said the baseline is set too low and shifts risk onto them. They asked for the underlying model to be published before any vote.",
+          "outlets": [
+            "The Hindu",
+            "Scroll",
+            "The Wire"
+          ]
+        },
+        {
+          "label": "Independent analysts",
+          "summary": "Tax economists said the outcome depends on growth assumptions that neither side has fully disclosed. Several said the dispute could be narrowed by agreeing on a transparent baseline.",
+          "outlets": [
+            "The Print",
+            "Mint",
+            "Business Standard"
+          ]
+        }
+      ],
+      "dateline": "NEW DELHI",
+      "image": {
+        "url": "https://picsum.photos/seed/council/1200/800",
+        "credit": "The Hindu",
+        "sourceUrl": "https://example.com/the-hindu/states-dispute-gst-compensation-formula",
+        "alt": "Finance ministers arriving at the GST Council meeting venue in New Delhi",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "The Hindu",
+          "title": "Several states reject Centre's proposed formula for sharing GST revenue shortfall",
+          "url": "https://example.com/the-hindu/states-dispute-gst-compensation-formula",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "Indian Express",
+          "title": "A group of finance ministers said the formula would leave them worse off; the Union government said it was revenue-neutral",
+          "url": "https://example.com/indian-express/states-dispute-gst-compensation-formula",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "The Print",
+          "title": "Several states reject Centre's proposed formula for sharing GST: key points",
+          "url": "https://example.com/the-print/states-dispute-gst-compensation-formula",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Swarajya",
+          "title": "What we know so far | A group of finance ministers said the formula would leave them worse off; the Union government said it was revenue-neutral",
+          "url": "https://example.com/swarajya/states-dispute-gst-compensation-formula",
+          "leaning": "right"
+        },
+        {
+          "outlet": "OpIndia",
+          "title": "Several states reject Centre's proposed formula for sharing GST revenue shortfall",
+          "url": "https://example.com/opindia/states-dispute-gst-compensation-formula",
+          "leaning": "right"
+        }
+      ],
+      "tags": [
+        "gst",
+        "centre-state",
+        "finance"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "cyclone-landfall-odisha-coast",
+      "section": "india",
+      "rank": 3,
+      "headline": "Cyclone makes landfall on Odisha coast; 280,000 people moved to shelters",
+      "dek": "Officials said the storm crossed the coast near Paradip with winds of up to 110 km/h.",
+      "summary": "A cyclonic storm crossed the Odisha coast near Paradip on Monday afternoon with winds of up to 110 km/h. State officials said about 280,000 people had been moved to shelters and that assessments of damage were still under way.",
+      "body": [
+        "A cyclonic storm crossed the Odisha coast near Paradip at about 3.30 pm on Monday, with sustained winds of 100 to 110 km/h, the India Meteorological Department said. The storm was expected to weaken into a depression over the next 12 hours as it moved inland towards Chhattisgarh.",
+        "The Odisha government said about 280,000 people had been moved from low-lying areas in five coastal districts to cyclone shelters and schools. Meera Panda, a spokesperson for the state's special relief commissioner, said food and drinking water had been stocked at all shelters.",
+        "Power lines were down in parts of Jagatsinghpur and Kendrapara districts, and mobile networks were disrupted in several blocks. Rail services on the Howrah-Chennai route were suspended for the afternoon, and flights to Bhubaneswar were cancelled until Tuesday morning. Officials said repair crews were waiting for the wind to drop below 50 km/h before they could climb poles or reach damaged lines.",
+        "National Disaster Response Force teams, 24 in all, were deployed along the coast. Fishing boats had been called back to harbour on Saturday, and officials said no fishing crews were reported missing as of Monday evening. The state fisheries department said it had also asked fishermen's cooperatives to move boats and nets above the high-tide line on beaches along the coast.",
+        "Officials said they would not be able to give a full account of crop and property damage until the rain eased. Heavy to very heavy rain was forecast over the next 24 hours for coastal and central districts, with a risk of flooding in river basins."
+      ],
+      "keyFacts": [
+        "Landfall was near Paradip at about 3.30 pm.",
+        "Winds reached 110 km/h.",
+        "About 280,000 people were moved to shelters.",
+        "24 NDRF teams were deployed."
+      ],
+      "background": "Odisha has built a network of cyclone shelters since the 1999 super cyclone, which killed about 10,000 people. Evacuations of this scale are now routine.",
+      "whyItMatters": "Heavy rain after landfall poses a flood risk in river basins, and the state's early response will shape how quickly power and roads are restored.",
+      "dateline": "BHUBANESWAR",
+      "developing": true,
+      "image": {
+        "url": "https://picsum.photos/seed/cyclone/1200/800",
+        "credit": "NDTV",
+        "sourceUrl": "https://example.com/ndtv/cyclone-landfall-odisha-coast",
+        "alt": "Waves breaking over a sea wall on the Odisha coast as dark clouds gathered",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "NDTV",
+          "title": "Cyclone makes landfall on Odisha coast; 280,000 people moved to shelters",
+          "url": "https://example.com/ndtv/cyclone-landfall-odisha-coast",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "The Hindu",
+          "title": "Officials said the storm crossed the coast near Paradip with winds of up to 110 km/h",
+          "url": "https://example.com/the-hindu/cyclone-landfall-odisha-coast",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "Times of India",
+          "title": "Cyclone makes landfall on Odisha coast; 280,000 people moved to: key points",
+          "url": "https://example.com/times-of-india/cyclone-landfall-odisha-coast",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Indian Express",
+          "title": "What we know so far | Officials said the storm crossed the coast near Paradip with winds of up to 110 km/h",
+          "url": "https://example.com/indian-express/cyclone-landfall-odisha-coast",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "cyclone",
+        "odisha",
+        "disaster-response"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "geneva-talks-on-shipping-emissions-levy",
+      "section": "world",
+      "rank": 4,
+      "headline": "Delegates from 60 countries open talks on a global levy on shipping emissions",
+      "dek": "Negotiators said they hoped to settle the outline of a fee on ship fuel by Friday.",
+      "summary": "Delegates from about 60 countries began a week of talks in Geneva on Monday on a proposed levy on greenhouse gas emissions from international shipping. Negotiators said the scale of the fee and how the money is spent remained undecided.",
+      "body": [
+        "Delegates from about 60 countries opened a week of talks in Geneva on Monday on a proposed levy on greenhouse gas emissions from international shipping. The talks are being held under the International Maritime Organization's framework, and negotiators said they hoped to settle the outline of a fee on ship fuel by Friday.",
+        "Under the draft text, ships burning fossil fuel would pay a charge for each tonne of carbon dioxide they emit. Rates in the draft range from $20 to $150 a tonne, and the largest gap between delegations is over where in that range to begin and how quickly to raise the rate.",
+        "Pacific island states and several European governments said the fee should start at the higher end of the range. A group of countries that rely heavily on shipping for exports, including some in South America and Southeast Asia, said a high initial rate would raise freight costs and hurt their economies.",
+        "A second dispute concerns the revenue. The draft would send part of the money to a fund to help developing countries buy cleaner fuels and upgrade ports, but delegates have not agreed on the share. Shipping industry groups said they would accept a levy if it replaced a patchwork of regional schemes.",
+        "Shipping accounts for roughly 3 per cent of global greenhouse gas emissions, according to estimates from the IMO. A final agreement would need to be ratified by member states, a process that officials said could take until at least 2028."
+      ],
+      "keyFacts": [
+        "About 60 countries are taking part.",
+        "The draft rates range from $20 to $150 a tonne.",
+        "Shipping produces about 3 per cent of global emissions.",
+        "Ratification could take until 2028."
+      ],
+      "background": "Member states agreed in principle last year to move shipping towards net-zero emissions by around 2050. A price on carbon was one of several measures under discussion.",
+      "whyItMatters": "A uniform global fee would replace a growing set of regional rules, and its revenue could help poorer countries pay for cleaner ships.",
+      "dateline": "GENEVA",
+      "image": {
+        "url": "https://picsum.photos/seed/shipping/1200/800",
+        "credit": "Wikimedia Commons / CC BY-SA 4.0",
+        "sourceUrl": "https://example.com/wikimedia-commons/geneva-talks-on-shipping-emissions-levy",
+        "alt": "A container ship moving through calm water past a port crane at dusk",
+        "width": 1200,
+        "height": 800,
+        "kind": "wikimedia"
+      },
+      "sources": [
+        {
+          "outlet": "Reuters",
+          "title": "Delegates from 60 countries open talks on a global levy on shipping emissions",
+          "url": "https://example.com/reuters/geneva-talks-on-shipping-emissions-levy",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "BBC",
+          "title": "Negotiators said they hoped to settle the outline of a fee on ship fuel by Friday",
+          "url": "https://example.com/bbc/geneva-talks-on-shipping-emissions-levy",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "The Guardian",
+          "title": "Delegates from 60 countries open talks on a global levy on shipping: key points",
+          "url": "https://example.com/the-guardian/geneva-talks-on-shipping-emissions-levy",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "Financial Times",
+          "title": "What we know so far | Negotiators said they hoped to settle the outline of a fee on ship fuel by Friday",
+          "url": "https://example.com/financial-times/geneva-talks-on-shipping-emissions-levy",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "shipping",
+        "emissions",
+        "imo"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "india-australia-second-test-day-three",
+      "section": "sports",
+      "rank": 5,
+      "headline": "India lead by 142 runs at stumps on day three of second Test against Australia",
+      "dek": "The visitors lost four wickets in the final session after a century stand in the second innings.",
+      "summary": "India ended day three of the second Test in Adelaide 142 runs ahead with six wickets in hand. A century partnership for the third wicket gave the visitors control before Australia's spinners took four wickets late in the day.",
+      "body": [
+        "India ended the third day of the second Test against Australia in Adelaide on 238 for 4 in their second innings, a lead of 142 runs. The visitors had trailed by 96 on the first innings but batted for most of the day to turn the match around.",
+        "The third-wicket pair added 121 runs in 34 overs, the highest stand of the match so far. Both batters left balls outside off stump on a pitch that offered little movement for the seamers in the afternoon, and scored mainly through the leg side.",
+        "Australia's off-spinner took three of the four wickets that fell after tea, as the pitch began to turn and bounce unevenly. India lost 4 for 52 in 15 overs, which brought the hosts back into the contest before stumps. Australia's fielders held two catches in the slips cordon during the period, but dropped a third chance when the batter had scored 61.",
+        "India's captain said the team had planned to bat for at least a day and a half in the second innings. Australia's coach said his side needed to take the remaining six wickets quickly on Tuesday morning to keep the target below 250.",
+        "The forecast for Tuesday was clear, with temperatures expected to reach 31 degrees Celsius. The pitch curator said the surface had dried out and would continue to take turn, which could make batting harder as the match went on. Team officials said the playing surface would be rolled before the start of play on Tuesday, as is standard on the fourth morning of a Test."
+      ],
+      "keyFacts": [
+        "India led by 142 runs at stumps.",
+        "The third-wicket stand was worth 121 runs.",
+        "India lost 4 for 52 after tea.",
+        "Six second-innings wickets remained."
+      ],
+      "background": "The series is level at 0-0 after a drawn first Test in Perth that lost most of the fourth day to rain.",
+      "whyItMatters": "The result of this Test could decide the series, with three matches left to play.",
+      "dateline": "ADELAIDE",
+      "image": {
+        "url": "https://picsum.photos/seed/adelaide/1200/800",
+        "credit": "Indian Express",
+        "sourceUrl": "https://example.com/indian-express/india-australia-second-test-day-three",
+        "alt": "Two batters talking in the middle of a floodlit cricket ground",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "video": {
+        "youtubeId": "jNQXAC9IVRw",
+        "title": "Day three highlights: India build lead in Adelaide",
+        "channel": "Test Cricket Daily"
+      },
+      "sources": [
+        {
+          "outlet": "Indian Express",
+          "title": "India lead by 142 runs at stumps on day three of second Test against Australia",
+          "url": "https://example.com/indian-express/india-australia-second-test-day-three",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Hindustan Times",
+          "title": "The visitors lost four wickets in the final session after a century stand in the second innings",
+          "url": "https://example.com/hindustan-times/india-australia-second-test-day-three",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Times of India",
+          "title": "India lead by 142 runs at stumps on day three of second Test against: key points",
+          "url": "https://example.com/times-of-india/india-australia-second-test-day-three",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Firstpost",
+          "title": "What we know so far | The visitors lost four wickets in the final session after a century stand in the second innings",
+          "url": "https://example.com/firstpost/india-australia-second-test-day-three",
+          "leaning": "centre-right"
+        }
+      ],
+      "tags": [
+        "cricket",
+        "test-cricket",
+        "india-australia"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "isro-test-flight-crew-module-recovery",
+      "section": "science-tech",
+      "rank": 6,
+      "headline": "ISRO recovers crew module after uncrewed test flight; navy ship brings capsule to port",
+      "dek": "The capsule splashed down in the Bay of Bengal about 11 minutes after launch.",
+      "summary": "ISRO said its crew module splashed down in the Bay of Bengal on Monday after an uncrewed test flight and was recovered by a naval vessel. Engineers said the parachutes opened as planned and the capsule was in good condition.",
+      "body": [
+        "The Indian Space Research Organisation said its crew module splashed down in the Bay of Bengal on Monday morning, about 11 minutes after lifting off from Sriharikota on a test rocket. The module was recovered by the naval ship *INS Jalashakti* and was being taken to Chennai port for examination.",
+        "The flight tested the escape system that is meant to pull a crew capsule away from a failing rocket. The rocket was launched to a height of about 17 kilometres, and the module separated at the planned point before descending under three main parachutes.",
+        "ISRO chairman's office said in a statement that all primary objectives had been met and that the parachutes deployed in the planned sequence. Engineers were studying data from more than 300 sensors on board the module, including readings of temperature and acceleration during re-entry.",
+        "The test is one of several that ISRO has said must be completed before it attempts a flight with astronauts on board. Officials have said a first crewed mission could happen in the second half of next year, though a date has not been fixed.",
+        "Meera Nambiar, a former ISRO engineer who now works for a private aerospace company, said the recovery of the module in good condition would allow engineers to inspect the heat shield. She said that was usually the main source of delay in programmes of this kind."
+      ],
+      "keyFacts": [
+        "The module splashed down about 11 minutes after launch.",
+        "The escape system was tested at about 17 km altitude.",
+        "The module was recovered by a naval ship.",
+        "A crewed flight is possible in late 2027."
+      ],
+      "background": "ISRO has flown several uncrewed test missions as part of its human spaceflight programme, which was announced in 2018.",
+      "whyItMatters": "The recovered capsule gives engineers a chance to inspect the heat shield and parachutes before a crewed flight is scheduled.",
+      "dateline": "SRIHARIKOTA",
+      "image": {
+        "url": "https://picsum.photos/seed/capsule/1200/800",
+        "credit": "The Hindu",
+        "sourceUrl": "https://example.com/the-hindu/isro-test-flight-crew-module-recovery",
+        "alt": "A white and orange crew module bobbing in rough water beside a naval boat",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "The Hindu",
+          "title": "ISRO recovers crew module after uncrewed test flight; navy ship brings capsule to port",
+          "url": "https://example.com/the-hindu/isro-test-flight-crew-module-recovery",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "The Print",
+          "title": "The capsule splashed down in the Bay of Bengal about 11 minutes after launch",
+          "url": "https://example.com/the-print/isro-test-flight-crew-module-recovery",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Deccan Herald",
+          "title": "ISRO recovers crew module after uncrewed test flight; navy ship: key points",
+          "url": "https://example.com/deccan-herald/isro-test-flight-crew-module-recovery",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "The Verge",
+          "title": "What we know so far | The capsule splashed down in the Bay of Bengal about 11 minutes after launch",
+          "url": "https://example.com/the-verge/isro-test-flight-crew-module-recovery"
+        }
+      ],
+      "tags": [
+        "isro",
+        "human-spaceflight",
+        "space"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "delhi-air-quality-severe-grade",
+      "section": "health-environment",
+      "rank": 7,
+      "headline": "Delhi's air quality falls to 'severe' as calm winds trap smoke and dust",
+      "dek": "The city's average air quality index reached 431 on Monday evening.",
+      "summary": "Delhi's air quality index reached 431 on Monday evening, which falls in the 'severe' category, according to the Central Pollution Control Board. Calm winds and low temperatures kept smoke and dust close to the ground.",
+      "body": [
+        "Delhi's average air quality index reached 431 on Monday evening, in the 'severe' category on the Central Pollution Control Board's scale, up from 378 on Sunday. The board said 14 of the city's monitoring stations recorded readings above 450, the highest being in the Anand Vihar area in the east of the city.",
+        "The Indian Meteorological Department said wind speeds had dropped below 4 km/h and morning temperatures were about 9 degrees Celsius. A layer of cooler air close to the ground was holding in smoke from vehicles, construction and stubble fires in neighbouring states, the department said.",
+        "Satellite data showed fewer fires in Punjab and Haryana than on the same date last year, but the board's source analysis said burning still contributed about 18 per cent of the city's fine particle pollution on Monday. Vehicle exhaust contributed about 22 per cent.",
+        "The commission for air quality management said it would meet on Tuesday to decide whether to impose stricter restrictions on construction and on diesel generators. Schools in the city had already shifted to outdoor-activity limits for children, the Delhi government said.",
+        "Doctors at several city hospitals said they had seen more patients with breathing difficulty and eye irritation over the past week. A forecast from the weather department said conditions were unlikely to improve until a western disturbance brought winds later in the week."
+      ],
+      "keyFacts": [
+        "The AQI was 431 on Monday evening.",
+        "14 stations recorded readings above 450.",
+        "Wind speeds were below 4 km/h.",
+        "The air quality commission meets on Tuesday."
+      ],
+      "background": "",
+      "dateline": "NEW DELHI",
+      "image": {
+        "url": "https://picsum.photos/seed/smog/1200/800",
+        "credit": "Hindustan Times",
+        "sourceUrl": "https://example.com/hindustan-times/delhi-air-quality-severe-grade",
+        "alt": "Commuters walking through grey haze near a Delhi flyover at dusk",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Hindustan Times",
+          "title": "Delhi's air quality falls to 'severe' as calm winds trap smoke and dust",
+          "url": "https://example.com/hindustan-times/delhi-air-quality-severe-grade",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Times of India",
+          "title": "The city's average air quality index reached 431 on Monday evening",
+          "url": "https://example.com/times-of-india/delhi-air-quality-severe-grade",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Indian Express",
+          "title": "Delhi's air quality falls to 'severe' as calm winds trap smoke and: key points",
+          "url": "https://example.com/indian-express/delhi-air-quality-severe-grade",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Scroll",
+          "title": "What we know so far | The city's average air quality index reached 431 on Monday evening",
+          "url": "https://example.com/scroll/delhi-air-quality-severe-grade",
+          "leaning": "left"
+        }
+      ],
+      "tags": [
+        "delhi",
+        "air-quality",
+        "pollution"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "namma-metro-pink-line-trial-runs",
+      "section": "bengaluru",
+      "rank": 8,
+      "headline": "Namma Metro begins trial runs on elevated stretch of Pink Line",
+      "dek": "The first trains ran between Kalena Agrahara and Tavarekere without passengers.",
+      "summary": "Namma Metro began trial runs on the elevated section of its Pink Line on Monday, with empty trains travelling between Kalena Agrahara and Tavarekere. Officials said safety inspections would follow before passenger service could begin.",
+      "body": [
+        "Bangalore Metro Rail Corporation began trial runs on the elevated stretch of the Pink Line on Monday morning, with empty six-coach trains running between Kalena Agrahara and Tavarekere. The 7.5-kilometre section has seven stations and is meant to link the southern suburbs to the city's wider metro network.",
+        "Trains ran at speeds of up to 40 km/h on Monday and will be tested at higher speeds in the coming weeks, a corporation official said. Engineers are checking the signalling system, the power supply and the brakes before the stretch is handed over for safety certification.",
+        "The line was originally due to open last year, but the corporation said delays in handing over land for two stations and a shortage of track components had pushed back the schedule. Officials said they hoped passenger service could begin early next year if the safety inspection went smoothly.",
+        "Residents of Bannerghatta Road, which the line will serve, said they hoped it would reduce travel time to the city centre. A trip by road between Kalena Agrahara and the Central Business District takes about 75 minutes at peak hours, according to a corporation survey.",
+        "The full Pink Line is planned to run 21 kilometres underground from Kalena Agrahara to Nagawara, with an elevated section at the southern end. The underground stretch is not expected to be ready for at least another year. The underground stretch, which has 18 stations, includes a long section beneath the Cantonment area where tunnelling is still under way."
+      ],
+      "keyFacts": [
+        "Trial runs covered a 7.5 km elevated stretch.",
+        "The section has seven stations.",
+        "Trains ran at up to 40 km/h.",
+        "Passenger service could start early next year."
+      ],
+      "background": "The Pink Line is one of two lines under construction in the second phase of the city's metro network.",
+      "whyItMatters": "The line will connect several southern neighbourhoods that currently rely on buses and cabs.",
+      "dateline": "BENGALURU",
+      "image": {
+        "url": "https://picsum.photos/seed/pinkline/1200/800",
+        "credit": "Deccan Herald",
+        "sourceUrl": "https://example.com/deccan-herald/namma-metro-pink-line-trial-runs",
+        "alt": "A metro train on an elevated viaduct above a busy road in south Bengaluru",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Deccan Herald",
+          "title": "Namma Metro begins trial runs on elevated stretch of Pink Line",
+          "url": "https://example.com/deccan-herald/namma-metro-pink-line-trial-runs",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "The Hindu",
+          "title": "The first trains ran between Kalena Agrahara and Tavarekere without passengers",
+          "url": "https://example.com/the-hindu/namma-metro-pink-line-trial-runs",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "Times of India",
+          "title": "Namma Metro begins trial runs on elevated stretch of Pink Line: key points",
+          "url": "https://example.com/times-of-india/namma-metro-pink-line-trial-runs",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "News18",
+          "title": "What we know so far | The first trains ran between Kalena Agrahara and Tavarekere without passengers",
+          "url": "https://example.com/news18/namma-metro-pink-line-trial-runs"
+        }
+      ],
+      "tags": [
+        "namma-metro",
+        "transport",
+        "pink-line"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "bellandur-lake-froth-restoration",
+      "section": "bengaluru",
+      "rank": 9,
+      "headline": "Froth returns to Bellandur Lake after weekend rain; civic body begins desilting work",
+      "dek": "Officials said treatment plants upstream were running below capacity.",
+      "summary": "White froth covered stretches of Bellandur Lake on Sunday and Monday after heavy rain flushed detergent and untreated waste into the water. The BBMP said it had begun desilting work at two inlets.",
+      "body": [
+        "White froth covered parts of Bellandur Lake on Sunday and Monday after heavy rain over the weekend washed detergent and untreated waste from nearby neighbourhoods into the water. Residents of Varthur and Panathur said clumps of foam drifted onto the roads in the early hours of Monday.",
+        "The BBMP said it had begun removing silt from two inlets where drains from Koramangala and HSR Layout enter the lake. A civic official said desilting at the inlets would take about three weeks and that crews were also clearing floating waste with booms.",
+        "The Karnataka State Pollution Control Board said sewage treatment plants on the lake's catchment were operating at about 70 per cent of capacity because of power cuts and a pump failure at one site. Board officials said they had asked the water utility for a repair schedule.",
+        "Lake activists said the froth had been appearing for more than a decade and that sewage inflows from unconnected buildings were the main cause. A citizens' group has asked the civic body to publish a list of buildings that discharge into storm drains.",
+        "The state's lake development authority said it had approved a plan to build a wetland-style filter at the main inlet. The first phase, worth 42 crore rupees, is scheduled to be tendered next month, according to an authority official. Officials said the plan also calls for planting reeds along the edge to help trap pollutants before they enter the main body of water."
+      ],
+      "keyFacts": [
+        "Froth was reported on Sunday and Monday.",
+        "Desilting is under way at two inlets.",
+        "Treatment plants were at about 70 per cent capacity.",
+        "A 42 crore rupee filter plan is to be tendered next month."
+      ],
+      "background": "Bellandur is the city's largest lake and has caught fire and frothed several times in the past decade because of pollution.",
+      "whyItMatters": "The lake's condition affects the health of residents in nearby neighbourhoods, and officials say fixing it depends on stopping sewage at its source.",
+      "dateline": "BENGALURU",
+      "image": {
+        "url": "https://example.invalid/missing-froth.jpg",
+        "credit": "Deccan Herald",
+        "sourceUrl": "https://example.com/deccan-herald/bellandur-lake-froth-restoration",
+        "alt": "White foam floating on the surface of a lake with apartment blocks in the background",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Deccan Herald",
+          "title": "Froth returns to Bellandur Lake after weekend rain; civic body begins desilting work",
+          "url": "https://example.com/deccan-herald/bellandur-lake-froth-restoration",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "The Hindu",
+          "title": "Officials said treatment plants upstream were running below capacity",
+          "url": "https://example.com/the-hindu/bellandur-lake-froth-restoration",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "Indian Express",
+          "title": "Froth returns to Bellandur Lake after weekend rain; civic body begins: key points",
+          "url": "https://example.com/indian-express/bellandur-lake-froth-restoration",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "bellandur",
+        "lakes",
+        "civic"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "eu-steel-quota-talks",
+      "section": "world",
+      "rank": 10,
+      "headline": "EU and trading partners fail to agree on steel import quota; talks to resume next month",
+      "dek": "Negotiators said they remained apart on how to measure the carbon content of imports.",
+      "summary": "The European Union and several steel-exporting countries ended two days of talks in Brussels without agreeing on a new quota system for steel imports. The two sides said they would resume discussions in December.",
+      "body": [
+        "The European Union and several steel-exporting countries ended two days of talks in Brussels on Monday without agreeing on a new quota system for steel imports. European Commission officials said the two sides would meet again in December and that they still hoped to conclude a deal before the current arrangement lapses at the end of June.",
+        "The main disagreement concerned a proposed requirement that importers report the carbon emissions produced in making the steel. Exporting countries said the method of measurement proposed by the Commission was complicated and favoured European producers, which are already subject to an emissions trading scheme.",
+        "The proposal would cut tariff-free quotas by about 47 per cent from their current level. Imports above the quota would face a 50 per cent tariff. European steelmakers, which have shut several blast furnaces in the past three years, have lobbied for tighter limits.",
+        "India, which exported about 4 million tonnes of steel to the EU last year, has asked for a separate quota allocation, according to officials familiar with the talks. A commerce ministry official said negotiations on the carbon reporting rules were continuing in parallel with free trade talks.",
+        "Steel users, including carmakers and construction firms, said tighter quotas could raise their costs. A trade group for European manufacturers said it had asked the Commission to leave room for imports of specialised grades that are not made in the bloc."
+      ],
+      "keyFacts": [
+        "Talks lasted two days.",
+        "The proposal would cut quotas by about 47 per cent.",
+        "Over-quota imports would face a 50 per cent tariff.",
+        "The current arrangement lapses at the end of June."
+      ],
+      "background": "The EU introduced steel safeguard measures in 2018 after global overcapacity depressed prices. They have been extended several times.",
+      "whyItMatters": "Higher costs for steel imports would affect exporters in India and elsewhere, and users of steel in Europe.",
+      "dateline": "BRUSSELS",
+      "image": {
+        "url": "https://picsum.photos/seed/steel/1200/800",
+        "credit": "Financial Times",
+        "sourceUrl": "https://example.com/financial-times/eu-steel-quota-talks",
+        "alt": "Steel coils stacked in a warehouse at a European port",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Financial Times",
+          "title": "EU and trading partners fail to agree on steel import quota; talks to resume next month",
+          "url": "https://example.com/financial-times/eu-steel-quota-talks",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Reuters",
+          "title": "Negotiators said they remained apart on how to measure the carbon content of imports",
+          "url": "https://example.com/reuters/eu-steel-quota-talks",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Mint",
+          "title": "EU and trading partners fail to agree on steel import quota; talks to: key points",
+          "url": "https://example.com/mint/eu-steel-quota-talks",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Business Standard",
+          "title": "What we know so far | Negotiators said they remained apart on how to measure the carbon content of imports",
+          "url": "https://example.com/business-standard/eu-steel-quota-talks",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "eu",
+        "trade",
+        "steel"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "sensex-ends-lower-on-profit-booking",
+      "section": "business",
+      "rank": 11,
+      "headline": "Sensex ends 412 points lower as investors book profits in banks and IT shares",
+      "dek": "The benchmark index fell 0.5 per cent after hitting a record high last week.",
+      "summary": "The BSE Sensex closed 412 points, or 0.5 per cent, lower on Monday as investors sold shares in banks and technology companies. The index had touched a record high last week.",
+      "body": [
+        "The BSE Sensex closed 412 points, or 0.5 per cent, lower at 84,906 on Monday, as investors booked profits in banking and information technology shares. The broader NSE Nifty 50 fell 118 points to 25,980. Both indices had touched record highs on Thursday.",
+        "Large private-sector banks led the fall, with the Nifty Bank index losing 0.8 per cent. Dealers said some investors had sold ahead of the central bank's policy announcement, though the rate decision itself, which left rates unchanged, was in line with expectations.",
+        "Information technology shares fell after a US-based research firm cut its forecast for technology spending by American companies next year. The Nifty IT index lost 1.1 per cent, with two of the five largest companies falling more than 2 per cent.",
+        "Foreign portfolio investors sold shares worth 2,140 crore rupees on Monday, according to exchange data, while domestic institutions bought 3,010 crore rupees. The rupee closed at 88.62 to the dollar, little changed from Friday. Brent crude traded at about $64 a barrel, and the yield on the benchmark ten-year government bond stood at 6.45 per cent, according to dealers.",
+        "Market analysts said the fall was not unusual after a long rally. The Nifty has risen about 9 per cent since August, and several analysts said valuations in some sectors were above their long-term average. Smaller companies fared better, with the Nifty Smallcap index ending 0.2 per cent higher."
+      ],
+      "keyFacts": [
+        "The Sensex closed at 84,906.",
+        "The Nifty 50 fell 118 points to 25,980.",
+        "Foreign investors sold shares worth 2,140 crore rupees.",
+        "The rupee closed at 88.62 to the dollar."
+      ],
+      "background": "",
+      "dateline": "MUMBAI",
+      "sources": [
+        {
+          "outlet": "Business Standard",
+          "title": "Sensex ends 412 points lower as investors book profits in banks and IT shares",
+          "url": "https://example.com/business-standard/sensex-ends-lower-on-profit-booking",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Mint",
+          "title": "The benchmark index fell 0.5 per cent after hitting a record high last week",
+          "url": "https://example.com/mint/sensex-ends-lower-on-profit-booking",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Hindustan Times",
+          "title": "Sensex ends 412 points lower as investors book profits in banks and: key points",
+          "url": "https://example.com/hindustan-times/sensex-ends-lower-on-profit-booking",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "sensex",
+        "markets",
+        "stocks"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "supreme-court-digital-listing-of-cases",
+      "section": "india",
+      "rank": 12,
+      "headline": "Supreme Court introduces automated listing of cases to cut adjournments, registry says",
+      "dek": "Fresh matters will be assigned dates by software from January.",
+      "summary": "The Supreme Court's registry said fresh cases would be listed by software from January, with dates assigned according to the type of case and the date of filing. Lawyers said they wanted details of how exceptions would be handled.",
+      "body": [
+        "The Supreme Court's registry said on Monday that fresh cases would be assigned hearing dates by software from January, replacing a system in which registry officials prepared the daily list by hand. A circular said the change was intended to reduce delays and the number of matters adjourned without a hearing.",
+        "Under the new system, the software will assign dates according to the type of case, the date of filing and the availability of a bench. Cases involving personal liberty, elderly litigants and certain election matters will be given priority, the circular said.",
+        "The court had about 82,000 pending cases at the end of October, according to its own figures. Of those, nearly 19,000 were fresh matters that had been filed but not yet heard. The registry said the software would also flag cases that were ready for hearing but had not been listed.",
+        "Lawyers' bodies said they welcomed the move but asked for clarity on how urgent matters would be handled. A representative of the Supreme Court Bar Association said members wanted a written procedure so that lawyers could seek an early date without approaching registry officials.",
+        "The registry said a pilot of the system had run since August for tax and service matters and had cut the average wait for a first hearing from 41 days to 29. It said an audit of the software's decisions would be carried out every quarter."
+      ],
+      "keyFacts": [
+        "The system starts in January.",
+        "About 82,000 cases were pending at end-October.",
+        "A pilot cut the wait for a first hearing from 41 days to 29.",
+        "Quarterly audits are planned."
+      ],
+      "background": "Courts in several states have used automated allocation of cases to benches for the past three years.",
+      "whyItMatters": "Faster listing could reduce waiting time for ordinary litigants, who often wait months for a first hearing.",
+      "dateline": "NEW DELHI",
+      "image": {
+        "url": "https://picsum.photos/seed/courthouse/1200/800",
+        "credit": "Wikimedia Commons / CC BY-SA 4.0",
+        "sourceUrl": "https://example.com/wikimedia-commons/supreme-court-digital-listing-of-cases",
+        "alt": "The front of the Supreme Court building in New Delhi in morning light",
+        "width": 1200,
+        "height": 800,
+        "kind": "wikimedia"
+      },
+      "sources": [
+        {
+          "outlet": "The Hindu",
+          "title": "Supreme Court introduces automated listing of cases to cut adjournments, registry says",
+          "url": "https://example.com/the-hindu/supreme-court-digital-listing-of-cases",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "Indian Express",
+          "title": "Fresh matters will be assigned dates by software from January",
+          "url": "https://example.com/indian-express/supreme-court-digital-listing-of-cases",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "The Print",
+          "title": "Supreme Court introduces automated listing of cases to cut: key points",
+          "url": "https://example.com/the-print/supreme-court-digital-listing-of-cases",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Scroll",
+          "title": "What we know so far | Fresh matters will be assigned dates by software from January",
+          "url": "https://example.com/scroll/supreme-court-digital-listing-of-cases",
+          "leaning": "left"
+        }
+      ],
+      "tags": [
+        "supreme-court",
+        "judiciary",
+        "courts"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "gujarat-chip-pilot-line-begins-operations",
+      "section": "science-tech",
+      "rank": 13,
+      "headline": "Semiconductor pilot line in Gujarat starts operations, first test chips due next quarter",
+      "dek": "The plant will make mature-node chips used in cars and appliances.",
+      "summary": "A semiconductor pilot line near Ahmedabad began operations on Monday, the state government said. The first test chips are due next quarter, and the plant is designed to make mature-node chips for cars and appliances.",
+      "body": [
+        "A semiconductor pilot line in Sanand, near Ahmedabad, began operations on Monday, the Gujarat government said. The line, which cost about 3,200 crore rupees, will make chips on mature process nodes of 40 to 65 nanometres, which are used in cars, appliances and industrial controls.",
+        "Company officials said the first test chips were expected next quarter, with limited commercial production to follow in the second half of next year. The plant will initially process about 5,000 wafers a month, which is a fraction of the capacity of large foundries in East Asia.",
+        "The project is partly funded under the central government's semiconductor incentive scheme, which covers up to half of the cost of approved plants. The state government has provided land and water, and has promised an uninterrupted power supply of 120 megawatts.",
+        "Analysts said mature-node chips were less glamorous than the advanced processors that dominate headlines but were in steady demand. India imports nearly all of the chips it uses, and shortages of the simpler chips have occasionally held up car production in the past.",
+        "A spokesperson for the company, Nisha Trivedi, said it had signed preliminary supply agreements with two automotive suppliers. She said the plant would employ about 1,400 people when fully staffed, of whom roughly half were engineers trained at local institutes."
+      ],
+      "keyFacts": [
+        "The line cost about 3,200 crore rupees.",
+        "It will process about 5,000 wafers a month.",
+        "Test chips are due next quarter.",
+        "About 1,400 people will be employed."
+      ],
+      "background": "The government approved the incentive scheme in 2021 and has since cleared several plants and packaging units.",
+      "whyItMatters": "India imports almost all of its chips, and domestic production of even simple chips would cut its exposure to supply disruptions.",
+      "dateline": "AHMEDABAD",
+      "image": {
+        "url": "https://picsum.photos/seed/wafer/1200/800",
+        "credit": "Mint",
+        "sourceUrl": "https://example.com/mint/gujarat-chip-pilot-line-begins-operations",
+        "alt": "Technicians in white suits inspecting a silicon wafer inside a clean room",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Mint",
+          "title": "Semiconductor pilot line in Gujarat starts operations, first test chips due next quarter",
+          "url": "https://example.com/mint/gujarat-chip-pilot-line-begins-operations",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Business Standard",
+          "title": "The plant will make mature-node chips used in cars and appliances",
+          "url": "https://example.com/business-standard/gujarat-chip-pilot-line-begins-operations",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "The Hindu",
+          "title": "Semiconductor pilot line in Gujarat starts operations, first test: key points",
+          "url": "https://example.com/the-hindu/gujarat-chip-pilot-line-begins-operations",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "The Verge",
+          "title": "What we know so far | The plant will make mature-node chips used in cars and appliances",
+          "url": "https://example.com/the-verge/gujarat-chip-pilot-line-begins-operations"
+        }
+      ],
+      "tags": [
+        "semiconductors",
+        "manufacturing",
+        "gujarat"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "western-ghats-tahr-count",
+      "section": "health-environment",
+      "rank": 14,
+      "headline": "Annual survey counts 3,120 Nilgiri tahr in the Western Ghats, up 4 per cent",
+      "dek": "Forest officials said the animals were found across 14 sites in Tamil Nadu and Kerala.",
+      "summary": "A joint survey by the Tamil Nadu and Kerala forest departments counted 3,120 Nilgiri tahr this year, up from 3,000 last year. Officials said sightings were highest in the Eravikulam area.",
+      "body": [
+        "A joint survey by the Tamil Nadu and Kerala forest departments counted 3,120 Nilgiri tahr this year, up from 3,000 in 2025, officials said on Monday. The count, carried out over four days by about 300 forest staff and volunteers, covered 14 sites across the Western Ghats.",
+        "The highest number, 810, was found in Eravikulam National Park in Kerala, followed by the Mukurthi area in Tamil Nadu. Surveyors counted the animals from fixed points, using binoculars, and recorded the number of kids, which rose by about 8 per cent.",
+        "The Nilgiri tahr, a mountain goat found only in the southern Western Ghats, is classified as endangered by the International Union for Conservation of Nature. Its range has shrunk because of grazing, plantations and the spread of invasive plants such as wattle.",
+        "Officials said a project to remove wattle and restore native grassland on about 1,100 hectares had helped the animals, which graze on open slopes. Forest staff said the work would continue, with a further 400 hectares planned for next year.",
+        "Researchers who took part in the survey said the figures were counts rather than estimates and probably missed some animals. They said a genetic survey of droppings, planned for next year, would give a better idea of population size and of how many animals were related."
+      ],
+      "keyFacts": [
+        "The count was 3,120 animals.",
+        "Eravikulam held 810 of them.",
+        "The number of kids rose by about 8 per cent.",
+        "About 1,100 hectares of grassland have been restored."
+      ],
+      "background": "",
+      "dateline": "COIMBATORE",
+      "image": {
+        "url": "https://picsum.photos/seed/tahr/1200/800",
+        "credit": "Wikimedia Commons / CC BY-SA 4.0",
+        "sourceUrl": "https://example.com/wikimedia-commons/western-ghats-tahr-count",
+        "alt": "A Nilgiri tahr standing on a grassy slope with mist behind it",
+        "width": 1200,
+        "height": 800,
+        "kind": "wikimedia"
+      },
+      "sources": [
+        {
+          "outlet": "The Hindu",
+          "title": "Annual survey counts 3,120 Nilgiri tahr in the Western Ghats, up 4 per cent",
+          "url": "https://example.com/the-hindu/western-ghats-tahr-count",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "Deccan Herald",
+          "title": "Forest officials said the animals were found across 14 sites in Tamil Nadu and Kerala",
+          "url": "https://example.com/deccan-herald/western-ghats-tahr-count",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Indian Express",
+          "title": "Annual survey counts 3,120 Nilgiri tahr in the Western Ghats, up 4: key points",
+          "url": "https://example.com/indian-express/western-ghats-tahr-count",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "wildlife",
+        "western-ghats",
+        "conservation"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "uk-rail-strike-ballot-opens",
+      "section": "world",
+      "rank": 15,
+      "headline": "Rail union members in Britain begin voting on strike action over pay and rostering changes affecting thousands of drivers and guards",
+      "dek": "The ballot closes on 12 December; the operator said it had made a fair offer.",
+      "summary": "Members of a British rail union began voting on Monday on whether to strike over pay and changes to rosters. The ballot closes on 12 December, and the operator said it would continue talks.",
+      "body": [
+        "Members of a British rail union began voting on Monday on whether to take strike action in a dispute over pay and changes to working rosters. The ballot, which covers about 6,200 drivers and guards on one of the country's largest train operators, closes on 12 December.",
+        "The operator has offered a pay increase of 3.5 per cent this year and 3 per cent next year, with a one-off payment for staff who accept changes to rest-day working. The union said the offer fell short of inflation and that the roster changes would lengthen working weeks.",
+        "Aidan Whitcombe, a spokesperson for the operator, said the offer was fair and that talks would continue while voting went on. He said any strike would hit passengers in the run-up to Christmas, when the operator usually runs about 1,900 extra services.",
+        "The union said it did not want to strike but that members had lost patience after eight months of talks. A union official said a vote in favour would give it a mandate to call strikes for six months, with 14 days' notice required before any walkout.",
+        "Under British law, a strike ballot must reach a turnout of at least 50 per cent to be valid. The union said an earlier ballot last year had a turnout of 71 per cent, with 88 per cent of those who voted supporting action."
+      ],
+      "keyFacts": [
+        "About 6,200 members are voting.",
+        "The ballot closes on 12 December.",
+        "The operator offered 3.5 per cent this year and 3 per cent next year.",
+        "A strike would need 14 days' notice."
+      ],
+      "background": "Rail unions in Britain held a series of strikes in 2022 and 2023 over pay and job cuts. Most disputes were settled in 2024.",
+      "whyItMatters": "A strike in December would disrupt travel in the busiest period for rail services.",
+      "dateline": "LONDON",
+      "image": {
+        "url": "https://picsum.photos/seed/platform/1200/800",
+        "credit": "BBC",
+        "sourceUrl": "https://example.com/bbc/uk-rail-strike-ballot-opens",
+        "alt": "Passengers waiting on a platform beneath a departures board at a London station",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "BBC",
+          "title": "Rail union members in Britain begin voting on strike action over pay and rostering changes affecting thousands of drivers and guards",
+          "url": "https://example.com/bbc/uk-rail-strike-ballot-opens",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "The Guardian",
+          "title": "The ballot closes on 12 December; the operator said it had made a fair offer",
+          "url": "https://example.com/the-guardian/uk-rail-strike-ballot-opens",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "Reuters",
+          "title": "Rail union members in Britain begin voting on strike action over pay: key points",
+          "url": "https://example.com/reuters/uk-rail-strike-ballot-opens",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Financial Times",
+          "title": "What we know so far | The ballot closes on 12 December; the operator said it had made a fair offer",
+          "url": "https://example.com/financial-times/uk-rail-strike-ballot-opens",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "uk",
+        "rail",
+        "labour"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "assam-tea-wage-agreement",
+      "section": "india",
+      "rank": 16,
+      "headline": "Assam tea growers and unions sign wage deal raising daily pay for plantation workers to 310 rupees",
+      "dek": "The agreement covers about 650,000 workers in 800 estates and lasts three years.",
+      "summary": "Tea growers' associations and plantation worker unions in Assam signed a three-year wage agreement on Monday that raises the daily wage to 310 rupees. About 650,000 workers in about 800 estates are covered.",
+      "body": [
+        "Tea growers' associations and plantation worker unions in Assam signed a three-year wage agreement in Guwahati on Monday that raises the daily wage for workers to 310 rupees from 250. The agreement covers about 650,000 workers in about 800 estates, according to the state labour department.",
+        "The increase will be paid in two stages, 280 rupees from 1 January and 310 rupees from 1 January next year. The unions had asked for 350 rupees, and the growers had initially offered 275. The state government mediated the talks, which began in August.",
+        "Growers' representatives said the wage would be hard to sustain unless tea prices improved. They said auction prices for Assam tea averaged about 8 per cent lower this year, and that rising costs for fertiliser and labour had cut margins at smaller estates.",
+        "Union leaders said the deal was a step forward but not enough. Worker representatives said the daily wage remained below the minimum wage in several other states and that housing and healthcare provided by estates had deteriorated at many gardens.",
+        "The state government said it would set up a committee to review conditions on estates, including the quality of housing and the supply of drinking water. The committee is to report within six months, a labour department official said. Growers said the committee would also look at plans to give workers small plots of land, which unions have requested for several years."
+      ],
+      "keyFacts": [
+        "The daily wage rises from 250 to 310 rupees.",
+        "About 650,000 workers are covered.",
+        "The increase is paid in two stages.",
+        "The agreement lasts three years."
+      ],
+      "background": "Tea plantation wages in Assam are set by negotiation rather than by the state's minimum wage law.",
+      "whyItMatters": "Tea is one of Assam's largest employers, and the wage settlement sets pay for a large share of its rural workforce.",
+      "image": {
+        "url": "https://picsum.photos/seed/tea/1200/800",
+        "credit": "Indian Express",
+        "sourceUrl": "https://example.com/indian-express/assam-tea-wage-agreement",
+        "alt": "Workers picking tea leaves in rows on a hillside plantation",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Indian Express",
+          "title": "Assam tea growers and unions sign wage deal raising daily pay for plantation workers to 310 rupees",
+          "url": "https://example.com/indian-express/assam-tea-wage-agreement",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "The Hindu",
+          "title": "The agreement covers about 650,000 workers in 800 estates and lasts three years",
+          "url": "https://example.com/the-hindu/assam-tea-wage-agreement",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "Scroll",
+          "title": "Assam tea growers and unions sign wage deal raising daily pay for: key points",
+          "url": "https://example.com/scroll/assam-tea-wage-agreement",
+          "leaning": "left"
+        },
+        {
+          "outlet": "Firstpost",
+          "title": "What we know so far | The agreement covers about 650,000 workers in 800 estates and lasts three years",
+          "url": "https://example.com/firstpost/assam-tea-wage-agreement",
+          "leaning": "centre-right"
+        }
+      ],
+      "tags": [
+        "assam",
+        "tea",
+        "wages"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "msme-credit-guarantee-scheme-extended",
+      "section": "business",
+      "rank": 17,
+      "headline": "Centre extends credit guarantee scheme for small businesses by two years",
+      "dek": "The cabinet raised the guarantee cover for loans up to 2 crore rupees to 85 per cent.",
+      "summary": "The Union cabinet extended a credit guarantee scheme for micro, small and medium enterprises by two years on Monday and raised the cover on small loans. Officials said it was meant to ease access to collateral-free loans.",
+      "body": [
+        "The Union cabinet on Monday extended a credit guarantee scheme for micro, small and medium enterprises by two years and increased the guarantee cover on loans up to 2 crore rupees to 85 per cent from 75 per cent. The government said the change would take effect from 1 January.",
+        "The scheme guarantees part of the loan against default, so that banks can lend to businesses without asking for collateral. Since its launch, it has covered about 7.8 million loans worth 6.4 lakh crore rupees, according to the finance ministry's figures.",
+        "A government statement said the change was aimed at businesses that had been refused loans because they lacked property to pledge. Officials said they expected the extended cover to raise lending by about 40,000 crore rupees in the first year.",
+        "Bankers said lenders had been cautious about collateral-free loans after defaults rose in some segments this year. A senior executive at a public-sector bank said the higher cover would reduce the bank's risk but that it would still assess each borrower's cash flow.",
+        "Industry groups welcomed the extension. A representative of a small-business federation said the sector needed faster loan approvals as well, since many firms waited more than a month for a decision, and asked the government to set a time limit for banks."
+      ],
+      "keyFacts": [
+        "The scheme is extended by two years.",
+        "Cover on loans up to 2 crore rupees rises to 85 per cent.",
+        "The change takes effect from 1 January.",
+        "About 7.8 million loans have been covered."
+      ],
+      "background": "The scheme was set up to help small firms borrow without collateral. It is run by a trust under the finance ministry.",
+      "whyItMatters": "Small businesses employ more than 100 million people, and many struggle to obtain bank loans without collateral.",
+      "dateline": "NEW DELHI",
+      "image": {
+        "url": "https://picsum.photos/seed/workshop/1200/800",
+        "credit": "Business Standard",
+        "sourceUrl": "https://example.com/business-standard/msme-credit-guarantee-scheme-extended",
+        "alt": "A shopkeeper in a small garment workshop talking to a bank officer",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Business Standard",
+          "title": "Centre extends credit guarantee scheme for small businesses by two years",
+          "url": "https://example.com/business-standard/msme-credit-guarantee-scheme-extended",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Mint",
+          "title": "The cabinet raised the guarantee cover for loans up to 2 crore rupees to 85 per cent",
+          "url": "https://example.com/mint/msme-credit-guarantee-scheme-extended",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Hindustan Times",
+          "title": "Centre extends credit guarantee scheme for small businesses by two: key points",
+          "url": "https://example.com/hindustan-times/msme-credit-guarantee-scheme-extended",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Times of India",
+          "title": "What we know so far | The cabinet raised the guarantee cover for loans up to 2 crore rupees to 85 per cent",
+          "url": "https://example.com/times-of-india/msme-credit-guarantee-scheme-extended",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "msme",
+        "credit",
+        "banking"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "bengaluru-fc-beat-goa-in-isl",
+      "section": "sports",
+      "rank": 18,
+      "headline": "Bengaluru FC beat FC Goa 2-1 at home to move into top three in Indian Super League",
+      "dek": "A second-half penalty settled a match that was level at the interval.",
+      "summary": "Bengaluru FC beat FC Goa 2-1 at the Sree Kanteerava Stadium on Sunday night, with a penalty in the 71st minute deciding the match. The result lifted the home side to third in the Indian Super League.",
+      "body": [
+        "Bengaluru FC beat FC Goa 2-1 at the Sree Kanteerava Stadium on Sunday night, with a penalty in the 71st minute deciding the match. The result lifted the home side to third in the Indian Super League table, two points behind the leaders with a game in hand.",
+        "Goa took the lead in the 19th minute through a low shot from the edge of the area. Bengaluru equalised just before half-time, when a left-wing cross was headed in at the near post by a substitute who had come on after an early injury to a defender.",
+        "The winning penalty was awarded after a Goa defender was ruled to have pulled a Bengaluru forward's shirt as a corner came in. Goa's coach said he thought the decision was harsh, and the referee's report is expected on Monday.",
+        "Bengaluru's coach said his team had played with more urgency after the break and had earned the win. About 17,500 spectators attended, a season high for the home side, and club officials said all tickets for the next home match had already been sold.",
+        "Bengaluru FC travel to Kolkata on Saturday, while Goa return home to face a side from the bottom half of the table. The league break for international matches begins after the next round of fixtures, officials said. The referee's report is routine after any penalty decision, the league said, and is not expected to lead to any action against either side."
+      ],
+      "keyFacts": [
+        "The match finished 2-1.",
+        "The winning penalty came in the 71st minute.",
+        "Attendance was about 17,500.",
+        "Bengaluru FC are third in the table."
+      ],
+      "background": "Bengaluru FC won the league in 2018-19 and reached the final in 2022-23.",
+      "whyItMatters": "The win keeps the club in contention for a place in the top six, which qualifies for the playoffs.",
+      "dateline": "BENGALURU",
+      "image": {
+        "url": "https://picsum.photos/seed/stadium/1200/800",
+        "credit": "Deccan Herald",
+        "sourceUrl": "https://example.com/deccan-herald/bengaluru-fc-beat-goa-in-isl",
+        "alt": "Players in blue shirts celebrating a goal in front of a crowded stand",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Deccan Herald",
+          "title": "Bengaluru FC beat FC Goa 2-1 at home to move into top three in Indian Super League",
+          "url": "https://example.com/deccan-herald/bengaluru-fc-beat-goa-in-isl",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Times of India",
+          "title": "A second-half penalty settled a match that was level at the interval",
+          "url": "https://example.com/times-of-india/bengaluru-fc-beat-goa-in-isl",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Firstpost",
+          "title": "Bengaluru FC beat FC Goa 2-1 at home to move into top three in Indian: key points",
+          "url": "https://example.com/firstpost/bengaluru-fc-beat-goa-in-isl",
+          "leaning": "centre-right"
+        }
+      ],
+      "tags": [
+        "football",
+        "isl",
+        "bengaluru-fc"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "indic-language-model-released-open-weights",
+      "section": "science-tech",
+      "rank": 19,
+      "headline": "Chennai lab releases open-source language model trained on 22 Indian languages",
+      "dek": "Researchers said the model runs on a single consumer graphics card.",
+      "summary": "A research lab in Chennai released an open-source language model trained on text in 22 Indian languages. The researchers said a smaller version runs on a single consumer graphics card.",
+      "body": [
+        "A research lab at a Chennai institute released an open-source language model on Monday that was trained on text in 22 Indian languages. The developers published the model's weights and its training code under a permissive licence, and said a smaller version could run on a single consumer graphics card.",
+        "The model, which has 7 billion parameters, was trained on about 1.2 trillion tokens of text drawn from books, news archives and government publications, along with speech transcripts. The team said about a third of the data was in languages other than Hindi, Bengali and Tamil.",
+        "In tests published with the release, the model scored higher than two other open models of similar size on a translation benchmark covering Indian languages, and lower than larger commercial models on reasoning tasks. The developers said the benchmarks were limited and could be gamed.",
+        "Researchers who were not involved in the project said releasing the training data's description was as valuable as the model itself. One said the weakest results were for languages with little written text online, such as Santali and Bodo, where the model often produced errors.",
+        "The lab said it would work with state governments and a few non-profit groups to test the model for use in answering questions about welfare schemes. The team said it did not plan to offer the model as a commercial service."
+      ],
+      "keyFacts": [
+        "The model has 7 billion parameters.",
+        "It was trained on about 1.2 trillion tokens.",
+        "It covers 22 Indian languages.",
+        "Weights and training code are public."
+      ],
+      "background": "Most large language models perform worse in Indian languages because there is much less text available for training.",
+      "whyItMatters": "A freely available model could let smaller firms and public agencies build tools in languages that commercial systems serve poorly.",
+      "dateline": "CHENNAI",
+      "image": {
+        "url": "https://picsum.photos/seed/lexicon/1200/800",
+        "credit": "The Print",
+        "sourceUrl": "https://example.com/the-print/indic-language-model-released-open-weights",
+        "alt": "Two researchers looking at lines of code on a monitor in a university lab",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "The Print",
+          "title": "Chennai lab releases open-source language model trained on 22 Indian languages",
+          "url": "https://example.com/the-print/indic-language-model-released-open-weights",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "The Hindu",
+          "title": "Researchers said the model runs on a single consumer graphics card",
+          "url": "https://example.com/the-hindu/indic-language-model-released-open-weights",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "The Verge",
+          "title": "Chennai lab releases open-source language model trained on 22 Indian: key points",
+          "url": "https://example.com/the-verge/indic-language-model-released-open-weights"
+        },
+        {
+          "outlet": "Mint",
+          "title": "What we know so far | Researchers said the model runs on a single consumer graphics card",
+          "url": "https://example.com/mint/indic-language-model-released-open-weights",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "ai",
+        "language-models",
+        "open-source"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "whitefield-cauvery-supply-cut",
+      "section": "bengaluru",
+      "rank": 20,
+      "headline": "Water supply to Whitefield and Mahadevapura to be cut for 36 hours from Wednesday",
+      "dek": "The water board said a pipeline connection needed to be shifted.",
+      "summary": "The Bangalore Water Supply and Sewerage Board said supply to parts of Whitefield and Mahadevapura would be cut for 36 hours from Wednesday morning. The board advised residents to store water.",
+      "body": [
+        "The Bangalore Water Supply and Sewerage Board said on Monday that Cauvery water supply to parts of Whitefield, Mahadevapura and Marathahalli would be cut for 36 hours from 6 am on Wednesday. The board said a large pipeline connection had to be shifted to make way for a road widening project.",
+        "The affected areas include about 140 neighbourhoods and several large apartment complexes, according to the board's notice. Tankers will be sent to hospitals, schools and apartment complexes that ask for water, and a helpline number will be active during the shutdown.",
+        "The board said the work involved cutting into a 1,200 mm pipe that supplies about 45 million litres a day. It said the schedule had been chosen to avoid the weekend and that crews would work in three shifts to restore supply earlier if possible.",
+        "Residents' groups said they had received only two days' notice. A representative of an apartment owners' association in Whitefield said tanker prices usually rose sharply during shutdowns, and asked the board to cap what private suppliers could charge. A second group, which represents residents of Marathahalli, said it would hold a meeting on Tuesday evening to decide whether to submit a complaint to the board.",
+        "Board officials said private tanker rates would be monitored and that the board's own tankers would be free for hospitals and for residents of areas without borewells. Supply is expected to resume by Thursday evening, with normal pressure restored by Friday."
+      ],
+      "keyFacts": [
+        "The cut begins at 6 am on Wednesday.",
+        "It will last 36 hours.",
+        "About 140 neighbourhoods are affected.",
+        "Board tankers will serve hospitals and schools."
+      ],
+      "background": "Whitefield and Mahadevapura depend on piped Cauvery water and on groundwater, which has fallen in many parts of the area.",
+      "dateline": "BENGALURU",
+      "image": {
+        "url": "https://picsum.photos/seed/tanker/1200/800",
+        "credit": "Deccan Herald",
+        "sourceUrl": "https://example.com/deccan-herald/whitefield-cauvery-supply-cut",
+        "alt": "A water tanker filling a storage tank at the entrance of an apartment complex",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Deccan Herald",
+          "title": "Water supply to Whitefield and Mahadevapura to be cut for 36 hours from Wednesday",
+          "url": "https://example.com/deccan-herald/whitefield-cauvery-supply-cut",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Times of India",
+          "title": "The water board said a pipeline connection needed to be shifted",
+          "url": "https://example.com/times-of-india/whitefield-cauvery-supply-cut",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "The Hindu",
+          "title": "Water supply to Whitefield and Mahadevapura to be cut for 36 hours: key points",
+          "url": "https://example.com/the-hindu/whitefield-cauvery-supply-cut",
+          "leaning": "centre-left"
+        }
+      ],
+      "tags": [
+        "water-supply",
+        "bwssb",
+        "whitefield"
+      ],
+      "readingMinutes": 1
+    }
+  ],
+  "stats": {
+    "feedsScanned": 61,
+    "itemsSeen": 1187,
+    "pagesRead": 242,
+    "costUsd": 0.74
+  }
+}

@@ -169,3 +169,6 @@ export function leaningFor(outlet: string): Leaning | undefined {
   const o = canonicalOutlet(outlet);
   return SOURCE_LEANINGS.get(o) ?? EXTRA_LEANINGS[o];
 }
+
+/** Image hosts that refuse pictures embedded on other sites (checked in a real browser). */
+export const HOTLINK_BLOCKED_HOSTS = new Set(["c.ndtvimg.com"]);

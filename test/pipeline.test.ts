@@ -98,3 +98,7 @@ test("batch custom ids satisfy the API pattern", async () => {
   const { storyCustomId } = await import("../pipeline/writer.ts");
   for (const key of ["india-nepal-package", "x".repeat(80), "a-b_c"]) assert.match(storyCustomId(key), /^[a-zA-Z0-9_-]{1,64}$/);
 });
+
+test("pictures from hosts that block embedding are never chosen", () => {
+  assert.ok(isJunkImage("https://c.ndtvimg.com/2026-11/abc.jpg"));
+});

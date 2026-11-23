@@ -1,0 +1,1394 @@
+{
+  "fixture": true,
+  "id": "2026-11-24-am",
+  "date": "2026-11-24",
+  "slot": "morning",
+  "publishedAt": "2026-11-24T05:00:00+05:30",
+  "lead": [
+    "odisha-cyclone-relief-operations",
+    "labour-codes-rollout-states-split",
+    "rupee-ends-weaker-on-oil-import-bill",
+    "geneva-shipping-levy-talks-adjourn"
+  ],
+  "sections": [
+    {
+      "id": "india",
+      "name": "India",
+      "storyIds": [
+        "chennai-northeast-monsoon-waterlogging",
+        "census-enumerator-training-begins"
+      ]
+    },
+    {
+      "id": "world",
+      "name": "World",
+      "storyIds": [
+        "pacific-islands-sea-level-fund-announced-at-suva-summit",
+        "canada-wildfire-inquiry-report",
+        "brazil-port-strike-ends"
+      ]
+    },
+    {
+      "id": "bengaluru",
+      "name": "Bengaluru",
+      "storyIds": [
+        "namma-metro-pink-line-opening-date",
+        "outer-ring-road-diversion-tech-park-flyover"
+      ]
+    },
+    {
+      "id": "business",
+      "name": "Business",
+      "storyIds": [
+        "it-services-fresher-hiring-third-quarter",
+        "gold-prices-ease-after-three-day-rally"
+      ]
+    },
+    {
+      "id": "science-tech",
+      "name": "Science & Tech",
+      "storyIds": [
+        "isro-crew-module-heat-shield-findings",
+        "hyderabad-quantum-lab-error-correction-result",
+        "battery-recycling-plant-pune-opens"
+      ]
+    },
+    {
+      "id": "health-environment",
+      "name": "Health & Environment",
+      "storyIds": [
+        "delhi-grap-stage-four-curbs",
+        "karnataka-tb-screening-drive-finds-cases"
+      ]
+    },
+    {
+      "id": "sports",
+      "name": "Sports",
+      "storyIds": [
+        "india-australia-second-test-day-four",
+        "india-women-hockey-beat-japan-in-asia-cup-opener"
+      ]
+    }
+  ],
+  "stories": [
+    {
+      "id": "odisha-cyclone-relief-operations",
+      "section": "india",
+      "rank": 1,
+      "headline": "Odisha begins relief work after cyclone; 11 deaths reported and power cut to 900,000 homes",
+      "dek": "Officials said the death toll could rise as teams reached cut-off villages.",
+      "summary": "Odisha officials reported 11 deaths and said power was cut to about 900,000 households after the cyclone that crossed the coast on Monday. Relief teams were still trying to reach several villages cut off by flooding.",
+      "body": [
+        "Odisha's government said on Tuesday that 11 people had died in cyclone-related incidents, mostly from falling trees and collapsed walls, and that the toll could rise as teams reached villages cut off by flooding. The storm, which crossed the coast near Paradip on Monday afternoon, weakened into a depression overnight.",
+        "The power distribution company said supply to about 900,000 households had been cut after more than 3,000 poles and several transmission towers were damaged. Crews from neighbouring states had been called in, and officials said supply to Bhubaneswar and Cuttack would be restored by Wednesday.",
+        "About 280,000 people who had moved into shelters on Monday were being sent home in districts where the water had receded. In Kendrapara and Jagatsinghpur, where embankments breached in at least four places, the state moved 40,000 people to higher ground by boat.",
+        "Preliminary estimates by the agriculture department showed that standing paddy on about 190,000 hectares had been damaged, though officials said the figure would change after field surveys. Harvesting of the winter crop was already under way in several coastal districts.",
+        "The state asked the Union government for advance assistance from the National Disaster Response Fund. A Union home ministry team was expected to visit on Thursday to assess the damage, an official said. Rail services on the Howrah-Chennai route resumed on Tuesday afternoon."
+      ],
+      "keyFacts": [
+        "11 deaths were reported by Tuesday morning.",
+        "About 900,000 households lost power.",
+        "Paddy on about 190,000 hectares was damaged.",
+        "40,000 people were moved to higher ground in two districts."
+      ],
+      "background": "The cyclone crossed the coast on Monday afternoon with winds of up to 110 km/h. About 280,000 people were moved to shelters beforehand.",
+      "whyItMatters": "Damage to power lines and embankments will determine how quickly daily life returns, and flooding remains possible in river basins.",
+      "dateline": "BHUBANESWAR",
+      "developing": true,
+      "image": {
+        "url": "https://picsum.photos/seed/relief/1200/800",
+        "credit": "NDTV",
+        "sourceUrl": "https://example.com/ndtv/odisha-cyclone-relief-operations",
+        "alt": "A man wading through knee-deep floodwater past a fallen tree in an Odisha village",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "NDTV",
+          "title": "Odisha begins relief work after cyclone; 11 deaths reported and power cut to 900,000 homes",
+          "url": "https://example.com/ndtv/odisha-cyclone-relief-operations",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "The Hindu",
+          "title": "Officials said the death toll could rise as teams reached cut-off villages",
+          "url": "https://example.com/the-hindu/odisha-cyclone-relief-operations",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "Indian Express",
+          "title": "Odisha begins relief work after cyclone; 11 deaths reported and power: key points",
+          "url": "https://example.com/indian-express/odisha-cyclone-relief-operations",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Times of India",
+          "title": "What we know so far | Officials said the death toll could rise as teams reached cut-off villages",
+          "url": "https://example.com/times-of-india/odisha-cyclone-relief-operations",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Hindustan Times",
+          "title": "Odisha begins relief work after cyclone; 11 deaths reported and power cut to 900,000 homes",
+          "url": "https://example.com/hindustan-times/odisha-cyclone-relief-operations",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "cyclone",
+        "odisha",
+        "relief"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "labour-codes-rollout-states-split",
+      "section": "india",
+      "rank": 2,
+      "headline": "Labour ministry sets 1 April date for four labour codes; states divided on readiness",
+      "dek": "Some states said they had finished their rules, while others asked for more time.",
+      "summary": "The Union labour ministry said the four labour codes would take effect on 1 April, and asked states to notify their rules by then. Nine states have done so, while others said they needed more time.",
+      "body": [
+        "The Union labour ministry said on Monday night that the four labour codes, which merge 29 older laws on wages, industrial relations, social security and workplace safety, would come into force on 1 April. It asked states to notify their own rules before that date, since labour is on the concurrent list.",
+        "Nine states have notified rules, the ministry said, and six more have published drafts. Several states governed by opposition parties said they needed more time, and Kerala and West Bengal said they objected to provisions that raise the threshold for government permission before retrenchment.",
+        "The codes raise that threshold to firms with 300 workers from 100, allow fixed-term contracts and require a minimum floor wage to be set nationally. They also extend social security to gig and platform workers for the first time, which the ministry said would cover about 10 million people.",
+        "Trade unions held a protest in Delhi on Tuesday morning. A union leader said the codes made it easier to dismiss workers and harder to form a union. Industry bodies said they supported the date but wanted clearer rules on how fixed-term contracts could be renewed.",
+        "Labour economists said the effects would take time to show, because most workers are in the informal sector and are not covered by many of the protections in either the old or the new laws. They said enforcement by states would matter more than the text."
+      ],
+      "keyFacts": [
+        "The codes take effect on 1 April.",
+        "Nine states have notified rules.",
+        "The retrenchment threshold rises from 100 to 300 workers.",
+        "Gig workers are covered for social security."
+      ],
+      "background": "Parliament passed the four codes in 2019 and 2020. Their implementation was delayed several times while rules were drafted.",
+      "whyItMatters": "The codes would change the terms of employment for many of the country's organised-sector workers.",
+      "perspectives": [
+        {
+          "label": "Government and supporters",
+          "summary": "The ministry said the codes simplify compliance and extend social security to workers who were previously excluded. Industry groups said they would make hiring more flexible.",
+          "outlets": [
+            "Swarajya",
+            "Firstpost",
+            "Mint"
+          ]
+        },
+        {
+          "label": "Opposition and critics",
+          "summary": "Trade unions and several state governments said the codes weaken protection against dismissal and make strikes harder to organise.",
+          "outlets": [
+            "The Wire",
+            "Scroll",
+            "The Hindu"
+          ]
+        },
+        {
+          "label": "Independent analysts",
+          "summary": "Economists said the codes' effect depends on how states write and enforce their rules. Several noted that most workers are outside the formal sector.",
+          "outlets": [
+            "Business Standard",
+            "The Print",
+            "Indian Express"
+          ]
+        }
+      ],
+      "dateline": "NEW DELHI",
+      "image": {
+        "url": "https://picsum.photos/seed/march/1200/800",
+        "credit": "The Hindu",
+        "sourceUrl": "https://example.com/the-hindu/labour-codes-rollout-states-split",
+        "alt": "Union members holding red flags during a protest march in central Delhi",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "The Hindu",
+          "title": "Labour ministry sets 1 April date for four labour codes; states divided on readiness",
+          "url": "https://example.com/the-hindu/labour-codes-rollout-states-split",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "The Print",
+          "title": "Some states said they had finished their rules, while others asked for more time",
+          "url": "https://example.com/the-print/labour-codes-rollout-states-split",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Swarajya",
+          "title": "Labour ministry sets 1 April date for four labour codes; states: key points",
+          "url": "https://example.com/swarajya/labour-codes-rollout-states-split",
+          "leaning": "right"
+        },
+        {
+          "outlet": "The Wire",
+          "title": "What we know so far | Some states said they had finished their rules, while others asked for more time",
+          "url": "https://example.com/the-wire/labour-codes-rollout-states-split",
+          "leaning": "left"
+        },
+        {
+          "outlet": "Business Standard",
+          "title": "Labour ministry sets 1 April date for four labour codes; states divided on readiness",
+          "url": "https://example.com/business-standard/labour-codes-rollout-states-split",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "labour-codes",
+        "employment",
+        "states"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "rupee-ends-weaker-on-oil-import-bill",
+      "section": "business",
+      "rank": 3,
+      "headline": "Rupee closes at record low of 89.04 against the dollar as oil importers buy dollars",
+      "dek": "The currency fell 0.4 per cent, its steepest daily drop in two months.",
+      "summary": "The rupee closed at 89.04 against the dollar on Monday, a record low, as oil companies and importers bought dollars. Dealers said the central bank sold dollars in the afternoon to slow the fall.",
+      "body": [
+        "The rupee closed at 89.04 against the US dollar on Monday, its weakest level on record, down 0.4 per cent from 88.69 on Friday. It was the steepest one-day fall in about two months, according to data from the foreign exchange dealers' association.",
+        "Dealers said state-run oil companies bought dollars through the day to pay for crude imports, and foreign investors sold Indian shares worth about 2,100 crore rupees. The dollar also gained against most Asian currencies after strong jobs data in the United States last week.",
+        "The Reserve Bank of India was believed to have sold dollars in the afternoon, dealers said, which slowed the currency's fall. The central bank does not comment on its intervention, and its foreign exchange reserves stood at $688 billion on 14 November.",
+        "Economists said a weaker rupee raises the cost of imported oil, electronics and gold, and could add to inflation, but helps exporters whose earnings are in dollars. One bank forecast the rupee would trade between 88.50 and 89.50 for the rest of the month.",
+        "The central bank left interest rates unchanged on Monday, citing lower inflation. Several analysts said the currency's weakness had made it harder for the bank to cut rates, since lower rates can encourage investors to move money out of the country."
+      ],
+      "keyFacts": [
+        "The rupee closed at 89.04 per dollar.",
+        "It fell 0.4 per cent on the day.",
+        "Reserves were $688 billion on 14 November.",
+        "Foreign investors sold about 2,100 crore rupees of shares."
+      ],
+      "background": "The rupee has lost about 6 per cent against the dollar over the past 12 months.",
+      "whyItMatters": "A weaker rupee raises import costs for fuel and electronics while helping exporters.",
+      "dateline": "MUMBAI",
+      "image": {
+        "url": "https://picsum.photos/seed/rupee/1200/800",
+        "credit": "Business Standard",
+        "sourceUrl": "https://example.com/business-standard/rupee-ends-weaker-on-oil-import-bill",
+        "alt": "Currency notes and coins arranged beside a dealer's screen showing exchange rates",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Business Standard",
+          "title": "Rupee closes at record low of 89.04 against the dollar as oil importers buy dollars",
+          "url": "https://example.com/business-standard/rupee-ends-weaker-on-oil-import-bill",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Mint",
+          "title": "The currency fell 0.4 per cent, its steepest daily drop in two months",
+          "url": "https://example.com/mint/rupee-ends-weaker-on-oil-import-bill",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Reuters",
+          "title": "Rupee closes at record low of 89.04 against the dollar as oil: key points",
+          "url": "https://example.com/reuters/rupee-ends-weaker-on-oil-import-bill",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Hindustan Times",
+          "title": "What we know so far | The currency fell 0.4 per cent, its steepest daily drop in two months",
+          "url": "https://example.com/hindustan-times/rupee-ends-weaker-on-oil-import-bill",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "rupee",
+        "currency",
+        "forex"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "geneva-shipping-levy-talks-adjourn",
+      "section": "world",
+      "rank": 4,
+      "headline": "Shipping levy talks adjourn without a rate; delegates agree to keep a fund for poorer countries",
+      "dek": "Negotiators said they would meet again in February.",
+      "summary": "Talks in Geneva on a global levy on shipping emissions ended three days early on Tuesday, with delegates agreeing on a fund for poorer countries but not on a rate. They plan to meet again in February.",
+      "body": [
+        "Delegates from about 60 countries ended a week of talks in Geneva on a global levy on shipping emissions without agreeing on a rate, though they settled one part of the draft: a fund to help developing countries pay for cleaner fuels and port upgrades. The talks closed on Tuesday, three days ahead of schedule.",
+        "The group agreed that at least 30 per cent of the revenue would go to the fund, according to the draft text published by the organisers. Pacific island states, which had asked for half, said they could accept the share if the rate was set high enough to raise meaningful sums.",
+        "The rate remained undecided. A bloc of countries led by large exporters of agricultural goods proposed a starting level of $20 a tonne of carbon dioxide, while European and Pacific delegations sought $100. Negotiators said a compromise in the range of $40 to $60 had been discussed informally.",
+        "The chair of the talks, Ingrid Solheim, said in a closing statement that the gaps were narrower than at the start of the week. The next round will be held in February, and delegates said they would need to agree on a text by spring to leave time for ratification.",
+        "Shipping industry groups said the failure to agree a rate prolonged uncertainty for shipowners who were ordering new vessels. Read the [full draft text](https://example.com/imo/draft-levy-text) published by the organisers for the proposed fee schedule. Environmental groups said the delay risked putting a global price on carbon out of reach before a major ship-ordering cycle begins next year."
+      ],
+      "keyFacts": [
+        "Talks ended three days early.",
+        "At least 30 per cent of revenue is earmarked for a fund.",
+        "Proposed starting rates ranged from $20 to $100 a tonne.",
+        "The next round is in February."
+      ],
+      "background": "Shipping accounts for about 3 per cent of global greenhouse gas emissions. Member states agreed last year to aim for net-zero emissions in the sector by around 2050.",
+      "whyItMatters": "The levy's rate will decide how quickly shipowners move to cleaner fuels, and how much money reaches developing countries.",
+      "dateline": "GENEVA",
+      "image": {
+        "url": "https://picsum.photos/seed/delegates/1200/800",
+        "credit": "Reuters",
+        "sourceUrl": "https://example.com/reuters/geneva-shipping-levy-talks-adjourn",
+        "alt": "Delegates seated at a long conference table in a Geneva meeting hall",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Reuters",
+          "title": "Shipping levy talks adjourn without a rate; delegates agree to keep a fund for poorer countries",
+          "url": "https://example.com/reuters/geneva-shipping-levy-talks-adjourn",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "BBC",
+          "title": "Negotiators said they would meet again in February",
+          "url": "https://example.com/bbc/geneva-shipping-levy-talks-adjourn",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Al Jazeera",
+          "title": "Shipping levy talks adjourn without a rate; delegates agree to keep a: key points",
+          "url": "https://example.com/al-jazeera/geneva-shipping-levy-talks-adjourn",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "Financial Times",
+          "title": "What we know so far | Negotiators said they would meet again in February",
+          "url": "https://example.com/financial-times/geneva-shipping-levy-talks-adjourn",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "shipping",
+        "emissions",
+        "imo"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "india-australia-second-test-day-four",
+      "section": "sports",
+      "rank": 5,
+      "headline": "India set Australia 152 to win second Test after losing last six wickets for nine runs",
+      "dek": "The hosts finished the day on 96 for 3, needing 56 more.",
+      "summary": "India lost their last six second-innings wickets for 9 runs on Tuesday morning and were bowled out for 247, setting Australia 152 to win. Australia reached 96 for 3 by the close of play on day four.",
+      "body": [
+        "India added only 9 runs on Tuesday morning before being bowled out for 247 in their second innings, setting Australia a target of 152 to win the second Test in Adelaide. The visitors lost their last six wickets in 7.3 overs, to the off-spinner and a fast bowler who each took three.",
+        "Australia began their chase after lunch and reached 96 for 3 at stumps on day four, needing another 56 runs. Their opening pair put on 52, but India's spinners took two wickets in the last hour on a pitch that was taking sharp turn.",
+        "India's captain said the target was small but that the pitch would make it difficult. Australia's captain said his batters had to play late and use their feet to the spinners, and that he believed his side could still win.",
+        "The match is the second of five in the series, which is level at 0-0. Rain is not forecast for the fifth day, and the curator said the pitch would continue to deteriorate, with uneven bounce likely in the morning session.",
+        "About 31,000 spectators attended the fourth day, according to Cricket Australia, bringing the match's total to more than 110,000. The attendance followed a crowd of about 28,000 on the third day. Cricket Australia said tickets for the fifth day were free for children, as part of a promotion for the series. The match is scheduled to resume at 10.30 am local time on Wednesday."
+      ],
+      "keyFacts": [
+        "India were bowled out for 247.",
+        "Australia need 152 to win.",
+        "Australia finished on 96 for 3, needing 56 more.",
+        "The series is level at 0-0."
+      ],
+      "background": "The first Test in Perth was drawn after rain stopped play on the fourth day.",
+      "whyItMatters": "A win for either side would give them a lead in the five-match series.",
+      "dateline": "ADELAIDE",
+      "image": {
+        "url": "https://picsum.photos/seed/appeal/1200/800",
+        "credit": "Indian Express",
+        "sourceUrl": "https://example.com/indian-express/india-australia-second-test-day-four",
+        "alt": "A spin bowler in white appealing to the umpire during a day-night Test",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "video": {
+        "youtubeId": "jNQXAC9IVRw",
+        "title": "Day four highlights: India set 247 for Australia",
+        "channel": "Test Cricket Daily"
+      },
+      "sources": [
+        {
+          "outlet": "Indian Express",
+          "title": "India set Australia 152 to win second Test after losing last six wickets for nine runs",
+          "url": "https://example.com/indian-express/india-australia-second-test-day-four",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Hindustan Times",
+          "title": "The hosts finished the day on 96 for 3, needing 56 more",
+          "url": "https://example.com/hindustan-times/india-australia-second-test-day-four",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Times of India",
+          "title": "India set Australia 152 to win second Test after losing last six: key points",
+          "url": "https://example.com/times-of-india/india-australia-second-test-day-four",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "NDTV",
+          "title": "What we know so far | The hosts finished the day on 96 for 3, needing 56 more",
+          "url": "https://example.com/ndtv/india-australia-second-test-day-four",
+          "leaning": "centre-left"
+        }
+      ],
+      "tags": [
+        "cricket",
+        "test-cricket",
+        "india-australia"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "delhi-grap-stage-four-curbs",
+      "section": "health-environment",
+      "rank": 6,
+      "headline": "Delhi imposes stage four curbs on construction and trucks after air quality stays 'severe'",
+      "dek": "The commission also asked offices to let half of their staff work from home.",
+      "summary": "The air quality commission imposed the strictest tier of restrictions in Delhi on Tuesday, banning most construction and the entry of non-essential trucks. The air quality index was 447 at 8 am.",
+      "body": [
+        "The commission for air quality management imposed the strictest tier of its emergency plan in Delhi and surrounding areas on Tuesday, after the city's air quality index stayed above 400 for a second day. The index was 447 at 8 am, the Central Pollution Control Board said.",
+        "Under the stage-four restrictions, construction and demolition work is banned except for essential projects, trucks that are not carrying essential goods may not enter the city, and schools have been asked to hold online classes for younger children. The commission also asked offices to let half their staff work from home.",
+        "The Delhi government said it had deployed 650 water-sprinkling and anti-smog vehicles, and that enforcement teams would check vehicles at 120 entry points. Municipal bodies were told to stop burning waste and to clean roads with mechanical sweepers. Fines of 20,000 rupees were announced for owners of vehicles that break the rules, and the transport department said it would impound trucks found without permits.",
+        "Environmental groups said the restrictions came too late, since the commission's own rules say action should begin when forecasts show a rise in pollution. A researcher at a Delhi think tank said the main sources, such as vehicle exhaust, remained largely untouched by the curbs.",
+        "The weather department said winds were expected to pick up on Friday, which should disperse some of the pollution. Until then, hospitals said they expected more patients with respiratory illness, and the health department asked residents to limit outdoor exercise."
+      ],
+      "keyFacts": [
+        "The AQI was 447 at 8 am.",
+        "Stage-four rules ban most construction.",
+        "650 anti-smog vehicles were deployed.",
+        "Winds are forecast to rise on Friday."
+      ],
+      "background": "Delhi's air quality fell to the 'severe' category on Monday evening because of calm winds and cold weather.",
+      "whyItMatters": "The restrictions affect construction workers' wages and trucking, and are meant to cut the pollution children and elderly residents breathe.",
+      "dateline": "NEW DELHI",
+      "image": {
+        "url": "https://picsum.photos/seed/sprinkler/1200/800",
+        "credit": "Hindustan Times",
+        "sourceUrl": "https://example.com/hindustan-times/delhi-grap-stage-four-curbs",
+        "alt": "A water-sprinkling truck driving down a hazy road lined with trees",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Hindustan Times",
+          "title": "Delhi imposes stage four curbs on construction and trucks after air quality stays 'severe'",
+          "url": "https://example.com/hindustan-times/delhi-grap-stage-four-curbs",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Times of India",
+          "title": "The commission also asked offices to let half of their staff work from home",
+          "url": "https://example.com/times-of-india/delhi-grap-stage-four-curbs",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Indian Express",
+          "title": "Delhi imposes stage four curbs on construction and trucks after air: key points",
+          "url": "https://example.com/indian-express/delhi-grap-stage-four-curbs",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "The Print",
+          "title": "What we know so far | The commission also asked offices to let half of their staff work from home",
+          "url": "https://example.com/the-print/delhi-grap-stage-four-curbs",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "delhi",
+        "air-quality",
+        "grap"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "isro-crew-module-heat-shield-findings",
+      "section": "science-tech",
+      "rank": 7,
+      "headline": "ISRO engineers find heat shield intact on recovered crew module; further tests planned",
+      "dek": "The capsule arrived at Chennai port on Tuesday morning.",
+      "summary": "ISRO engineers said the heat shield on the recovered crew module appeared intact after a first inspection on Tuesday. The capsule reached Chennai port on a naval ship and will be taken to a laboratory in Bengaluru.",
+      "body": [
+        "The Indian Space Research Organisation said engineers found the heat shield on its recovered crew module intact after a first visual inspection on Tuesday. The capsule, which splashed down in the Bay of Bengal on Monday morning after an uncrewed test, arrived at Chennai port on a naval ship early on Tuesday.",
+        "The module will be taken by road to a laboratory in Bengaluru, where engineers will take samples from the shield and examine the parachute lines and the escape system's motors. ISRO said analysis of data from the flight would take about three weeks.",
+        "An ISRO official, who spoke on condition that he not be named because he was not authorised to brief the press, said minor charring was visible on the shield's edge but that the damage was within the limits expected. The shield was designed to withstand temperatures of about 1,500 degrees Celsius.",
+        "The space agency said it would carry out at least two more tests of the escape system, including one at a higher altitude, before an astronaut flight. A date for the next test has not been announced, but officials said it could be held within four months.",
+        "Space analysts said the successful recovery was a useful step but that the programme still needed to show it could safely launch and land a crewed capsule on the full rocket. Several said ISRO's schedule for a crewed flight next year looked tight."
+      ],
+      "keyFacts": [
+        "The heat shield appeared intact.",
+        "The capsule reached Chennai port on Tuesday.",
+        "Data analysis will take about three weeks.",
+        "At least two more escape system tests are planned."
+      ],
+      "background": "The crew module splashed down about 11 minutes after launch from Sriharikota on Monday.",
+      "whyItMatters": "The heat shield is the part of a capsule that most directly protects astronauts on return to Earth.",
+      "dateline": "BENGALURU",
+      "image": {
+        "url": "https://picsum.photos/seed/quay/1200/800",
+        "credit": "The Hindu",
+        "sourceUrl": "https://example.com/the-hindu/isro-crew-module-heat-shield-findings",
+        "alt": "A crane lifting a conical white capsule from a ship's deck onto a quay",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "The Hindu",
+          "title": "ISRO engineers find heat shield intact on recovered crew module; further tests planned",
+          "url": "https://example.com/the-hindu/isro-crew-module-heat-shield-findings",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "The Print",
+          "title": "The capsule arrived at Chennai port on Tuesday morning",
+          "url": "https://example.com/the-print/isro-crew-module-heat-shield-findings",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Deccan Herald",
+          "title": "ISRO engineers find heat shield intact on recovered crew module;: key points",
+          "url": "https://example.com/deccan-herald/isro-crew-module-heat-shield-findings",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "NDTV",
+          "title": "What we know so far | The capsule arrived at Chennai port on Tuesday morning",
+          "url": "https://example.com/ndtv/isro-crew-module-heat-shield-findings",
+          "leaning": "centre-left"
+        }
+      ],
+      "tags": [
+        "isro",
+        "human-spaceflight",
+        "space"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "namma-metro-pink-line-opening-date",
+      "section": "bengaluru",
+      "rank": 8,
+      "headline": "Metro corporation says Pink Line elevated stretch could open by February after safety checks",
+      "dek": "Officials said trial runs would be extended to 60 km/h this week.",
+      "summary": "The metro corporation said the elevated section of the Pink Line could open by February if safety inspections are completed on time. Trial runs, which began on Monday, will now go to 60 km/h.",
+      "body": [
+        "Bangalore Metro Rail Corporation said on Tuesday that the elevated section of the Pink Line, where trial runs began on Monday, could open to passengers by February if safety inspections are completed on schedule. The corporation's managing director said the date depended on certification by the commissioner of metro rail safety.",
+        "The trial runs will be extended to speeds of 60 km/h this week and 80 km/h later this month, the corporation said. Trains will make about 12 trips a day between Kalena Agrahara and Tavarekere, and engineers will test the signalling system with two trains on the line at once.",
+        "Safety inspectors are expected to visit in the first week of January, according to the corporation's schedule. The inspection usually takes two to three weeks, and the corporation has to fix any faults that are found before the line can open.",
+        "Bus operators on Bannerghatta Road said they were planning to cut some services when the metro opened and add feeder buses to the new stations. The city transport corporation said it would announce its plan after the opening date was confirmed.",
+        "Commuters waiting at bus stops near Jayadeva Hospital on Tuesday said they hoped the opening would not slip again. The stretch was due to open last year, and the corporation has revised its schedule four times since then. Officials said they would run additional trial trips at night, when there are fewer people near the track and engineers can carry out maintenance work."
+      ],
+      "keyFacts": [
+        "The line could open by February.",
+        "Trial speeds will rise to 60 km/h this week.",
+        "About 12 trips a day are being run.",
+        "Safety inspection is expected in early January."
+      ],
+      "background": "The elevated section is 7.5 kilometres long and has seven stations.",
+      "dateline": "BENGALURU",
+      "image": {
+        "url": "https://picsum.photos/seed/viaduct/1200/800",
+        "credit": "Deccan Herald",
+        "sourceUrl": "https://example.com/deccan-herald/namma-metro-pink-line-opening-date",
+        "alt": "A train on a metro viaduct above traffic on Bannerghatta Road",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Deccan Herald",
+          "title": "Metro corporation says Pink Line elevated stretch could open by February after safety checks",
+          "url": "https://example.com/deccan-herald/namma-metro-pink-line-opening-date",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "The Hindu",
+          "title": "Officials said trial runs would be extended to 60 km/h this week",
+          "url": "https://example.com/the-hindu/namma-metro-pink-line-opening-date",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "Times of India",
+          "title": "Metro corporation says Pink Line elevated stretch could open by: key points",
+          "url": "https://example.com/times-of-india/namma-metro-pink-line-opening-date",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "namma-metro",
+        "pink-line",
+        "transport"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "outer-ring-road-diversion-tech-park-flyover",
+      "section": "bengaluru",
+      "rank": 9,
+      "headline": "Traffic diversions on Outer Ring Road near Bellandur for six weeks as flyover work begins",
+      "dek": "Police said office-goers should expect delays of up to 40 minutes at peak hours.",
+      "summary": "Bengaluru traffic police announced diversions on the Outer Ring Road near Bellandur for six weeks from Wednesday, while work begins on a new flyover. Police said delays of up to 40 minutes were likely at peak hours.",
+      "body": [
+        "Bengaluru traffic police announced diversions on the Outer Ring Road near Bellandur that will remain in place for six weeks from Wednesday, while the BBMP builds a flyover at the junction. Traffic officials said delays of up to 40 minutes were likely at morning and evening peak hours.",
+        "Vehicles coming from Sarjapur Road will be directed to a service lane and then along an internal road in a nearby tech park, which has agreed to open two gates for public use. Heavy vehicles will be banned from the stretch between 7 am and 11 am and between 4 pm and 9 pm.",
+        "The flyover, which will be 840 metres long, is to cost about 96 crore rupees, according to the BBMP. The civic body said the work would take about 14 months, and that this first phase involves shifting utility lines and demolishing the median.",
+        "The association of tech-park tenants said companies had been asked to stagger shifts and to allow staff to work from home on two days a week during the diversion. A spokesperson for one park, Ritu Menon, said shuttle buses would be rerouted.",
+        "Traffic police said 60 additional officers would be deployed at the junction, and that a control room had been set up to track congestion with camera feeds. Commuters can check the diversion plan on the police website and on social media."
+      ],
+      "keyFacts": [
+        "Diversions run for six weeks from Wednesday.",
+        "The flyover will be 840 metres long.",
+        "It will cost about 96 crore rupees.",
+        "60 extra officers will be deployed."
+      ],
+      "background": "The Outer Ring Road carries about 400,000 vehicles a day and is home to dozens of tech parks.",
+      "whyItMatters": "The diversions will affect thousands of office-goers in one of the city's busiest corridors.",
+      "dateline": "BENGALURU",
+      "image": {
+        "url": "https://picsum.photos/seed/gridlock/1200/800",
+        "credit": "Deccan Herald",
+        "sourceUrl": "https://example.com/deccan-herald/outer-ring-road-diversion-tech-park-flyover",
+        "alt": "Cars and buses queued on a multi-lane road beside glass office towers",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Deccan Herald",
+          "title": "Traffic diversions on Outer Ring Road near Bellandur for six weeks as flyover work begins",
+          "url": "https://example.com/deccan-herald/outer-ring-road-diversion-tech-park-flyover",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Times of India",
+          "title": "Police said office-goers should expect delays of up to 40 minutes at peak hours",
+          "url": "https://example.com/times-of-india/outer-ring-road-diversion-tech-park-flyover",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Hindustan Times",
+          "title": "Traffic diversions on Outer Ring Road near Bellandur for six weeks as: key points",
+          "url": "https://example.com/hindustan-times/outer-ring-road-diversion-tech-park-flyover",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "News18",
+          "title": "What we know so far | Police said office-goers should expect delays of up to 40 minutes at peak hours",
+          "url": "https://example.com/news18/outer-ring-road-diversion-tech-park-flyover",
+          "leaning": "centre-right"
+        }
+      ],
+      "tags": [
+        "traffic",
+        "outer-ring-road",
+        "bbmp"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "chennai-northeast-monsoon-waterlogging",
+      "section": "india",
+      "rank": 10,
+      "headline": "Heavy rain floods low-lying areas of Chennai; schools shut in four districts on Tuesday",
+      "dek": "The city recorded 14 cm of rain in 24 hours, according to the weather department.",
+      "summary": "Chennai recorded 14 cm of rain in 24 hours on Monday night, flooding roads in low-lying areas. Schools were shut in four districts, and the weather department forecast more rain on Wednesday.",
+      "body": [
+        "Chennai received 14 cm of rain in 24 hours up to Tuesday morning, the regional meteorological centre said, flooding underpasses and roads in low-lying areas such as Velachery, Perambur and Mylapore. Schools and colleges were shut on Tuesday in Chennai, Chengalpattu, Kancheepuram and Tiruvallur districts.",
+        "The Greater Chennai Corporation said 1,100 pumps had been deployed and that water had been cleared from 38 of 52 flooded subways by noon. Officials said about 4,000 people had been moved to relief centres, where meals were being served.",
+        "Suburban train services ran with delays, and some flights were rescheduled at the airport, where the runway was kept clear. State transport buses were rerouted in parts of the south of the city, where water was waist-deep in some streets.",
+        "The weather department forecast heavy rain again on Wednesday and said an offshore trough would keep conditions unsettled for three days. It issued an orange alert for six districts and advised fishermen not to go out to sea. People living along the Adyar river were told to watch for rising water levels after releases from an upstream reservoir, officials said.",
+        "Residents in Velachery said the water took about 10 hours to recede from some lanes, which was faster than during the floods of previous years. Civic officials credited the new stormwater drains on two major roads but said the work in other areas was incomplete."
+      ],
+      "keyFacts": [
+        "Chennai got 14 cm of rain in 24 hours.",
+        "Schools were shut in four districts.",
+        "About 4,000 people were in relief centres.",
+        "More heavy rain was forecast for Wednesday."
+      ],
+      "background": "The northeast monsoon brings most of Tamil Nadu's annual rain between October and December.",
+      "whyItMatters": "Repeated flooding in low-lying areas tests the city's drainage upgrades, completed after earlier floods.",
+      "dateline": "CHENNAI",
+      "image": {
+        "url": "https://example.invalid/missing-downpour.jpg",
+        "credit": "The Hindu",
+        "sourceUrl": "https://example.com/the-hindu/chennai-northeast-monsoon-waterlogging",
+        "alt": "A bus driving through floodwater on a Chennai street as people wait on the pavement",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "The Hindu",
+          "title": "Heavy rain floods low-lying areas of Chennai; schools shut in four districts on Tuesday",
+          "url": "https://example.com/the-hindu/chennai-northeast-monsoon-waterlogging",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "Indian Express",
+          "title": "The city recorded 14 cm of rain in 24 hours, according to the weather department",
+          "url": "https://example.com/indian-express/chennai-northeast-monsoon-waterlogging",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "NDTV",
+          "title": "Heavy rain floods low-lying areas of Chennai; schools shut in four: key points",
+          "url": "https://example.com/ndtv/chennai-northeast-monsoon-waterlogging",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "Times of India",
+          "title": "What we know so far | The city recorded 14 cm of rain in 24 hours, according to the weather department",
+          "url": "https://example.com/times-of-india/chennai-northeast-monsoon-waterlogging",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "chennai",
+        "rain",
+        "monsoon"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "census-enumerator-training-begins",
+      "section": "india",
+      "rank": 11,
+      "headline": "Census enumerator training begins in 12 states ahead of house-listing next spring",
+      "dek": "Officials said about 3 million staff would be trained over four months.",
+      "summary": "Training of enumerators for the national census began in 12 states on Tuesday. The house-listing phase is scheduled for next spring, and officials said about 3 million staff would be trained.",
+      "body": [
+        "Training of enumerators for the national census began on Tuesday in 12 states, the office of the Registrar General said. The first phase, house-listing, is scheduled to take place between April and September next year, and the population count is to follow in early 2027.",
+        "About 3 million enumerators and supervisors, most of them teachers and government employees, will be trained over the next four months, officials said. They will use a mobile application to record information, with paper forms available in areas without a reliable mobile network.",
+        "The house-listing questionnaire has 33 questions, including on the material of the house, access to drinking water and electricity, and ownership of items such as vehicles and phones. For the first time, respondents will be able to fill in their details online before the visit.",
+        "Officials said data collected would be encrypted on devices and sent to servers within the country, in response to concerns about privacy. A senior official said the application had been tested in a pilot in 11 districts earlier this year.",
+        "The government has not yet said whether the population count will include questions on caste. A decision is expected before the second phase begins, an official said. Some states have asked for the caste question to be included. The Registrar General's office said it would announce the final questionnaire after the cabinet meets."
+      ],
+      "keyFacts": [
+        "Training began in 12 states.",
+        "About 3 million staff will be trained.",
+        "House-listing runs from April to September.",
+        "The questionnaire has 33 questions."
+      ],
+      "background": "",
+      "dateline": "NEW DELHI",
+      "image": {
+        "url": "https://picsum.photos/seed/census/1200/800",
+        "credit": "Indian Express",
+        "sourceUrl": "https://example.com/indian-express/census-enumerator-training-begins",
+        "alt": "Teachers seated in a training hall holding tablets while an instructor speaks",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Indian Express",
+          "title": "Census enumerator training begins in 12 states ahead of house-listing next spring",
+          "url": "https://example.com/indian-express/census-enumerator-training-begins",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "The Hindu",
+          "title": "Officials said about 3 million staff would be trained over four months",
+          "url": "https://example.com/the-hindu/census-enumerator-training-begins",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "The Print",
+          "title": "Census enumerator training begins in 12 states ahead of house-listing: key points",
+          "url": "https://example.com/the-print/census-enumerator-training-begins",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "census",
+        "government",
+        "statistics"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "pacific-islands-sea-level-fund-announced-at-suva-summit",
+      "section": "world",
+      "rank": 12,
+      "headline": "Pacific island leaders and donor countries agree on a $480 million fund to move coastal communities from rising seas",
+      "dek": "Pledges came from eleven governments at the summit in Fiji.",
+      "summary": "Pacific island leaders and donor governments agreed in Suva on a $480 million fund for relocating coastal communities threatened by rising seas. Eleven governments made pledges, and the first payments are due next year.",
+      "body": [
+        "Pacific island leaders and representatives of eleven donor governments agreed in Suva on Tuesday to set up a $480 million fund to help move coastal communities that are being flooded by rising seas. The fund will be run by a regional development bank and make its first payments next year.",
+        "The largest pledges came from Australia, New Zealand and Japan, with smaller amounts from European governments and South Korea. The fund will pay for planning, land purchases and new housing, and for the upkeep of cultural sites, according to a statement issued after the summit.",
+        "Leaders from Tuvalu, Kiribati and the Marshall Islands, where the highest point of land is only a few metres above sea level, said the sum was far smaller than the cost of moving even one community. A Fijian official estimated that relocating the country's 40 most threatened villages would cost $300 million.",
+        "Donor countries said the fund would be reviewed after three years and could be topped up. Representatives of two donor governments said they wanted communities to decide where they moved to, and that payments would be tied to plans drawn up with local leaders.",
+        "Satellite measurements show that sea levels in the western Pacific have risen at about twice the global average over the past 30 years, according to a study cited by the summit. More than a dozen villages in Fiji have already moved inland."
+      ],
+      "keyFacts": [
+        "The fund is worth $480 million.",
+        "Eleven governments made pledges.",
+        "First payments are due next year.",
+        "Fiji estimates relocating 40 villages would cost $300 million."
+      ],
+      "background": "Fiji has relocated several villages since 2014 and has a national plan for moving others.",
+      "whyItMatters": "Rising seas are forcing communities in low-lying island states to leave land they have lived on for generations.",
+      "dateline": "SUVA",
+      "image": {
+        "url": "https://picsum.photos/seed/islands/1200/800",
+        "credit": "Wikimedia Commons / CC BY-SA 4.0",
+        "sourceUrl": "https://example.com/wikimedia-commons/pacific-islands-sea-level-fund-announced-at-suva-summit",
+        "alt": "Houses on stilts at the water's edge in a Fijian coastal village at high tide",
+        "width": 1200,
+        "height": 800,
+        "kind": "wikimedia"
+      },
+      "sources": [
+        {
+          "outlet": "Al Jazeera",
+          "title": "Pacific island leaders and donor countries agree on a $480 million fund to move coastal communities from rising seas",
+          "url": "https://example.com/al-jazeera/pacific-islands-sea-level-fund-announced-at-suva-summit",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "The Guardian",
+          "title": "Pledges came from eleven governments at the summit in Fiji",
+          "url": "https://example.com/the-guardian/pacific-islands-sea-level-fund-announced-at-suva-summit",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "BBC",
+          "title": "Pacific island leaders and donor countries agree on a $480 million: key points",
+          "url": "https://example.com/bbc/pacific-islands-sea-level-fund-announced-at-suva-summit",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Reuters",
+          "title": "What we know so far | Pledges came from eleven governments at the summit in Fiji",
+          "url": "https://example.com/reuters/pacific-islands-sea-level-fund-announced-at-suva-summit",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "pacific",
+        "climate",
+        "relocation"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "canada-wildfire-inquiry-report",
+      "section": "world",
+      "rank": 13,
+      "headline": "Canadian inquiry says warnings on wildfire season went unheeded; recommends new national fire agency",
+      "dek": "The report examined the response to last year's fires, which burned 8 million hectares.",
+      "summary": "A Canadian inquiry into last year's wildfire season said early warnings from forecasters were not acted on, and recommended a single national agency to coordinate firefighting. The fires burned about 8 million hectares.",
+      "body": [
+        "A Canadian government-commissioned inquiry said on Tuesday that forecasters' warnings about an exceptionally dry wildfire season last year were not acted on in time, and recommended the creation of a single national agency to coordinate firefighting. The fires burned about 8 million hectares and forced more than 200,000 people from their homes.",
+        "The report, which ran to 412 pages, found that provinces competed for aircraft and crews during peak weeks, and that a national centre had no authority to allocate resources. It said some crews were sent home early because of rules that limit shifts, even as fires grew.",
+        "The panel's chair, retired judge Helen Okafor, said at a press conference that the system had been designed for smaller fires and had not been updated. She said the recommendations were intended to be practical and could be adopted within two years.",
+        "The panel also recommended an increase in funding for prescribed burning, which clears undergrowth in forests, and a requirement that new housing in high-risk areas be built with fire-resistant materials. The federal government said it would respond within 90 days.",
+        "Provincial officials said they supported better coordination but were wary of ceding authority. The premier of one province said emergency response was a provincial responsibility and that the report should not lead to a loss of local control. Opposition parties said the report vindicated their calls for a stronger federal role, and promised to press the government to adopt it in full."
+      ],
+      "keyFacts": [
+        "The fires burned about 8 million hectares.",
+        "More than 200,000 people were evacuated.",
+        "The report ran to 412 pages.",
+        "The government will respond within 90 days."
+      ],
+      "background": "Canada recorded its worst wildfire season on record last year. Smoke from the fires reached parts of Europe.",
+      "whyItMatters": "Fire seasons are growing longer and more severe, and any national agency would change how resources are shared across provinces.",
+      "dateline": "OTTAWA",
+      "image": {
+        "url": "https://picsum.photos/seed/wildfire/1200/800",
+        "credit": "BBC",
+        "sourceUrl": "https://example.com/bbc/canada-wildfire-inquiry-report",
+        "alt": "A water bomber dropping red retardant over a burning forest ridge",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "BBC",
+          "title": "Canadian inquiry says warnings on wildfire season went unheeded; recommends new national fire agency",
+          "url": "https://example.com/bbc/canada-wildfire-inquiry-report",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "The Guardian",
+          "title": "The report examined the response to last year's fires, which burned 8 million hectares",
+          "url": "https://example.com/the-guardian/canada-wildfire-inquiry-report",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "Reuters",
+          "title": "Canadian inquiry says warnings on wildfire season went unheeded;: key points",
+          "url": "https://example.com/reuters/canada-wildfire-inquiry-report",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Wall Street Journal",
+          "title": "What we know so far | The report examined the response to last year's fires, which burned 8 million hectares",
+          "url": "https://example.com/wall-street-journal/canada-wildfire-inquiry-report",
+          "leaning": "centre-right"
+        }
+      ],
+      "tags": [
+        "canada",
+        "wildfires",
+        "climate"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "brazil-port-strike-ends",
+      "section": "world",
+      "rank": 14,
+      "headline": "Brazilian dock workers end nine-day strike at Santos after union and operators reach wage deal",
+      "dek": "Cargo handling was expected to return to normal within three days.",
+      "summary": "Dock workers at Brazil's port of Santos ended a nine-day strike on Tuesday after agreeing a wage deal with terminal operators. Hundreds of ships had been waiting to load or unload, port officials said.",
+      "body": [
+        "Dock workers at Santos, Latin America's busiest container port, ended a nine-day strike on Tuesday after their union and terminal operators agreed a wage increase of 6.2 per cent, port authority officials said. Work resumed on the evening shift, and the authority said cargo handling would return to normal within three days.",
+        "About 140 ships were waiting off the coast to load or unload when the strike ended, the authority said. Exporters of soybeans, coffee and sugar said they had lost a week of shipments, and some had asked buyers to extend delivery deadlines.",
+        "The union had asked for a rise of 9 per cent and a change to shift rules that it said left workers exhausted. The agreement gives workers the smaller increase but caps shifts at eight hours and adds a bonus for night work, according to a union statement.",
+        "Operators said the cost of the strike, which they put at about $400 million in delayed trade, would be hard to recover. A trade association for exporters said it would ask the government to set up a mechanism for mediation before future stoppages.",
+        "The port handles about a quarter of Brazil's trade by value. Shipping lines said they expected delays at other ports on their routes while they rescheduled the vessels that missed their slots. Terminal operators said they would add extra night shifts for a week to clear the backlog, and the port authority said it would publish daily updates."
+      ],
+      "keyFacts": [
+        "The strike lasted nine days.",
+        "Workers won a 6.2 per cent wage rise.",
+        "About 140 ships were waiting.",
+        "Operators put the cost at $400 million."
+      ],
+      "background": "Santos is the main outlet for Brazil's farm exports, including soybeans and coffee.",
+      "whyItMatters": "The delay affects shipments of food commodities that are priced on global markets.",
+      "image": {
+        "url": "https://picsum.photos/seed/harbour/1200/800",
+        "credit": "Reuters",
+        "sourceUrl": "https://example.com/reuters/brazil-port-strike-ends",
+        "alt": "Container cranes and stacked containers at a busy port under a cloudy sky",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Reuters",
+          "title": "Brazilian dock workers end nine-day strike at Santos after union and operators reach wage deal",
+          "url": "https://example.com/reuters/brazil-port-strike-ends",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Al Jazeera",
+          "title": "Cargo handling was expected to return to normal within three days",
+          "url": "https://example.com/al-jazeera/brazil-port-strike-ends",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "The Guardian",
+          "title": "Brazilian dock workers end nine-day strike at Santos after union and: key points",
+          "url": "https://example.com/the-guardian/brazil-port-strike-ends",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "Financial Times",
+          "title": "What we know so far | Cargo handling was expected to return to normal within three days",
+          "url": "https://example.com/financial-times/brazil-port-strike-ends",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "brazil",
+        "ports",
+        "strike"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "it-services-fresher-hiring-third-quarter",
+      "section": "business",
+      "rank": 15,
+      "headline": "IT services firms plan to hire about 20 per cent fewer graduates this quarter, industry survey finds",
+      "dek": "A staffing firm said demand for experienced engineers in cloud and data roles remained steady.",
+      "summary": "A survey of 40 technology services companies found that they plan to hire about 20 per cent fewer fresh graduates in the October-December quarter than a year earlier. Demand for experienced engineers was steadier.",
+      "body": [
+        "A survey of 40 technology services companies by a staffing firm found that they plan to hire about 20 per cent fewer fresh graduates in the October-December quarter than in the same period last year. The survey, whose results were published on Tuesday, covered firms that together employ about 3.9 million people.",
+        "Respondents said they were cautious because clients had delayed new projects and demanded lower prices for routine work. Several said they were using software tools to automate testing and support tasks that were once done by new recruits, and that the move cut the number of entry-level roles.",
+        "Demand for experienced engineers in cloud, data engineering and cybersecurity remained steady, the survey found, with hiring for such roles down only 3 per cent. Salaries for mid-level engineers in those fields rose by about 8 per cent over the past year.",
+        "Colleges said the trend was affecting campus placements. A placement officer at an engineering college in Karnataka said the number of companies visiting this year was down by about a fifth, and that offers were arriving later than in earlier years.",
+        "Industry body officials said the sector's order books were healthy and that hiring would recover if client budgets improved in the new year. The firms in the survey said they expected to increase hiring in the January-March quarter. The survey authors said they would repeat the exercise in January and add questions about how companies were using automation tools in hiring."
+      ],
+      "keyFacts": [
+        "The survey covered 40 firms.",
+        "Fresher hiring is expected to fall about 20 per cent.",
+        "Experienced-hire demand fell only 3 per cent.",
+        "Mid-level pay rose about 8 per cent."
+      ],
+      "background": "IT services firms hired heavily during the pandemic and have been more cautious since 2023.",
+      "whyItMatters": "The sector is one of the largest employers of engineering graduates, so a slowdown in hiring affects campus placements across the country.",
+      "dateline": "BENGALURU",
+      "image": {
+        "url": "https://picsum.photos/seed/graduates/1200/800",
+        "credit": "Mint",
+        "sourceUrl": "https://example.com/mint/it-services-fresher-hiring-third-quarter",
+        "alt": "Young graduates holding folders while queuing outside a campus placement hall",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Mint",
+          "title": "IT services firms plan to hire about 20 per cent fewer graduates this quarter, industry survey finds",
+          "url": "https://example.com/mint/it-services-fresher-hiring-third-quarter",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Business Standard",
+          "title": "A staffing firm said demand for experienced engineers in cloud and data roles remained steady",
+          "url": "https://example.com/business-standard/it-services-fresher-hiring-third-quarter",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Deccan Herald",
+          "title": "IT services firms plan to hire about 20 per cent fewer graduates this: key points",
+          "url": "https://example.com/deccan-herald/it-services-fresher-hiring-third-quarter",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Times of India",
+          "title": "What we know so far | A staffing firm said demand for experienced engineers in cloud and data roles remained steady",
+          "url": "https://example.com/times-of-india/it-services-fresher-hiring-third-quarter",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "it-services",
+        "jobs",
+        "hiring"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "gold-prices-ease-after-three-day-rally",
+      "section": "business",
+      "rank": 16,
+      "headline": "Gold eases 0.6 per cent in domestic market after three-day rally as dollar firms",
+      "dek": "Ten grams of 24-carat gold was priced at 1,24,300 rupees in Mumbai.",
+      "summary": "Gold prices eased about 0.6 per cent in the domestic market on Tuesday after rising for three sessions, as a stronger dollar reduced demand. Ten grams of 24-carat gold sold at 1,24,300 rupees in Mumbai.",
+      "body": [
+        "Gold prices fell about 0.6 per cent in India's domestic market on Tuesday after three sessions of gains, as a firmer dollar made the metal costlier for overseas buyers. Ten grams of 24-carat gold sold at 1,24,300 rupees in Mumbai, according to a jewellers' association, down from 1,25,050 rupees on Monday.",
+        "Prices in the international market were about $4,120 an ounce, slightly lower than the previous close. Dealers said investors were waiting for US economic data later this week that could affect expectations for interest rate cuts by the Federal Reserve.",
+        "Jewellers said retail demand had improved over the past week because of the wedding season, though high prices had led many buyers to choose lighter pieces. A Mumbai jeweller said sales by weight were down about 10 per cent from last year, while sales by value were higher.",
+        "India imported about 62 tonnes of gold in October, according to government data, compared with 45 tonnes a year earlier. The rupee's fall to a record low has added to the domestic cost, since gold is priced in dollars. The government has also raised the duty on gold imports, which dealers said had pushed some trade into the informal market over the past year.",
+        "Analysts said a stronger dollar could keep prices in check in the short term but that central bank purchases and economic uncertainty supported demand over the longer term. Some analysts forecast prices would end the year near 1,28,000 rupees per ten grams, while others expected a small correction before the festival season ended."
+      ],
+      "keyFacts": [
+        "Gold fell about 0.6 per cent.",
+        "Ten grams sold at 1,24,300 rupees.",
+        "October imports were about 62 tonnes.",
+        "Wedding-season demand is up."
+      ],
+      "background": "",
+      "dateline": "MUMBAI",
+      "sources": [
+        {
+          "outlet": "Business Standard",
+          "title": "Gold eases 0.6 per cent in domestic market after three-day rally as dollar firms",
+          "url": "https://example.com/business-standard/gold-prices-ease-after-three-day-rally",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Mint",
+          "title": "Ten grams of 24-carat gold was priced at 1,24,300 rupees in Mumbai",
+          "url": "https://example.com/mint/gold-prices-ease-after-three-day-rally",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Times of India",
+          "title": "Gold eases 0.6 per cent in domestic market after three-day rally as: key points",
+          "url": "https://example.com/times-of-india/gold-prices-ease-after-three-day-rally",
+          "leaning": "centre"
+        }
+      ],
+      "tags": [
+        "gold",
+        "commodities",
+        "jewellery"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "hyderabad-quantum-lab-error-correction-result",
+      "section": "science-tech",
+      "rank": 17,
+      "headline": "Hyderabad team reports error-corrected logical qubit on indigenous 12-qubit processor",
+      "dek": "The preprint has not yet been independently reproduced.",
+      "summary": "Researchers at a Hyderabad institute said they had demonstrated an error-corrected logical qubit on a 12-qubit processor built in India. Outside physicists called the result modest but credible.",
+      "body": [
+        "Researchers at a Hyderabad institute reported on Tuesday that they had demonstrated an error-corrected logical qubit on a 12-qubit superconducting processor designed and built in India. A paper describing the work was posted to a preprint server and has been submitted to *Nature Physics*, the team said, and has not yet been peer reviewed.",
+        "A logical qubit combines several physical qubits so that errors in any one of them can be detected and corrected. The Hyderabad team used seven physical qubits for each logical qubit, and said the logical qubit kept its state about 1.8 times longer than the best single physical qubit on the chip.",
+        "Physicists not involved in the work said the improvement was modest but real, and that similar results had been reported by laboratories in the United States, China and Europe over the past three years. One said the main value was that it showed India's fabrication of superconducting circuits had reached the necessary quality.",
+        "The chip was made at a national facility using aluminium and niobium films on silicon, with measurements taken at temperatures close to 10 millikelvin. The team's leader, Dr Anjali Rao, said the group was working on a 50-qubit chip, which she expected to be ready in two years.",
+        "The work was funded under the National Quantum Mission, which has set aside 6,000 crore rupees over eight years. Officials said the mission would review progress at the end of next year. The Hyderabad group is expected to present its results to the mission's review panel, and has said it will release the circuit designs once the paper is accepted."
+      ],
+      "keyFacts": [
+        "The processor has 12 qubits.",
+        "Seven physical qubits make one logical qubit.",
+        "Coherence improved about 1.8 times.",
+        "The paper is not yet peer reviewed."
+      ],
+      "background": "The National Quantum Mission was approved in 2023 with the aim of building quantum computers with 50 to 1,000 qubits.",
+      "whyItMatters": "Error correction is regarded as necessary for quantum computers to be useful at scale.",
+      "dateline": "HYDERABAD",
+      "image": {
+        "url": "https://picsum.photos/seed/cryostat/1200/800",
+        "credit": "Nature",
+        "sourceUrl": "https://example.com/nature/hyderabad-quantum-lab-error-correction-result",
+        "alt": "A dilution refrigerator with gold-coloured plates in a physics laboratory",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Nature",
+          "title": "Hyderabad team reports error-corrected logical qubit on indigenous 12-qubit processor",
+          "url": "https://example.com/nature/hyderabad-quantum-lab-error-correction-result"
+        },
+        {
+          "outlet": "The Hindu",
+          "title": "The preprint has not yet been independently reproduced",
+          "url": "https://example.com/the-hindu/hyderabad-quantum-lab-error-correction-result",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "The Print",
+          "title": "Hyderabad team reports error-corrected logical qubit on indigenous: key points",
+          "url": "https://example.com/the-print/hyderabad-quantum-lab-error-correction-result",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "The Verge",
+          "title": "What we know so far | The preprint has not yet been independently reproduced",
+          "url": "https://example.com/the-verge/hyderabad-quantum-lab-error-correction-result"
+        }
+      ],
+      "tags": [
+        "quantum",
+        "physics",
+        "research"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "battery-recycling-plant-pune-opens",
+      "section": "science-tech",
+      "rank": 18,
+      "headline": "Battery recycling plant opens near Pune, aims to recover lithium from 10,000 tonnes of cells a year",
+      "dek": "The company said it would recover about 95 per cent of the metals in used cells.",
+      "summary": "A battery recycling plant opened near Pune on Tuesday. The company said it can process 10,000 tonnes of used lithium-ion cells a year and expects to recover about 95 per cent of the metals.",
+      "body": [
+        "A battery recycling plant opened in Chakan, near Pune, on Tuesday. The company that built it said the plant could process 10,000 tonnes of used lithium-ion batteries a year and would recover about 95 per cent of the nickel, cobalt, lithium and copper in them, which would be sold to battery makers.",
+        "The plant, which cost about 450 crore rupees, takes in manufacturing scrap from battery factories and used cells from electric vehicles and consumer electronics. The company has agreements with three vehicle makers to collect batteries from vehicles at the end of their lives.",
+        "Under rules in force since 2022, manufacturers of batteries must recycle a fixed share of what they sell, or buy recycling certificates from authorised recyclers. Industry officials said the rule had created demand for plants like the one in Chakan.",
+        "The volume of used electric vehicle batteries in India is still small, because most vehicles on the road are less than five years old. A company executive, Vikram Joshi, said the plant would at first rely mostly on scrap from factories and then shift to used cells from 2029.",
+        "Environmental groups said recycling was welcome but asked that the plant publish its emissions and waste data. The state pollution control board said it had given the plant permission to operate with conditions on wastewater treatment. The board said it would inspect the plant every quarter, and that inspection reports would be made available to the public on its website."
+      ],
+      "keyFacts": [
+        "The plant can process 10,000 tonnes a year.",
+        "It cost about 450 crore rupees.",
+        "It aims to recover about 95 per cent of metals.",
+        "Recycling rules have applied since 2022."
+      ],
+      "background": "India's electric vehicle sales have risen sharply in the past three years, and the first large wave of used batteries is expected in the next decade.",
+      "whyItMatters": "Recycling can reduce India's dependence on imported lithium and cobalt.",
+      "dateline": "PUNE",
+      "image": {
+        "url": "https://picsum.photos/seed/cells/1200/800",
+        "credit": "Mint",
+        "sourceUrl": "https://example.com/mint/battery-recycling-plant-pune-opens",
+        "alt": "Workers in hard hats sorting battery modules on a conveyor in a factory",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Mint",
+          "title": "Battery recycling plant opens near Pune, aims to recover lithium from 10,000 tonnes of cells a year",
+          "url": "https://example.com/mint/battery-recycling-plant-pune-opens",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Business Standard",
+          "title": "The company said it would recover about 95 per cent of the metals in used cells",
+          "url": "https://example.com/business-standard/battery-recycling-plant-pune-opens",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Indian Express",
+          "title": "Battery recycling plant opens near Pune, aims to recover lithium from: key points",
+          "url": "https://example.com/indian-express/battery-recycling-plant-pune-opens",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "The Verge",
+          "title": "What we know so far | The company said it would recover about 95 per cent of the metals in used cells",
+          "url": "https://example.com/the-verge/battery-recycling-plant-pune-opens"
+        }
+      ],
+      "tags": [
+        "batteries",
+        "recycling",
+        "ev"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "india-women-hockey-beat-japan-in-asia-cup-opener",
+      "section": "sports",
+      "rank": 19,
+      "headline": "India women beat Japan 3-1 in Asia Cup hockey opener on Tuesday",
+      "dek": "Two goals from penalty corners gave India control in the second half.",
+      "summary": "India's women's hockey team beat Japan 3-1 in the opening match of the Asia Cup in Ranchi on Tuesday. Two of India's goals came from penalty corners in the third quarter.",
+      "body": [
+        "India's women's hockey team beat Japan 3-1 in the opening match of the Asia Cup in Ranchi on Tuesday. The teams were level at 1-1 at half-time before India scored twice from penalty corners in the third quarter to take control.",
+        "Japan scored first in the 12th minute through a counter-attack, and India equalised in the 27th minute with a reverse-stick shot from close range. India's drag-flicker scored from the first of her two penalty corners in the 38th minute and added a second in the 44th.",
+        "India's coach said the team had improved its defensive structure since a loss to Japan at the same tournament two years ago. He said he was pleased with the penalty corner routine, which the team had practised for most of the preceding month.",
+        "Japan's coach said her team had given away too many corners and had struggled to deal with India's pressing in the middle of the pitch. She said Japan would need to win its next two group games to be sure of a place in the semi-finals.",
+        "India play South Korea on Thursday and China on Saturday. The tournament, which has eight teams, serves as a qualifying event for next year's World Cup, with the winner and runner-up earning places, organisers said. Attendance at the Jaipal Singh Stadium was about 9,000, which organisers said was a record for a women's match at the venue."
+      ],
+      "keyFacts": [
+        "India won 3-1.",
+        "Two goals came from penalty corners.",
+        "India play South Korea on Thursday.",
+        "The top two teams qualify for the World Cup."
+      ],
+      "background": "India won the title in 2022 and finished second in 2017.",
+      "whyItMatters": "A winning start improves India's chances of qualifying for the World Cup.",
+      "dateline": "RANCHI",
+      "image": {
+        "url": "https://picsum.photos/seed/turf/1200/800",
+        "credit": "Times of India",
+        "sourceUrl": "https://example.com/times-of-india/india-women-hockey-beat-japan-in-asia-cup-opener",
+        "alt": "Players in blue celebrating together on an artificial hockey pitch under floodlights",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "Times of India",
+          "title": "India women beat Japan 3-1 in Asia Cup hockey opener on Tuesday",
+          "url": "https://example.com/times-of-india/india-women-hockey-beat-japan-in-asia-cup-opener",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Indian Express",
+          "title": "Two goals from penalty corners gave India control in the second half",
+          "url": "https://example.com/indian-express/india-women-hockey-beat-japan-in-asia-cup-opener",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Hindustan Times",
+          "title": "India women beat Japan 3-1 in Asia Cup hockey opener on Tuesday: key points",
+          "url": "https://example.com/hindustan-times/india-women-hockey-beat-japan-in-asia-cup-opener",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Firstpost",
+          "title": "What we know so far | Two goals from penalty corners gave India control in the second half",
+          "url": "https://example.com/firstpost/india-women-hockey-beat-japan-in-asia-cup-opener",
+          "leaning": "centre-right"
+        }
+      ],
+      "tags": [
+        "hockey",
+        "asia-cup",
+        "womens-sport"
+      ],
+      "readingMinutes": 1
+    },
+    {
+      "id": "karnataka-tb-screening-drive-finds-cases",
+      "section": "health-environment",
+      "rank": 20,
+      "headline": "Karnataka tuberculosis screening drive finds 6,400 new cases in three months",
+      "dek": "Health officials said most were detected through mobile X-ray vans in urban slums and industrial areas.",
+      "summary": "Karnataka's health department said a three-month screening drive found about 6,400 new tuberculosis cases. Most were detected by mobile X-ray vans in urban slums and industrial areas.",
+      "body": [
+        "Karnataka's health department said on Tuesday that a three-month tuberculosis screening campaign had found about 6,400 new cases among 1.1 million people screened. Most of the cases were detected through mobile X-ray vans deployed in urban slums, construction sites and industrial areas, officials said.",
+        "The department said that about 40 per cent of those found with the disease had no cough, the symptom most commonly used to decide who should be tested. Officials said X-rays, and not reported symptoms alone, should decide who is tested.",
+        "Treatment has begun for 91 per cent of the patients, according to the department, and the rest are being traced. Patients receive a six-month course of drugs for free, along with a monthly payment of 1,000 rupees for nutrition under a central scheme.",
+        "Doctors at a hospital in Bengaluru said the drive had reached people who were less likely to visit clinics, such as migrant workers. A doctor said many patients arrived late, with advanced disease, because they could not take time away from work.",
+        "The state has set a goal of cutting tuberculosis cases by 80 per cent by 2030 from the 2015 level. The health department said it would expand the campaign to 14 more districts and add 20 vans. Officials said they would also train 2,000 community health workers to follow up with patients who stop treatment, which is a common reason for the disease returning in drug-resistant form."
+      ],
+      "keyFacts": [
+        "About 1.1 million people were screened.",
+        "About 6,400 new cases were found.",
+        "91 per cent of patients have started treatment.",
+        "20 more X-ray vans are planned."
+      ],
+      "background": "India has the largest number of tuberculosis cases in the world, according to the WHO.",
+      "whyItMatters": "Finding cases early lets patients start treatment before they pass the infection to others.",
+      "dateline": "BENGALURU",
+      "image": {
+        "url": "https://picsum.photos/seed/xray/1200/800",
+        "credit": "The Hindu",
+        "sourceUrl": "https://example.com/the-hindu/karnataka-tb-screening-drive-finds-cases",
+        "alt": "A health worker guiding a man into a mobile X-ray van parked beside a market",
+        "width": 1200,
+        "height": 800,
+        "kind": "outlet"
+      },
+      "sources": [
+        {
+          "outlet": "The Hindu",
+          "title": "Karnataka tuberculosis screening drive finds 6,400 new cases in three months",
+          "url": "https://example.com/the-hindu/karnataka-tb-screening-drive-finds-cases",
+          "leaning": "centre-left"
+        },
+        {
+          "outlet": "Deccan Herald",
+          "title": "Health officials said most were detected through mobile X-ray vans in urban slums and industrial areas",
+          "url": "https://example.com/deccan-herald/karnataka-tb-screening-drive-finds-cases",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "Indian Express",
+          "title": "Karnataka tuberculosis screening drive finds 6,400 new cases in three: key points",
+          "url": "https://example.com/indian-express/karnataka-tb-screening-drive-finds-cases",
+          "leaning": "centre"
+        },
+        {
+          "outlet": "NDTV",
+          "title": "What we know so far | Health officials said most were detected through mobile X-ray vans in urban slums and industrial areas",
+          "url": "https://example.com/ndtv/karnataka-tb-screening-drive-finds-cases",
+          "leaning": "centre-left"
+        }
+      ],
+      "tags": [
+        "tuberculosis",
+        "public-health",
+        "karnataka"
+      ],
+      "readingMinutes": 1
+    }
+  ],
+  "stats": {
+    "feedsScanned": 60,
+    "itemsSeen": 1042,
+    "pagesRead": 228,
+    "costUsd": 0.68
+  }
+}

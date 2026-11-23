@@ -1,0 +1,167 @@
+// node --test 'site/**/*.test.ts'   (Node 24 does not expand a bare directory)
+import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { mkdtemp, readdir, readFile, rm, writeFile, mkdir } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import { after, before, describe, it } from "node:test";
+import { fileURLToPath } from "node:url";
+import { buildSite } from "./build.ts";
+import { inline, placeName, usableImageUrl } from "./templates/helpers.ts";
+import type { Story } from "./types.ts";
+import { HEAD_SCRIPT } from "./templates/layout.ts";
+
+const FIXTURES = path.join(path.dirname(fileURLToPath(import.meta.url)), "fixtures");
+const EVIL = `<script>alert("x")</script> & "quotes"`;
+
+let tmp: string;
+let dataDir: string;
+let outDir: string;
+let evilStoryPath: string;
+
+async function htmlFiles(dir: string): Promise<string[]> {
+  const out: string[] = [];
+  for (const entry of await readdir(dir, { withFileTypes: true })) {
+    const p = path.join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...(await htmlFiles(p)));
+    else if (entry.name.endsWith(".html")) out.push(p);
+  }
+  return out;
+}
+
+before(async () => {
+  tmp = await mkdtemp(path.join(os.tmpdir(), "meridian-build-"));
+  dataDir = path.join(tmp, "data");
+  outDir = path.join(tmp, "dist");
+  await mkdir(dataDir);
+  for (const name of await readdir(FIXTURES)) {
+    if (!name.endsWith(".json")) continue;
+    const ed = JSON.parse(await readFile(path.join(FIXTURES, name), "utf8"));
+    if (ed.id === "2026-11-24-am") {
+      // Untrusted text must come out escaped, and unsafe links must not become links.
+      const story = ed.stories[0];
+      story.headline = EVIL;
+      story.body[0] = `Before [click](javascript:alert(1)) and *ok* and [fine](https://example.com/a?b=1&c=2) ${EVIL}`;
+      evilStoryPath = path.join("e", ed.id, story.id, "index.html");
+    }
+    await writeFile(path.join(dataDir, name), JSON.stringify(ed));
+  }
+  await buildSite({ dataDir, outDir, quiet: true });
+});
+
+after(async () => {
+  await rm(tmp, { recursive: true, force: true });
+});
+
+describe("buildSite", () => {
+  it("writes the expected pages and files", async () => {
+    const expected = [
+      "index.html",
+      "404.html",
+      "robots.txt",
+      "_headers",
+      "archive/index.html",
+      "e/2026-11-23-pm/index.html",
+      "e/2026-11-24-am/index.html",
+      "e/2026-11-23-pm/rbi-holds-repo-rate/index.html",
+      evilStoryPath,
+    ];
+    for (const rel of expected) {
+      await assert.doesNotReject(readFile(path.join(outDir, rel)), `missing ${rel}`);
+    }
+    const assets = await readdir(path.join(outDir, "assets"));
+    assert.ok(assets.some((f) => /^site\.[0-9a-f]{10}\.css$/.test(f)), "hashed css");
+    assert.ok(assets.some((f) => /^site\.[0-9a-f]{10}\.js$/.test(f)), "hashed js");
+    const fonts = await readdir(path.join(outDir, "assets", "fonts"));
+    assert.ok(fonts.includes("source-serif-4-latin.woff2"));
+    // One article page per story in each edition.
+    for (const id of ["2026-11-23-pm", "2026-11-24-am"]) {
+      const ed = JSON.parse(await readFile(path.join(FIXTURES, `${id}.json`), "utf8"));
+      for (const s of ed.stories) {
+        await assert.doesNotReject(readFile(path.join(outDir, "e", id, s.id, "index.html")), `missing ${id}/${s.id}`);
+      }
+    }
+  });
+
+  it("serves the latest edition at the root", async () => {
+    const root = await readFile(path.join(outDir, "index.html"), "utf8");
+    assert.match(root, /data-edition="2026-11-24-am"/);
+  });
+
+  it("escapes untrusted text and drops unsafe links", async () => {
+    for (const rel of [evilStoryPath, "e/2026-11-24-am/index.html", "index.html"]) {
+      const html = await readFile(path.join(outDir, rel), "utf8");
+      assert.ok(!html.includes(`<script>alert("x")</script>`), `${rel} contains raw <script>`);
+      assert.ok(html.includes("&lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt; &amp; &quot;quotes&quot;"), `${rel} lacks escaped headline`);
+      assert.ok(!/href="\s*javascript:/i.test(html), `${rel} has a javascript: link`);
+    }
+    const article = await readFile(path.join(outDir, evilStoryPath), "utf8");
+    assert.match(article, /<em>ok<\/em>/);
+    assert.match(article, /<a href="https:\/\/example\.com\/a\?b=1&amp;c=2"/);
+    // Only the known inline head script and the external script are present.
+    const scripts = article.match(/<script\b[^>]*>/g) ?? [];
+    assert.equal(scripts.length, 2);
+  });
+
+  it("gives every <img> referrerpolicy=no-referrer, decoding and dimensions", async () => {
+    let count = 0;
+    for (const file of await htmlFiles(outDir)) {
+      const html = await readFile(file, "utf8");
+      for (const tag of html.match(/<img\b[^>]*>/g) ?? []) {
+        count++;
+        assert.match(tag, /referrerpolicy="no-referrer"/, `${path.relative(outDir, file)}: ${tag}`);
+        assert.match(tag, /decoding="async"/, tag);
+        assert.match(tag, /width="\d+" height="\d+"/, tag);
+      }
+    }
+    assert.ok(count > 50, `expected many images, saw ${count}`);
+  });
+
+  it("emits noindex headers, robots.txt and a CSP that allows the inline head script", async () => {
+    const headers = await readFile(path.join(outDir, "_headers"), "utf8");
+    assert.match(headers, /X-Robots-Tag: noindex, nofollow/);
+    const hash = createHash("sha256").update(HEAD_SCRIPT).digest("base64");
+    assert.ok(headers.includes(`'sha256-${hash}'`), "CSP hash matches head script");
+    assert.match(headers, /\/assets\/\*\n {2}Cache-Control: public, max-age=31536000, immutable/);
+    const robots = await readFile(path.join(outDir, "robots.txt"), "utf8");
+    assert.match(robots, /Disallow: \//);
+    const page = await readFile(path.join(outDir, "index.html"), "utf8");
+    assert.ok(page.includes(`<script>${HEAD_SCRIPT}</script>`));
+  });
+
+  it("labels fixture builds as invented on every page", async () => {
+    for (const f of await htmlFiles(outDir)) {
+      assert.ok((await readFile(f, "utf8")).includes(`class="sample-banner"`), `${f} lacks the sample banner`);
+    }
+  });
+
+  it("does not repeat a lead story inside its section on the front page", async () => {
+    const html = await readFile(path.join(outDir, "e/2026-11-23-pm/index.html"), "utf8");
+    const ids = [...html.matchAll(/<article [^>]*id="([^"]+)"/g)].map((m) => m[1]);
+    assert.equal(new Set(ids).size, ids.length, "duplicate story cards");
+    assert.equal(ids.length, 20);
+  });
+});
+
+describe("inline markdown", () => {
+  it("allows only italics and http(s) links", () => {
+    assert.equal(
+      inline(`a *b* [c](https://x.org/?q=1&r=2) [d](javascript:void0) <e>`),
+      `a <em>b</em> <a href="https://x.org/?q=1&amp;r=2" target="_blank" rel="noopener noreferrer nofollow">c</a> d &lt;e&gt;`,
+    );
+  });
+});
+
+describe("pictures and places", () => {
+  const story = (url: string) => ({ image: { url, credit: "", sourceUrl: "", alt: "", kind: "outlet" } }) as unknown as Story;
+  it("treats hotlink-blocking hosts and non-http URLs as missing", () => {
+    assert.equal(usableImageUrl(story("https://c.ndtvimg.com/a.jpg")), null);
+    assert.equal(usableImageUrl(story("javascript:alert(1)")), null);
+    assert.equal(usableImageUrl(story("https://upload.wikimedia.org/a.jpg")), "https://upload.wikimedia.org/a.jpg");
+  });
+  it("title-cases all-caps datelines and leaves mixed case alone", () => {
+    assert.equal(placeName("NEW DELHI"), "New Delhi");
+    assert.equal(placeName("THIRUVANANTHAPURAM, "), "Thiruvananthapuram");
+    assert.equal(placeName("Port-au-Prince"), "Port-au-Prince");
+  });
+});

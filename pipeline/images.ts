@@ -1,3 +1,4 @@
+import { HOTLINK_BLOCKED_HOSTS } from "../config/sources.ts";
 import { probeImage } from "./enrich.ts";
 import { fetchText, stripHtml } from "./util.ts";
 
@@ -22,7 +23,12 @@ export interface ImageCandidate {
 const JUNK = /logo|placeholder|default[-_.]|[-_/]default|sprite|favicon|icon[-_.]|avatar|blank|spacer|1x1|no[-_]?image|fallback|share[-_]?image|social[-_]?share|og[-_]?default|branding|\.svg(\?|$)/i;
 
 export function isJunkImage(url: string): boolean {
-  return JUNK.test(url);
+  if (JUNK.test(url)) return true;
+  try {
+    return HOTLINK_BLOCKED_HOSTS.has(new URL(url).hostname);
+  } catch {
+    return true;
+  }
 }
 
 /** Order candidates by preference: og images first, larger declared width first, junk removed, de-duplicated. */

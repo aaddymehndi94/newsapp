@@ -7,7 +7,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "test": "node --test test/*.test.ts site/*.test.ts",
+    "test": "node --test 'test/**/*.test.ts' 'site/**/*.test.ts'",
     "build": "node site/build.ts",
     "edition": "node pipeline/run.ts",
     "check-feeds": "node scripts/check-feeds.ts",
