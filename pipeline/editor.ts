@@ -1,0 +1,205 @@
+import type { FeedItem } from "./feeds.ts";
+import type { VideoItem } from "./videos.ts";
+import { EDITOR_MODEL, type CostMeter, type JsonRequest, type JsonResult, callJson, runBatch } from "./llm.ts";
+
+export const SECTION_IDS = ["india", "world", "bengaluru", "business", "science-tech", "health-environment", "sports"] as const;
+export type SectionId = (typeof SECTION_IDS)[number];
+
+export const SECTION_NAMES: Record<SectionId, string> = {
+  india: "India",
+  world: "World",
+  bengaluru: "Bengaluru",
+  business: "Business",
+  "science-tech": "Science & Tech",
+  "health-environment": "Health & Environment",
+  sports: "Sports",
+};
+
+export const QUOTAS: Record<SectionId, number> = {
+  india: 9,
+  world: 9,
+  bengaluru: 3,
+  business: 5,
+  "science-tech": 5,
+  "health-environment": 3,
+  sports: 4,
+};
+
+export interface SlatePick {
+  key: string;
+  section: SectionId;
+  rank: number;
+  lead: boolean;
+  workingHeadline: string;
+  angle: string;
+  itemIds: string[];
+  contested: boolean;
+  videoId: string; // "" when none
+}
+
+export interface Slate {
+  stories: SlatePick[];
+}
+
+const SLATE_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: ["stories"],
+  properties: {
+    stories: {
+      type: "array",
+      items: {
+        type: "object",
+        additionalProperties: false,
+        required: ["key", "section", "rank", "lead", "workingHeadline", "angle", "itemIds", "contested", "videoId"],
+        properties: {
+          key: { type: "string", description: "short kebab-case id for the event" },
+          section: { type: "string", enum: [...SECTION_IDS] },
+          rank: { type: "integer", description: "1 = most important story of the edition" },
+          lead: { type: "boolean" },
+          workingHeadline: { type: "string" },
+          angle: { type: "string", description: "one sentence telling the writer what the story is and what is new" },
+          itemIds: { type: "array", items: { type: "string" } },
+          contested: { type: "boolean" },
+          videoId: { type: "string", description: "a v:... id from the video list that covers this exact event, or empty string" },
+        },
+      },
+    },
+  },
+};
+
+const EDITOR_SYSTEM = `You are the editor-in-chief of Meridian, a non-partisan news site. Its reader lives in Bengaluru, India, and wants one calm, complete, balanced picture of the news twice a day instead of reading six or seven sites. You choose which stories go into this edition. Writers will then produce each story from the source items you assign.
+
+How to choose
+- Group items that report the same event or development. One story = one event.
+- Judge importance the way a serious national newspaper would: consequences for many people, significance for India and the world, genuinely new developments. Prefer hard news. Skip celebrity gossip, entertainment fluff, horoscopes, shopping deals, product promotions, listicles, explainers with no news peg, opinion columns, sponsored posts, "how to watch" pieces, and trivial viral stories.
+- Fill the sections close to these targets (±1 if the day's news clearly calls for it): ${Object.entries(QUOTAS)
+  .map(([k, v]) => `${k} ${v}`)
+  .join(", ")}.
+  * india: national politics, government and courts, security, states, society, infrastructure.
+  * world: international news, including events abroad that involve India.
+  * bengaluru: the city and Karnataka — civic issues, transport, water, weather, local government, the city's tech and startup scene. Avoid minor crime items unless they matter to the city.
+  * business: economy, markets, companies, jobs, trade — India first, plus major global business news.
+  * science-tech: research, space, technology and AI developments with substance (not gadget deals).
+  * health-environment: public health, medicine, climate, pollution, wildlife, disasters' environmental side.
+  * sports: results and major developments; cricket plus at least one other sport (football, tennis, chess, F1, hockey, badminton, athletics…). Results over previews.
+- Balance: across the edition, Indian politics must not be one-sided — cover government actions and decisions, opposition activity and criticism, and courts on their merits. Keep the world section global (not only US/UK); include Asia, the Middle East, Africa, Latin America and Europe when there is real news.
+- Lead: mark exactly 4 stories as lead — the most important overall, normally a mix of India and world. Rank all stories 1..N by importance across the whole edition.
+- Freshness: the previous edition's headlines are listed. Do not repeat a story unless there is a material new development; if you do, make the angle about what is new.
+
+Assigning sources (itemIds)
+- Give each story 2–6 item ids reporting that same event, from different outlets where possible. Put the most informative first: items from outlets' own feeds before Google News headline-only items.
+- For political or disputed stories, include outlets from different leanings (each feed shows its leaning code) so the writer sees how each side reports it.
+- A single-source story is acceptable only for significant news from a reliable outlet (e.g. a science paper, a local Bengaluru report).
+- Only use ids that appear in the list (like i3f).
+
+Other fields
+- contested: true only when outlets or political sides frame the story in clearly different ways (partisan disputes, religion- or identity-related controversies, wars and conflicts, culture-war issues). Most stories are not contested.
+- videoId: a v:… id only if that video's title is clearly about this same event; otherwise "".
+- angle: one sentence for the writer — what happened and what is new.
+- key: short kebab-case id.`;
+
+function age(published: string | undefined, now: number): string {
+  if (!published) return "?";
+  const h = (now - Date.parse(published)) / 3600_000;
+  return h < 1 ? `${Math.max(1, Math.round(h * 60))}m` : `${Math.round(h)}h`;
+}
+
+const LEAN: Record<string, string> = { left: "L", "centre-left": "CL", centre: "C", "centre-right": "CR", right: "R" };
+
+/**
+ * Compact listing grouped by feed. Items get short aliases (i0, i1, …) to save tokens;
+ * returns the alias → item id map so the slate can be translated back.
+ */
+export function formatItems(items: FeedItem[], now = Date.now()): { text: string; aliases: Map<string, string> } {
+  const aliases = new Map<string, string>();
+  const groups = new Map<string, FeedItem[]>();
+  for (const it of items) {
+    const g = groups.get(it.sourceId) ?? [];
+    g.push(it);
+    groups.set(it.sourceId, g);
+  }
+  const out: string[] = [];
+  let n = 0;
+  for (const g of groups.values()) {
+    const f = g[0];
+    const kind = f.kind === "gnews" ? ", headline-only" : "";
+    out.push(`## ${f.kind === "gnews" ? "Google News: " + f.sourceId.replace(/^gn(ews)?-/, "") : f.outlet} (${LEAN[f.leaning]}; ${f.sectionHint}${kind})`);
+    for (const it of g) {
+      const alias = `i${(n++).toString(36)}`;
+      aliases.set(alias, it.id);
+      const outlet = f.kind === "gnews" ? ` [${it.outlet}]` : "";
+      out.push(`${alias} ${age(it.published, now)}${outlet} ${it.title}`);
+    }
+  }
+  return { text: out.join("\n"), aliases };
+}
+
+export function buildEditorRequest(opts: {
+  items: FeedItem[];
+  videos: VideoItem[];
+  previousHeadlines: string[];
+  editionLabel: string;
+}): { req: JsonRequest; aliases: Map<string, string> } {
+  const listing = formatItems(opts.items);
+  const user = `Edition: ${opts.editionLabel} (India Standard Time).
+
+PREVIOUS EDITION HEADLINES
+${opts.previousHeadlines.length ? opts.previousHeadlines.map((h) => `- ${h}`).join("\n") : "(none)"}
+
+VIDEOS AVAILABLE (news channel uploads)
+${opts.videos.map((v) => `${v.id} ${v.channel}: ${v.title}`).join("\n") || "(none)"}
+
+INCOMING ITEMS (${opts.items.length}) — grouped by feed; each line: id, age, headline. Leaning codes: L left, CL centre-left, C centre, CR centre-right, R right.
+${listing.text}
+
+Choose this edition's stories.`;
+  const req: JsonRequest = {
+    customId: "editor",
+    model: EDITOR_MODEL,
+    system: EDITOR_SYSTEM,
+    user,
+    schema: SLATE_SCHEMA,
+    effort: "medium",
+    maxTokens: 32000,
+  };
+  return { req, aliases: listing.aliases };
+}
+
+/** Translate alias item ids (i0, i1…) in a slate back to real item ids. */
+export function unalias(slate: Slate, aliases: Map<string, string>): Slate {
+  return { stories: slate.stories.map((s) => ({ ...s, itemIds: s.itemIds.map((a) => aliases.get(a.trim()) ?? a) })) };
+}
+
+/** Validate the editor's slate against the items we actually have. */
+export function cleanSlate(slate: Slate, items: Map<string, FeedItem>, videoIds: Set<string>): Slate {
+  const usedItems = new Set<string>();
+  const stories: SlatePick[] = [];
+  const keys = new Set<string>();
+  for (const s of [...slate.stories].sort((a, b) => a.rank - b.rank)) {
+    if (!SECTION_IDS.includes(s.section)) continue;
+    const ids = s.itemIds.filter((id) => items.has(id) && !usedItems.has(id));
+    if (ids.length === 0) continue;
+    ids.forEach((id) => usedItems.add(id));
+    let key = s.key.replace(/[^a-z0-9-]/gi, "-").toLowerCase().slice(0, 60) || "story";
+    while (keys.has(key)) key += "-2";
+    keys.add(key);
+    stories.push({ ...s, key, itemIds: ids, videoId: videoIds.has(s.videoId) ? s.videoId : "" });
+  }
+  stories.forEach((s, i) => (s.rank = i + 1));
+  // Exactly up to 4 leads, falling back to top-ranked stories.
+  const leads = stories.filter((s) => s.lead).slice(0, 4);
+  if (leads.length < 4) for (const s of stories) if (!s.lead && leads.length < 4) (s.lead = true), leads.push(s);
+  for (const s of stories) s.lead = leads.includes(s);
+  return { stories };
+}
+
+export async function planEdition(
+  req: JsonRequest,
+  meter: CostMeter,
+  mode: { batch: boolean; deadline: Date },
+): Promise<JsonResult<Slate>> {
+  if (!mode.batch) return callJson<Slate>(req, meter);
+  const res = await runBatch<Slate>([req], meter, { deadline: mode.deadline });
+  return res.get(req.customId) ?? { ok: false, error: "missing" };
+}
