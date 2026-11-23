@@ -89,7 +89,7 @@ How to choose
 
 Assigning sources (itemIds)
 - Give each story 2–6 item ids reporting that same event, from different outlets where possible. Put the most informative first: items from outlets' own feeds before Google News headline-only items.
-- For political or disputed stories, include outlets from different leanings (each feed shows its leaning code) so the writer sees how each side reports it.
+- For political or disputed stories, include outlets from different leanings (each feed shows its leaning code) so the writer sees how each side reports it. For every contested story, assign at least one left-of-centre (L/CL) and one right-of-centre (CR/R) item whenever any feed carries the event; check the right- and left-leaning feeds (including the Google News headline feeds) for it before settling on a one-sided set.
 - A single-source story is acceptable only for significant news from a reliable outlet (e.g. a science paper, a local Bengaluru report).
 - Only use ids that appear in the list (like i3f).
 

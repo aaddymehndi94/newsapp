@@ -139,6 +139,16 @@ async function main() {
     writeJson(path.join(WORK, "slate.json"), slate);
     log(`editor: ${slate.stories.length} stories, cost so far $${meter.total.toFixed(3)}`);
   }
+  {
+    // Visibility: contested stories whose sources all sit on one side of centre.
+    const side = (id: string) => items.get(id)?.leaning ?? "centre";
+    const oneSided = slate.stories.filter((p) => {
+      if (!p.contested) return false;
+      const l = p.itemIds.map(side);
+      return !(l.some((x) => x === "left" || x === "centre-left") && l.some((x) => x === "right" || x === "centre-right"));
+    });
+    if (oneSided.length) log(`contested stories missing one side's sources: ${oneSided.map((p) => p.key).join(", ")}`);
+  }
   let picks = slate.stories;
   if (maxStories) picks = picks.slice(0, maxStories);
 

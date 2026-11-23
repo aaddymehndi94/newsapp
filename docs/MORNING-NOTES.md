@@ -36,10 +36,11 @@ Logs: `logs/`.
 
 ## Cost so far
 
-- Tonight's first edition (written directly, plus tests): about **$1.70** of Anthropic credit.
-- Scheduled editions use the half-price Batch API: expect **~$0.85 per edition, ~$1.70/day**,
-  so $100 lasts roughly two months. The editor (Opus) is about half of that. Easy levers if you
-  want it cheaper: lower the editor's effort, or trim the number of feeds it reads.
+- Building and testing overnight: about **$1.70** of Anthropic credit.
+- The first scheduled edition (03:30 run, half-price Batch API) cost **$0.69** for 37 stories and
+  was live by 03:37. Expect **~$0.70–0.85 per edition, ~$1.40–1.70/day**, so $100 lasts about two
+  months. The editor (Opus) is about a quarter of that and the writer the rest. Easy levers if
+  you want it cheaper: lower the editor's effort, or trim the number of feeds it reads.
   Each edition's cost is recorded in `data/editions/<id>.json` → `stats.costUsd`.
 
 ## Things to know
@@ -51,6 +52,13 @@ Logs: `logs/`.
 - **No paywall bypassing**, and the reader respects each site's robots.txt and identifies itself honestly.
 - **NDTV photos** can't be embedded on other sites, so we always use another outlet's photo for those stories.
 - **Possible refusals:** if Claude declines to write a story (very rare for news), that story is skipped.
+- **Thin stories are dropped:** if none of a story's sources can be read (e.g. headline-only), it's
+  left out rather than padded. Tonight that cost a Delhi air-quality story and a SEBI one.
+- **Source balance, watch this:** the Indian feed pool leans left of centre, so in the first
+  scheduled edition 5 of 14 contested stories had no right-of-centre source (e.g. the Bengal
+  voter-roll appeals). I tightened the editor's rule so contested stories must get one source
+  from each side whenever any feed covers the event, and the log now lists any that still don't.
+  If it persists, the next fix is adding more right-of-centre Indian feeds.
 
 ## Ideas for next steps (your call)
 
