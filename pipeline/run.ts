@@ -30,6 +30,14 @@ const ist = istParts(now);
 // Scheduled runs start ~90 min before the 05:00 / 17:00 edition time (03:30 → am, 15:30 → pm).
 const slot = (opt("slot") as "am" | "pm" | undefined) ?? (ist.hour < 14 ? "am" : "pm");
 const date = opt("date") ?? ist.date;
+if (slot !== "am" && slot !== "pm") throw new Error(`--slot must be am or pm, got ${slot}`);
+const realDate = (d: string) => {
+  const t = new Date(`${d}T12:00:00Z`);
+  return /^\d{4}-\d{2}-\d{2}$/.test(d) && !Number.isNaN(t.getTime()) && t.toISOString().slice(0, 10) === d;
+};
+if (!realDate(date)) {
+  throw new Error(`--date must be a real YYYY-MM-DD date, got ${date}`);
+}
 const editionId = `${date}-${slot}`;
 const useBatch = flag("batch");
 const build = !flag("no-build");
@@ -120,7 +128,11 @@ async function main() {
     const { req, aliases } = buildEditorRequest({ items: gathered.items, videos, previousHeadlines: previousHeadlines(), editionLabel });
     log(`editor: asking ${req.model} (${req.user.length} chars)…`);
     // Batch (half price) with a 25-minute deadline, then falls back to a direct call.
-    const res = await planEdition(req, meter, { batch: useBatch, deadline: new Date(Date.now() + 25 * 60e3) });
+    const res = await planEdition(req, meter, {
+      batch: useBatch,
+      deadline: new Date(Date.now() + 25 * 60e3),
+      stateFile: path.join(WORK, "batch-editor.json"),
+    });
     if (!res.ok) throw new Error(`editor failed: ${res.error}`);
     writeJson(path.join(WORK, "slate.raw.json"), res.data);
     slate = cleanSlate(unalias(res.data, aliases), items, new Set(videoById.keys()));
@@ -165,7 +177,10 @@ async function main() {
   log(`writing ${reqs.length} stories (${useBatch ? "batch" : "direct"})…`);
   let results: Map<string, JsonResult<WrittenStory>>;
   if (useBatch) {
-    results = await runBatch<WrittenStory>(reqs, meter, { deadline: new Date(publishAt.getTime() - 15 * 60e3) });
+    results = await runBatch<WrittenStory>(reqs, meter, {
+      deadline: new Date(publishAt.getTime() - 15 * 60e3),
+      stateFile: path.join(WORK, "batch-writer.json"),
+    });
   } else {
     results = new Map();
     await mapLimit(reqs, 6, async (r) => {
@@ -230,6 +245,9 @@ async function main() {
       usedSlugs.add(id);
       const words = [...w.body, w.background, w.whyItMatters].join(" ").split(/\s+/).length;
       const v = p.videoId ? videoById.get(p.videoId) : undefined;
+      const sourceUrls = new Set(p.itemIds.map((id) => items.get(id)?.link).filter(Boolean));
+      // Writers are told links aren't needed; any that appear must point at one of this story's sources.
+      const unlink = (t: string) => t.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, label: string, url: string) => (sourceUrls.has(url) ? m : label));
       const img = images.get(p.key) ?? undefined;
       return {
         id,
@@ -240,7 +258,7 @@ async function main() {
         headline: w.headline,
         dek: w.dek,
         summary: w.summary,
-        body: w.body,
+        body: w.body.map(unlink),
         keyFacts: w.keyFacts,
         background: w.background,
         whyItMatters: w.whyItMatters,

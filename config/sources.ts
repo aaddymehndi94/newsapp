@@ -42,12 +42,9 @@ export const SOURCES: Source[] = [
   { id: "ndtv-india", outlet: "NDTV", url: "https://feeds.feedburner.com/ndtvnews-india-news", region: "india", section: "india", leaning: "centre" },
   { id: "ndtv-top", outlet: "NDTV", url: "https://feeds.feedburner.com/ndtvnews-top-stories", region: "india", section: "general", leaning: "centre" },
   { id: "scroll", outlet: "Scroll", url: "https://feeds.feedburner.com/ScrollinArticles.rss", region: "india", section: "india", leaning: "left" },
-  { id: "indiatoday", outlet: "India Today", url: "https://www.indiatoday.in/rss/1206514", region: "india", section: "india", leaning: "centre-right" },
   { id: "news18-india", outlet: "News18", url: "https://www.news18.com/commonfeeds/v1/eng/rss/india.xml", region: "india", section: "india", leaning: "right" },
   { id: "firstpost-india", outlet: "Firstpost", url: "https://www.firstpost.com/commonfeeds/v1/mfp/rss/india.xml", region: "india", section: "india", leaning: "centre-right" },
-  { id: "pib", outlet: "Press Information Bureau", url: "https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3", region: "india", section: "india", leaning: "centre" },
   { id: "organiser", outlet: "Organiser", url: "https://organiser.org/feed/", region: "india", section: "india", leaning: "right" },
-  { id: "zee-india", outlet: "Zee News", url: "https://zeenews.india.com/rss/india-national-news.xml", region: "india", section: "india", leaning: "right" },
   // Outlets whose own feeds are unavailable to us: headlines via Google News only (no page fetch).
   { id: "gn-theprint", outlet: "ThePrint", url: gnews("site:theprint.in when:1d"), region: "india", section: "india", leaning: "centre", kind: "gnews" },
   { id: "gn-thewire", outlet: "The Wire", url: gnews("site:thewire.in when:1d"), region: "india", section: "india", leaning: "left", kind: "gnews" },
@@ -64,7 +61,6 @@ export const SOURCES: Source[] = [
   { id: "et-top", outlet: "The Economic Times", url: "https://economictimes.indiatimes.com/rssfeedstopstories.cms", region: "india", section: "business", leaning: "centre-right" },
   { id: "bs-latest", outlet: "Business Standard", url: "https://www.business-standard.com/rss/latest.rss", region: "india", section: "business", leaning: "centre" },
   { id: "hindu-business", outlet: "The Hindu", url: "https://www.thehindu.com/business/feeder/default.rss", region: "india", section: "business", leaning: "centre-left" },
-  { id: "moneycontrol", outlet: "Moneycontrol", url: "https://www.moneycontrol.com/rss/latestnews.xml", region: "india", section: "business", leaning: "centre" },
 
   // ───────────── Bengaluru ─────────────
   { id: "hindu-blr", outlet: "The Hindu", url: "https://www.thehindu.com/news/cities/bangalore/feeder/default.rss", region: "bengaluru", section: "bengaluru", leaning: "centre-left" },

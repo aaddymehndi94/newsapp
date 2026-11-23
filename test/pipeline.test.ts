@@ -102,3 +102,20 @@ test("batch custom ids satisfy the API pattern", async () => {
 test("pictures from hosts that block embedding are never chosen", () => {
   assert.ok(isJunkImage("https://c.ndtvimg.com/2026-11/abc.jpg"));
 });
+
+test("feed hardening: bad entities, lowercase pubdate, dedupe keeps real query params", async () => {
+  const { decodeEntities } = await import("../pipeline/util.ts");
+  const { dedupeKey } = await import("../pipeline/feeds.ts");
+  assert.equal(decodeEntities("a &#99999999; b &#x110000; c"), "a &#99999999; b &#x110000; c");
+  const xml = `<rss><channel><item><title>Lowercase date tag story</title><link>https://ex.com/z</link><pubdate>Mon, 23 Nov 2026 10:00:00 +0530</pubdate></item></channel></rss>`;
+  assert.equal(parseFeed(xml, src)[0].published, "2026-11-23T04:30:00.000Z");
+  assert.notEqual(dedupeKey("https://pib.gov.in/P.aspx?PRID=1"), dedupeKey("https://pib.gov.in/P.aspx?PRID=2"));
+  assert.equal(dedupeKey("https://ex.com/a?utm_source=x&at_medium=rss#top"), "https://ex.com/a");
+});
+
+test("style check: word boundaries and single quotes", () => {
+  assert.deepEqual(findAiTells("Farm incomes as reported by the survey rose 4%. The outcomes as listed were mixed."), []);
+  assert.deepEqual(findAiTells("He called the ruling ‘unprecedented’ and asked ‘why now?’ in a speech."), []);
+  assert.ok(findAiTells("The ruling comes as farmers protest.").includes("comes as"));
+  assert.ok(findAiTells("It was unprecedented.").includes("unprecedented"));
+});

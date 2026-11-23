@@ -69,7 +69,13 @@ export const StorySchema = z.looseObject({
 
 export const EditionSchema = z.looseObject({
   id: z.string().regex(SLUG, "edition id must be a lowercase slug"),
-  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .refine((d) => {
+      const t = new Date(`${d}T12:00:00Z`);
+      return !Number.isNaN(t.getTime()) && t.toISOString().slice(0, 10) === d;
+    }, "not a real calendar date"),
   slot: z.enum(["morning", "evening"]),
   publishedAt: z.string().refine((v) => !Number.isNaN(Date.parse(v)), "publishedAt must be ISO 8601"),
   lead: z.array(z.string()).default([]),

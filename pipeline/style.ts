@@ -16,36 +16,30 @@ export const BANNED_PHRASES = [
   "landmark", "historic", "escalating tensions", "growing concerns", "mounting pressure", "heated debate",
 ];
 
-const WORD_BOUNDARY_TERMS = new Set(["amid", "amidst", "delve", "delves", "landmark", "historic", "robust", "bolster", "pivotal", "myriad", "plethora", "landscape", "tapestry"]);
+const escapeRe = (x: string) => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+// Every phrase matches on word boundaries, so "comes as" doesn't fire inside "outcomes as".
+const PHRASE_RES = BANNED_PHRASES.map((p) => [p, new RegExp(`(^|[^\\p{L}\\p{N}])${escapeRe(p)}(?=$|[^\\p{L}\\p{N}])`, "iu")] as const);
 
-/** Returns the banned phrases / patterns found in the text (case-insensitive). */
+/** Text outside quotations: “double”, "straight" and ‘single’ quotes are removed (quotes are the speaker's words). */
+function outsideQuotes(text: string): string {
+  return text.replace(/“[^”]*”|"[^"]*"|‘[^’]*’/g, " ");
+}
+
+/** Returns the banned phrases / patterns found in the text outside quotations (case-insensitive). */
 export function findAiTells(text: string): string[] {
-  const lower = text.toLowerCase();
+  const unquoted = outsideQuotes(text);
   const found = new Set<string>();
-  for (const p of BANNED_PHRASES) {
-    if (WORD_BOUNDARY_TERMS.has(p)) {
-      if (new RegExp(`\\b${p}\\b`, "i").test(text)) found.add(p);
-    } else if (lower.includes(p)) {
-      found.add(p);
-    }
-  }
-  // Inside quotation marks, sources may legitimately say these things; ignore matches that only occur inside quotes.
-  for (const p of [...found]) {
-    const outside = text.replace(/[“"][^”"]*[”"]/g, " ").toLowerCase();
-    const hit = WORD_BOUNDARY_TERMS.has(p) ? new RegExp(`\\b${p}\\b`, "i").test(outside) : outside.includes(p);
-    if (!hit) found.delete(p);
-  }
+  for (const [p, re] of PHRASE_RES) if (re.test(unquoted)) found.add(p);
   // Em-dash habit: more than one em dash in a paragraph.
-  for (const para of text.split(/\n+/)) {
+  for (const para of unquoted.split(/\n+/)) {
     if ((para.match(/—/g) ?? []).length > 1) {
       found.add("multiple em dashes in one paragraph");
       break;
     }
   }
-  const unquoted = text.replace(/[“"][^”"]*[”"]/g, " ");
-  // "Not just X, but Y" construction (outside quotes).
+  // "Not just X, but Y" construction.
   if (/\bnot (just|only|merely) [^.]{1,60}, but\b/i.test(unquoted)) found.add("not just X, but Y");
-  // Exclamation marks / rhetorical questions outside quotes.
+  // Exclamation marks / rhetorical questions.
   if (/!/.test(unquoted)) found.add("exclamation mark");
   if (/\?\s/.test(unquoted + " ")) found.add("rhetorical question");
   return [...found];

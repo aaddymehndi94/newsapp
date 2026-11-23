@@ -57,7 +57,10 @@ export async function loadEditions(dataDir: string, warn: (m: string) => void): 
     if (prev && Date.parse(prev.publishedAt) > Date.parse(edition.publishedAt)) continue;
     byId.set(edition.id, edition);
   }
-  return [...byId.values()].sort((a, b) => Date.parse(a.publishedAt) - Date.parse(b.publishedAt));
+  // Order by edition (date, then morning before evening), not by when a run happened to finish,
+  // so re-running a morning edition never displaces that evening's edition from the front page.
+  const order = (e: { date: string; slot: string }) => `${e.date}-${e.slot === "morning" ? "a" : "b"}`;
+  return [...byId.values()].sort((a, b) => order(a).localeCompare(order(b)) || Date.parse(a.publishedAt) - Date.parse(b.publishedAt));
 }
 
 /** Refuse to wipe anything that is obviously not a build directory. */

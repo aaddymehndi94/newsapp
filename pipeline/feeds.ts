@@ -141,7 +141,9 @@ export function parseFeed(xml: string, source: Source): FeedItem[] {
     if (kind === "reddit") summary = "";
     if (summary.length > 600) summary = summary.slice(0, 600).replace(/\s+\S*$/, "") + "…";
 
-    const published = toIso(text(it["pubDate"]) || text(it["dc:date"]) || text(it["published"]) || text(it["updated"]));
+    const published = toIso(
+      text(it["pubDate"]) || text(it["pubdate"]) || text(it["PubDate"]) || text(it["dc:date"]) || text(it["published"]) || text(it["updated"]),
+    );
     out.push({
       id: hash(link),
       sourceId: source.id,
@@ -160,6 +162,20 @@ export function parseFeed(xml: string, source: Source): FeedItem[] {
   return out;
 }
 
+const TRACKING = /^(utm_|at_|fbclid|gclid|ocid|cmpid|ref$|ref_|src$|from$|itm_|mc_)/i;
+
+/** Identity of an article link for de-duplication: drops the fragment and tracking parameters only. */
+export function dedupeKey(link: string): string {
+  try {
+    const u = new URL(link);
+    u.hash = "";
+    for (const k of [...u.searchParams.keys()]) if (TRACKING.test(k)) u.searchParams.delete(k);
+    return u.toString();
+  } catch {
+    return link;
+  }
+}
+
 export interface GatherStats {
   feedsTried: number;
   feedsOk: number;
@@ -176,7 +192,13 @@ export async function gatherAll(sources: Source[], sinceHours: number): Promise<
       stats.failed.push({ id: s.id, status: res.status, note: res.status ? "" : res.text.slice(0, 80) });
       return [];
     }
-    const items = parseFeed(res.text, s);
+    let items: FeedItem[];
+    try {
+      items = parseFeed(res.text, s);
+    } catch (e) {
+      stats.failed.push({ id: s.id, status: res.status, note: `parse error: ${(e as Error).message.slice(0, 60)}` });
+      return [];
+    }
     if (items.length === 0) {
       stats.failed.push({ id: s.id, status: res.status, note: "no items parsed" });
       return [];
@@ -186,16 +208,21 @@ export async function gatherAll(sources: Source[], sinceHours: number): Promise<
   });
   const seen = new Set<string>();
   const items: FeedItem[] = [];
+  const recentBySource = new Map<string, number>();
   for (const it of lists.flat()) {
     stats.itemsSeen++;
-    // Items without dates are kept (some feeds omit them); dated items must be recent.
-    if (it.published && Date.parse(it.published) < since) continue;
-    if (it.published && Date.parse(it.published) > Date.now() + 3600_000) continue;
-    const key = it.link.replace(/[?#].*$/, "");
+    // Undated items can't be shown to be recent, so they are dropped (stale news is worse than less news).
+    if (!it.published) continue;
+    if (Date.parse(it.published) < since) continue;
+    if (Date.parse(it.published) > Date.now() + 3600_000) continue;
+    const key = dedupeKey(it.link);
     if (seen.has(key)) continue;
     seen.add(key);
     items.push(it);
+    recentBySource.set(it.sourceId, (recentBySource.get(it.sourceId) ?? 0) + 1);
   }
+  const quiet = sources.filter((s) => !recentBySource.has(s.id) && !stats.failed.some((f) => f.id === s.id)).map((s) => s.id);
+  if (quiet.length) log(`feeds with no recent dated items: ${quiet.join(", ")}`);
   log(`feeds: ${stats.feedsOk}/${stats.feedsTried} ok, ${stats.itemsSeen} items seen, ${items.length} recent+unique`);
   if (stats.failed.length) log("feeds failed:", stats.failed.map((f) => `${f.id}(${f.status}${f.note ? " " + f.note : ""})`).join(", "));
   return { items, stats };

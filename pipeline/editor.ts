@@ -197,9 +197,9 @@ export function cleanSlate(slate: Slate, items: Map<string, FeedItem>, videoIds:
 export async function planEdition(
   req: JsonRequest,
   meter: CostMeter,
-  mode: { batch: boolean; deadline: Date },
+  mode: { batch: boolean; deadline: Date; stateFile?: string },
 ): Promise<JsonResult<Slate>> {
   if (!mode.batch) return callJson<Slate>(req, meter);
-  const res = await runBatch<Slate>([req], meter, { deadline: mode.deadline });
+  const res = await runBatch<Slate>([req], meter, { deadline: mode.deadline, stateFile: mode.stateFile, pollMs: 20_000 });
   return res.get(req.customId) ?? { ok: false, error: "missing" };
 }

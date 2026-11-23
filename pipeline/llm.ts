@@ -1,5 +1,6 @@
+import fs from "node:fs";
 import Anthropic from "@anthropic-ai/sdk";
-import { log } from "./util.ts";
+import { log, mapLimit, readJson, writeJson } from "./util.ts";
 
 export const EDITOR_MODEL = "claude-opus-5-5";
 export const WRITER_MODEL = "claude-sonnet-5-5";
@@ -11,6 +12,10 @@ const PRICES: Record<string, { in: number; out: number; cacheRead: number }> = {
 };
 
 let client: Anthropic | undefined;
+/** Tests substitute a fake client here. */
+export function setClient(c: Anthropic | undefined): void {
+  client = c;
+}
 export function anthropic(): Anthropic {
   client ??= new Anthropic({ maxRetries: 4, timeout: 15 * 60_000 });
   return client;
@@ -90,51 +95,85 @@ export async function callJson<T>(req: JsonRequest, meter: CostMeter): Promise<J
   }
 }
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 /**
- * Submit requests as a Message Batch (50% off). Polls until done or deadline; anything not
- * finished by the deadline (or errored/expired) is re-run directly so the edition still ships.
+ * Submit requests as a Message Batch (50% off). Polls until done or the deadline; anything not
+ * finished by then (or errored/expired) is re-run directly so the edition still ships.
+ * Transient API/network errors while polling are tolerated. With `stateFile`, the batch id is
+ * saved so a re-run of the same edition resumes the batch instead of paying for it twice.
  */
 export async function runBatch<T>(
   reqs: JsonRequest[],
   meter: CostMeter,
-  opts: { deadline: Date; pollMs?: number; syncConcurrency?: number },
+  opts: { deadline: Date; pollMs?: number; syncConcurrency?: number; stateFile?: string },
 ): Promise<Map<string, JsonResult<T>>> {
   const results = new Map<string, JsonResult<T>>();
   if (reqs.length === 0) return results;
-  const byId = new Map(reqs.map((r) => [r.customId, r]));
-  let batch: Anthropic.Messages.MessageBatch;
-  try {
-    batch = await anthropic().messages.batches.create({
-      requests: reqs.map((r) => ({ custom_id: r.customId, params: params(r) })),
-    });
-  } catch (e) {
-    log(`batch submit failed (${(e as Error).message.slice(0, 200)}) — running directly`);
-    const { mapLimit } = await import("./util.ts");
-    await mapLimit(reqs, opts.syncConcurrency ?? 6, async (r) => {
+  const direct = (list: JsonRequest[]) =>
+    mapLimit(list, opts.syncConcurrency ?? 6, async (r) => {
       results.set(r.customId, await callJson<T>(r, meter));
     });
+
+  // Too close to the deadline for a batch to be worth it: go direct.
+  if (opts.deadline.getTime() - Date.now() < 10 * 60e3) {
+    log(`deadline too close for a batch — running ${reqs.length} requests directly`);
+    await direct(reqs);
     return results;
   }
-  log(`batch ${batch.id} submitted (${reqs.length} requests)`);
-  let status = batch.processing_status;
-  while (status !== "ended" && Date.now() < opts.deadline.getTime()) {
-    await new Promise((r) => setTimeout(r, opts.pollMs ?? 30_000));
-    const b = await anthropic().messages.batches.retrieve(batch.id);
-    status = b.processing_status;
-    log(`batch ${batch.id}: ${status} ok=${b.request_counts.succeeded} processing=${b.request_counts.processing}`);
+
+  const byId = new Map(reqs.map((r) => [r.customId, r]));
+  const ids = reqs.map((r) => r.customId).sort().join(",");
+  let batchId: string | undefined;
+  const saved = opts.stateFile ? readJson<{ id: string; ids: string }>(opts.stateFile) : undefined;
+  if (saved?.id && saved.ids === ids) {
+    batchId = saved.id;
+    log(`resuming batch ${batchId}`);
+  } else {
+    try {
+      const b = await anthropic().messages.batches.create({
+        requests: reqs.map((r) => ({ custom_id: r.customId, params: params(r) })),
+      });
+      batchId = b.id;
+      if (opts.stateFile) writeJson(opts.stateFile, { id: batchId, ids });
+      log(`batch ${batchId} submitted (${reqs.length} requests)`);
+    } catch (e) {
+      log(`batch submit failed (${(e as Error).message.slice(0, 200)}) — running directly`);
+      await direct(reqs);
+      return results;
+    }
+  }
+
+  const retrieve = async () => {
+    try {
+      return await anthropic().messages.batches.retrieve(batchId!);
+    } catch (e) {
+      log(`batch poll error (will retry): ${(e as Error).message.slice(0, 120)}`);
+      return undefined;
+    }
+  };
+
+  let status: string = "in_progress";
+  while (Date.now() < opts.deadline.getTime()) {
+    const b = await retrieve();
+    if (b) {
+      status = b.processing_status;
+      if (status === "ended") break;
+      log(`batch ${batchId}: ${status} ok=${b.request_counts.succeeded} processing=${b.request_counts.processing}`);
+    }
+    await sleep(opts.pollMs ?? 30_000);
   }
   if (status !== "ended") {
-    log(`batch ${batch.id} missed deadline — cancelling and finishing remaining requests directly`);
-    await anthropic().messages.batches.cancel(batch.id).catch(() => undefined);
-    // Wait briefly for cancellation so completed results are retrievable.
-    for (let i = 0; i < 20; i++) {
-      const b = await anthropic().messages.batches.retrieve(batch.id);
-      if (b.processing_status === "ended") break;
-      await new Promise((r) => setTimeout(r, 5_000));
+    log(`batch ${batchId} missed the deadline — cancelling; finished results are kept`);
+    await anthropic().messages.batches.cancel(batchId).catch(() => undefined);
+    // Wait (up to 10 min) for cancellation to settle so already-finished results can be read.
+    for (let i = 0; i < 60 && status !== "ended"; i++) {
+      await sleep(10_000);
+      status = (await retrieve())?.processing_status ?? status;
     }
   }
   try {
-    for await (const r of await anthropic().messages.batches.results(batch.id)) {
+    for await (const r of await anthropic().messages.batches.results(batchId)) {
       const req = byId.get(r.custom_id);
       if (!req) continue;
       if (r.result.type === "succeeded") {
@@ -144,7 +183,7 @@ export async function runBatch<T>(
       }
     }
   } catch (e) {
-    log(`batch results read failed: ${(e as Error).message}`);
+    log(`batch results read failed: ${(e as Error).message.slice(0, 200)}`);
   }
   // Retry anything missing or failed (except refusals) directly.
   const retry = reqs.filter((r) => {
@@ -153,10 +192,8 @@ export async function runBatch<T>(
   });
   if (retry.length) {
     log(`retrying ${retry.length} requests directly`);
-    const { mapLimit } = await import("./util.ts");
-    await mapLimit(retry, opts.syncConcurrency ?? 6, async (r) => {
-      results.set(r.customId, await callJson<T>(r, meter));
-    });
+    await direct(retry);
   }
+  if (opts.stateFile) fs.rmSync(opts.stateFile, { force: true });
   return results;
 }
