@@ -1,0 +1,48 @@
+# Optional: run editions on GitHub instead of the home computer.
+# To switch: add repo secrets ANTHROPIC_API_KEY, CLOUDFLARE_API_TOKEN (template "Edit Cloudflare Workers"),
+# CLOUDFLARE_ACCOUNT_ID; uncomment the schedule below; and remove the local crontab lines
+# (`crontab -e`) so editions aren't produced twice.
+name: Edition
+
+on:
+  # schedule:
+  #   - cron: "0 22 * * *"   # 03:30 IST → 05:00 edition
+  #   - cron: "0 10 * * *"   # 15:30 IST → 17:00 edition
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: "am or pm (blank = by current IST time)"
+        required: false
+
+concurrency: edition
+
+jobs:
+  edition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Produce edition
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TZ: Asia/Kolkata
+        run: node pipeline/run.ts --fresh --batch --no-deploy ${{ inputs.slot && format('--slot {0}', inputs.slot) || '' }}
+      - name: Deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler deploy
+      - name: Save edition to the repo
+        run: |
+          git config user.name "meridian-bot"
+          git config user.email "meridian-bot@users.noreply.github.com"
+          git add data/editions
+          git commit -m "Edition $(TZ=Asia/Kolkata date +%F-%H%M)" || exit 0
+          git push

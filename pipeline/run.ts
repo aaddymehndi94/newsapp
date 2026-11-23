@@ -7,7 +7,7 @@ import { SOURCES, canonicalOutlet, leaningFor } from "../config/sources.ts";
 import { type FeedItem, gatherAll } from "./feeds.ts";
 import { type PageInfo, readPage } from "./enrich.ts";
 import { type Slate, type SlatePick, SECTION_IDS, SECTION_NAMES, buildEditorRequest, cleanSlate, planEdition, unalias } from "./editor.ts";
-import { type WrittenStory, buildRevisionRequest, buildWriterRequest, sourceDocs, storyText } from "./writer.ts";
+import { type WrittenStory, buildRevisionRequest, buildWriterRequest, sourceDocs, storyCustomId, storyText } from "./writer.ts";
 import { CostMeter, type JsonResult, callJson, runBatch } from "./llm.ts";
 import { findAiTells } from "./style.ts";
 import { type ImageCandidate, type StoryImage, chooseOutletImage, wikimediaImage } from "./images.ts";
@@ -58,6 +58,12 @@ const unlock = () => fs.rmSync(LOCK, { force: true });
 process.on("exit", unlock);
 process.on("SIGINT", () => process.exit(130));
 process.on("SIGTERM", () => process.exit(143));
+
+// --fresh: start this edition from scratch (no cached feeds, slate, stories, pages or pictures).
+if (fresh) {
+  fs.rmSync(WORK, { recursive: true, force: true });
+  fs.mkdirSync(WORK, { recursive: true });
+}
 
 const meter = new CostMeter();
 const cached = <T>(name: string) => (fresh ? undefined : readJson<T>(path.join(WORK, name)));
@@ -166,7 +172,7 @@ async function main() {
     });
   }
   for (const p of todo) {
-    const r = results.get(`story:${p.key}`);
+    const r = results.get(storyCustomId(p.key));
     if (r?.ok) {
       written.set(p.key, r.data);
       writeJson(path.join(storiesDir, `${p.key}.json`), r.data);

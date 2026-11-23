@@ -82,6 +82,11 @@ ${summary ? `SUMMARY: ${summary}\n` : ""}${text ? `TEXT:\n${text}` : "(full text
   return docs.join("\n\n");
 }
 
+/** Batch custom_ids must match ^[a-zA-Z0-9_-]{1,64}$. */
+export function storyCustomId(key: string): string {
+  return `story_${key}`.slice(0, 64);
+}
+
 export function buildWriterRequest(pick: SlatePick, docs: string, editionLabel: string): JsonRequest {
   const user = `ASSIGNMENT
 Edition: ${editionLabel} (India Standard Time)
@@ -95,7 +100,7 @@ ${docs}
 
 Write the story.`;
   return {
-    customId: `story:${pick.key}`,
+    customId: storyCustomId(pick.key),
     model: WRITER_MODEL,
     system: WRITER_SYSTEM,
     user,
@@ -109,7 +114,7 @@ export function buildRevisionRequest(pick: SlatePick, story: WrittenStory, tells
   const base = buildWriterRequest(pick, docs, editionLabel);
   return {
     ...base,
-    customId: `revise:${pick.key}`,
+    customId: `revise_${pick.key}`.slice(0, 64),
     effort: "low",
     user: `${base.user}
 

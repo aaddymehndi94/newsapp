@@ -162,7 +162,8 @@ export function canonicalOutlet(name: string): string {
 }
 
 const SOURCE_LEANINGS = new Map<string, Leaning>();
-for (const s of SOURCES) if (!s.kind || s.kind === "rss") SOURCE_LEANINGS.set(s.outlet, s.leaning);
+// First (main news) feed of an outlet defines its leaning; section feeds like sport may be labelled differently.
+for (const s of SOURCES) if ((!s.kind || s.kind === "rss") && !SOURCE_LEANINGS.has(s.outlet)) SOURCE_LEANINGS.set(s.outlet, s.leaning);
 
 export function leaningFor(outlet: string): Leaning | undefined {
   const o = canonicalOutlet(outlet);

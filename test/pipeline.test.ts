@@ -93,3 +93,8 @@ test("cleanSlate removes unknown ids, dedupes items across stories, renumbers, f
   // y (rank 1) claims b and a; x then has no unused known items; z has none at all.
   assert.deepEqual(s.stories.map((x) => [x.key, x.rank, x.itemIds.join(), x.lead, x.videoId]), [["y", 1, "b,a", true, ""]]);
 });
+
+test("batch custom ids satisfy the API pattern", async () => {
+  const { storyCustomId } = await import("../pipeline/writer.ts");
+  for (const key of ["india-nepal-package", "x".repeat(80), "a-b_c"]) assert.match(storyCustomId(key), /^[a-zA-Z0-9_-]{1,64}$/);
+});

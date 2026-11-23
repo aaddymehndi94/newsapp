@@ -181,7 +181,7 @@ export function cleanSlate(slate: Slate, items: Map<string, FeedItem>, videoIds:
     const ids = s.itemIds.filter((id) => items.has(id) && !usedItems.has(id));
     if (ids.length === 0) continue;
     ids.forEach((id) => usedItems.add(id));
-    let key = s.key.replace(/[^a-z0-9-]/gi, "-").toLowerCase().slice(0, 60) || "story";
+    let key = s.key.replace(/[^a-z0-9-]/gi, "-").toLowerCase().slice(0, 50) || "story";
     while (keys.has(key)) key += "-2";
     keys.add(key);
     stories.push({ ...s, key, itemIds: ids, videoId: videoIds.has(s.videoId) ? s.videoId : "" });

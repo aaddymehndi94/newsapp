@@ -102,9 +102,19 @@ export async function runBatch<T>(
   const results = new Map<string, JsonResult<T>>();
   if (reqs.length === 0) return results;
   const byId = new Map(reqs.map((r) => [r.customId, r]));
-  const batch = await anthropic().messages.batches.create({
-    requests: reqs.map((r) => ({ custom_id: r.customId, params: params(r) })),
-  });
+  let batch: Anthropic.Messages.MessageBatch;
+  try {
+    batch = await anthropic().messages.batches.create({
+      requests: reqs.map((r) => ({ custom_id: r.customId, params: params(r) })),
+    });
+  } catch (e) {
+    log(`batch submit failed (${(e as Error).message.slice(0, 200)}) — running directly`);
+    const { mapLimit } = await import("./util.ts");
+    await mapLimit(reqs, opts.syncConcurrency ?? 6, async (r) => {
+      results.set(r.customId, await callJson<T>(r, meter));
+    });
+    return results;
+  }
   log(`batch ${batch.id} submitted (${reqs.length} requests)`);
   let status = batch.processing_status;
   while (status !== "ended" && Date.now() < opts.deadline.getTime()) {
