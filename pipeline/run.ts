@@ -119,7 +119,8 @@ async function main() {
   if (!slate) {
     const { req, aliases } = buildEditorRequest({ items: gathered.items, videos, previousHeadlines: previousHeadlines(), editionLabel });
     log(`editor: asking ${req.model} (${req.user.length} chars)…`);
-    const res = await planEdition(req, meter, { batch: false, deadline: new Date(Date.now() + 30 * 60e3) });
+    // Batch (half price) with a 25-minute deadline, then falls back to a direct call.
+    const res = await planEdition(req, meter, { batch: useBatch, deadline: new Date(Date.now() + 25 * 60e3) });
     if (!res.ok) throw new Error(`editor failed: ${res.error}`);
     writeJson(path.join(WORK, "slate.raw.json"), res.data);
     slate = cleanSlate(unalias(res.data, aliases), items, new Set(videoById.keys()));
