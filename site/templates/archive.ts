@@ -3,7 +3,7 @@
 import type { Edition } from "../types.ts";
 import type { SiteCtx } from "./layout.ts";
 import { page, slimMasthead } from "./layout.ts";
-import { byId, editionName, editionPath, esc, istTime, longDate, pic, plural } from "./helpers.ts";
+import { byId, editionName, editionPath, esc, istClock, longDate, pic, plural } from "./helpers.ts";
 
 function leadOf(ed: Edition) {
   const map = byId(ed);
@@ -18,7 +18,7 @@ function editionCell(ed: Edition, ctx: SiteCtx): string {
 ${lead ? pic(lead, ed, "mini") : ""}
 <div class="ed-text">
 <h3 class="ed-name"><a class="stretch" href="${editionPath(ed.id)}">${editionName(ed)}</a>${latest}</h3>
-<p class="meta"><span>${istTime(ed.publishedAt)} IST</span><span>${plural(ed.stories.length, "story", "stories")}</span></p>
+<p class="meta"><span>${istClock(ed.publishedAt)}</span><span>${plural(ed.stories.length, "story", "stories")}</span></p>
 ${lead ? `<p class="ed-lead">${esc(lead.headline)}</p>` : ""}
 </div>
 </article>
@@ -45,7 +45,7 @@ export function renderArchive(ctx: SiteCtx): string {
   const main = `<div class="wrap archive">
 <header class="page-head">
 <h1 class="page-title">All editions</h1>
-<p class="page-lede">Two editions a day, published at 05:00 and 17:00 IST. ${plural(ctx.editions.length, "edition")} so far.</p>
+<p class="page-lede">Two editions a day, at 5 am and 5 pm IST. ${plural(ctx.editions.length, "edition")} so far.</p>
 </header>
 <ol class="days">
 ${days}
@@ -63,7 +63,7 @@ ${days}
 
 export function renderNotFound(ctx: SiteCtx): string {
   const main = `<div class="wrap notfound">
-<h1 class="page-title">Off the map</h1>
+<h1 class="page-title">Page not found</h1>
 <p class="page-lede">There is no page at this address. It may belong to an edition that has been removed, or the link may be mistyped.</p>
 <p class="nf-links"><a href="/">Read the latest edition (${editionName(ctx.latest).toLowerCase()}, ${esc(longDate(ctx.latest.date))})</a><a href="/archive/">Browse all editions</a></p>
 </div>`;

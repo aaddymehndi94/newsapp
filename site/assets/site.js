@@ -1,4 +1,4 @@
-// Meridian: theme toggle, read marks, return-to-place, click-to-load video, section bar.
+// Meridian: theme toggle, read ticks, return-to-place, click-to-load video, section tabs.
 // Progressive: every page works without this file.
 (() => {
   "use strict";
@@ -21,7 +21,7 @@
   const darkMq = matchMedia("(prefers-color-scheme: dark)");
 
   // ---- theme ----
-  const PAPER = { light: "#f5f7fa", dark: "#10151d" };
+  const PAPER = { light: "#ffffff", dark: "#111111" };
   const theme = () => doc.getAttribute("data-theme") || (darkMq.matches ? "dark" : "light");
   const syncThemeColor = () => {
     const forced = doc.getAttribute("data-theme");
@@ -35,7 +35,7 @@
     const sync = () => {
       const next = theme() === "dark" ? "light" : "dark";
       btn.setAttribute("aria-label", `Switch to ${next} theme`);
-      if (label) label.textContent = next === "dark" ? "Dark" : "Light";
+      if (label) label.textContent = `Switch to ${next} theme`;
     };
     btn.hidden = false;
     sync();
@@ -72,8 +72,9 @@
     });
   }
 
-  // ---- read marks on story cards (front page and "keep reading") ----
-  const PIN = '<svg viewBox="0 0 12 14" width="10" height="12" aria-hidden="true" focusable="false"><path d="M6 13.2S1.2 8.6 1.2 5.4a4.8 4.8 0 0 1 9.6 0C10.8 8.6 6 13.2 6 13.2Z" fill="currentColor"/><circle cx="6" cy="5.3" r="1.7" fill="var(--paper)"/></svg>';
+  // ---- read ticks on story cards (front page and "keep reading"); cards are never dimmed ----
+  const TICK = '<svg viewBox="0 0 14 14" width="13" height="13" aria-hidden="true" focusable="false"><circle cx="7" cy="7" r="7" fill="currentColor"/><path d="m3.9 7.2 2.1 2.1 4.1-4.4" fill="none" stroke="var(--bg)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const PIN = '<svg viewBox="0 0 12 14" width="11" height="13" aria-hidden="true" focusable="false"><path d="M6 13.2S1.2 8.6 1.2 5.4a4.8 4.8 0 0 1 9.6 0C10.8 8.6 6 13.2 6 13.2Z" fill="currentColor"/><circle cx="6" cy="5.3" r="1.7" fill="var(--bg)"/></svg>';
   const markCards = () => {
     const read = new Set(readList());
     const last = body.classList.contains("page-front") ? store.get(LAST) : null;
@@ -81,7 +82,6 @@
       const key = el.getAttribute("data-story");
       const isRead = read.has(key);
       const isLast = key === last;
-      el.classList.toggle("is-read", isRead);
       const meta = el.querySelector(".meta");
       if (!meta) return;
       let badge = meta.querySelector(".state");
@@ -91,7 +91,7 @@
         meta.prepend(badge);
       }
       badge.className = isLast ? "state is-last" : "state";
-      badge.innerHTML = isLast ? `${PIN}Last opened` : "Read";
+      badge.innerHTML = isLast ? `${PIN}Last opened` : `${TICK}Read`;
     });
   };
   markCards();
@@ -134,8 +134,26 @@
     });
   });
 
-  // ---- section bar: show where you are ----
-  const track = document.querySelector(".jumpbar-track");
+  // ---- section tabs: edge fades/arrows when there's more, and the tab for where you are ----
+  const tabs = document.querySelector(".tabs");
+  const track = document.querySelector(".tabs-track");
+  if (tabs && track) {
+    const edges = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      tabs.classList.toggle("at-start", track.scrollLeft <= 2);
+      tabs.classList.toggle("at-end", track.scrollLeft >= max - 2);
+    };
+    tabs.querySelectorAll("[data-scroll]").forEach((b) => {
+      b.hidden = false;
+      b.addEventListener("click", () => {
+        const dir = Number(b.getAttribute("data-scroll")) || 1;
+        track.scrollBy({ left: dir * track.clientWidth * 0.7, behavior: reduced.matches ? "auto" : "smooth" });
+      });
+    });
+    track.addEventListener("scroll", edges, { passive: true });
+    addEventListener("resize", edges);
+    edges();
+  }
   if (track && "IntersectionObserver" in window) {
     const links = new Map();
     track.querySelectorAll("a[data-jump]").forEach((a) => links.set(a.getAttribute("data-jump"), a));

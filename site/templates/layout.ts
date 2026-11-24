@@ -1,7 +1,7 @@
 // Document shell, mastheads and footer shared by every page.
 
 import type { Edition } from "../types.ts";
-import { editionName, editionPath, esc, istTime, longDate, shortDate, slotName } from "./helpers.ts";
+import { editionName, editionPath, esc, istClock, longDate, shortDate } from "./helpers.ts";
 
 export interface SiteCtx {
   /** All editions, oldest first. */
@@ -16,12 +16,15 @@ export interface SiteCtx {
 
 /**
  * Runs in <head> before first paint: applies a saved theme (or ?theme=light|dark, not saved)
- * and swaps any picture that fails to load for its typographic card. Must stay byte-identical
+ * and swaps any picture that fails to load for its placeholder. Must stay byte-identical
  * across pages: its hash is pinned in the Content-Security-Policy.
  */
 export const HEAD_SCRIPT =
   `(function(){var d=document.documentElement;d.className+=" js";try{var q=new URLSearchParams(location.search).get("theme"),t=q==="light"||q==="dark"?q:localStorage.getItem("meridian:theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t)}catch(e){}` +
   `document.addEventListener("error",function(e){var i=e.target;if(i&&i.tagName==="IMG"){var p=i.closest(".pic");if(p){p.classList.add("is-broken");i.remove()}}},true)})();`;
+
+/** Browser chrome colours; must match --bg in site.css (site.js keeps them in sync on toggle). */
+export const THEME_COLORS = { light: "#ffffff", dark: "#111111" } as const;
 
 export interface PageOpts {
   title: string;
@@ -49,8 +52,8 @@ export function page(o: PageOpts): string {
 ${o.description ? `<meta name="description" content="${esc(o.description)}">` : ""}
 <meta name="robots" content="noindex, nofollow">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#f5f7fa" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#10151d" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="${THEME_COLORS.light}" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="${THEME_COLORS.dark}" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <script>${HEAD_SCRIPT}</script>
 ${preloads}
@@ -70,88 +73,51 @@ ${footer(o.ctx)}
 `;
 }
 
+const ICON_THEME = `<svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>`;
+export const ICON_BACK = `<svg class="icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
 export function themeToggle(): string {
-  return `<button class="theme-toggle" type="button" data-theme-toggle hidden>
-<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg>
-<span class="theme-toggle-label">Theme</span>
-</button>`;
+  return `<button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Switch theme" hidden>${ICON_THEME}<span class="visually-hidden theme-toggle-label">Theme</span></button>`;
 }
 
-/**
- * The graduated neatline: a map border whose 24 segments are the hours of the IST day,
- * with the two edition times marked and the current edition's mark emphasised.
- * `labels: false` keeps the ticks but drops the times (slim mastheads).
- */
-export function neatline(current?: Edition["slot"], opts: { labels?: boolean } = {}): string {
-  const labels = opts.labels ?? true;
-  const tick = (slot: Edition["slot"]) => {
-    const hour = slot === "morning" ? "05" : "17";
-    const cur = current === slot ? " is-current" : "";
-    return `<span class="tick at-${hour}${cur}">${labels ? `${hour}:00` : ""}</span>`;
-  };
-  return `<div class="neatline${labels ? "" : " neatline--ticks"}" aria-hidden="true"><div class="neatline-bar"></div><div class="neatline-scale">${tick("morning")}${tick("evening")}</div></div>`;
-}
-
-/** Morning / Evening switch for an edition's date, plus the archive. */
-function editionSwitch(ed: Edition, ctx: SiteCtx): string {
-  const sameDay = ctx.editions.filter((e) => e.date === ed.date);
-  const cell = (slot: Edition["slot"]) => {
-    const e = sameDay.find((x) => x.slot === slot);
-    const label = slotName(slot);
-    if (e && e.id === ed.id) return `<a class="seg is-current" href="${editionPath(e.id)}" aria-current="page">${label}</a>`;
-    if (e) return `<a class="seg" href="${editionPath(e.id)}">${label}</a>`;
-    const due = ed.id === ctx.latest.id && slot === "evening" ? `${label} at 17:00` : label;
-    return `<span class="seg is-absent" aria-disabled="true">${due}</span>`;
-  };
-  return `<nav class="edition-switch" aria-label="Editions">
-<div class="segs">${cell("morning")}${cell("evening")}</div>
-<a class="archive-link" href="/archive/">All editions</a>
-</nav>`;
-}
-
-/** Full masthead for an edition front page. */
+/** Masthead for an edition front page: wordmark, theme button, and one edition line. */
 export function frontMasthead(ed: Edition, ctx: SiteCtx): string {
-  const time = istTime(ed.publishedAt);
-  return `<header class="masthead masthead--front">
-<div class="wrap">
-<div class="mast-top">
-<p class="margin-note margin-note--left">Compiled in Bengaluru<br><span class="coord">12°58′ N 77°35′ E</span></p>
+  const sameDay = ctx.editions.filter((e) => e.date === ed.date && e.id !== ed.id);
+  const other = sameDay[0];
+  const otherLink = other
+    ? `<a class="mast-link" href="${editionPath(other.id)}">${editionName(other)}</a>`
+    : "";
+  return `<header class="masthead">
+<div class="wrap mast-row">
 <h1 class="wordmark"><a href="/">Meridian</a></h1>
-<div class="mast-tools">
-<p class="margin-note margin-note--right">All times IST<br><span class="coord">the 82°30′ E meridian</span></p>
 ${themeToggle()}
 </div>
-</div>
-<div class="mast-edition">
-<p class="edition-line"><strong>${editionName(ed)}</strong><span class="sep" aria-hidden="true"></span><time datetime="${esc(ed.publishedAt)}"><span class="date-long">${esc(longDate(ed.date))}</span><span class="date-short">${esc(shortDate(ed.date))}</span></time><span class="sep" aria-hidden="true"></span><span>${time} IST</span></p>
-${editionSwitch(ed, ctx)}
-</div>
-${neatline(ed.slot)}
+<div class="wrap mast-sub">
+<p class="edition-line"><strong>${editionName(ed)}</strong><span><time datetime="${esc(ed.publishedAt)}"><span class="date-long">${esc(longDate(ed.date))}</span><span class="date-short">${esc(shortDate(ed.date))}</span></time></span><span class="date-long">Updated ${istClock(ed.publishedAt)}</span></p>
+<p class="mast-links">${otherLink}<a class="mast-link" href="/archive/">All editions</a></p>
 </div>
 </header>`;
 }
 
-/** Compact masthead for articles, the archive and the 404 page. */
-export function slimMasthead(ctx: SiteCtx, ed?: Edition): string {
-  const editionLink = ed
-    ? `<a class="mast-edition-link" href="${editionPath(ed.id)}">${editionName(ed)}<span class="sep" aria-hidden="true"></span><span>${esc(shortDate(ed.date))}</span></a>`
-    : "";
-  return `<header class="masthead masthead--slim">
-<div class="wrap">
-<div class="mast-row">
+/**
+ * Compact top bar for articles, the archive and the 404 page: a way back on the left, the
+ * wordmark in the middle, the theme button on the right. Sticky, so the way back is always
+ * one tap away.
+ */
+export function slimMasthead(ctx: SiteCtx, back?: string): string {
+  const left = back ?? `<a class="back" href="/">${ICON_BACK}<span>Latest</span></a>`;
+  return `<header class="topbar">
+<div class="wrap topbar-row">
+<div class="topbar-left">${left}</div>
 <a class="wordmark wordmark--slim" href="/">Meridian</a>
-${editionLink}
-${themeToggle()}
-</div>
-${neatline(ed?.slot, { labels: false })}
+<div class="topbar-right">${themeToggle()}</div>
 </div>
 </header>`;
 }
 
 function footer(ctx: SiteCtx): string {
   return `<footer class="site-foot">
-<div class="wrap">
-<div class="foot-grid">
+<div class="wrap foot-grid">
 <p class="foot-mark">Meridian</p>
 <div class="foot-note">
 <p>Stories on Meridian are written by AI from the reporting of the outlets credited on each story, and edited for balance across outlets of different leanings. Pictures belong to their credited owners and link to where they were published.</p>
@@ -161,7 +127,6 @@ function footer(ctx: SiteCtx): string {
 <a href="/">Latest edition</a>
 <a href="/archive/">All editions</a>
 </nav>
-</div>
 </div>
 </footer>`;
 }

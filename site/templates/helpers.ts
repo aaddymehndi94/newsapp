@@ -84,6 +84,10 @@ function fmt(opts: Intl.DateTimeFormatOptions): Intl.DateTimeFormat {
 export function istTime(iso: string): string {
   return fmt({ hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date(iso));
 }
+/** "3:36 am" — how times read on a phone in India. */
+export function istClock(iso: string): string {
+  return fmt({ hour: "numeric", minute: "2-digit", hour12: true }).format(new Date(iso)).replace(/\s*([ap])\.?m\.?$/i, " $1m").toLowerCase();
+}
 /** "Tuesday, 24 November 2026" for an edition date "2026-11-24". */
 export function longDate(date: string): string {
   return fmt({ weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date(`${date}T12:00:00+05:30`));
@@ -132,9 +136,9 @@ const KNOWN_SECTIONS = new Set([
   "bengaluru",
 ]);
 
-/** CSS class carrying a section's legend tint. Unknown sections get the neutral key. */
+/** A safe CSS class naming the section (for hooks and tests; sections are not colour-coded). */
 export function tint(sectionId: string): string {
-  return `t-${KNOWN_SECTIONS.has(sectionId) ? sectionId : "other"}`;
+  return `s-${KNOWN_SECTIONS.has(sectionId) ? sectionId : "other"}`;
 }
 
 const FALLBACK_NAMES: Record<string, string> = {
@@ -149,11 +153,6 @@ const FALLBACK_NAMES: Record<string, string> = {
 
 export function sectionName(ed: Edition, sectionId: string): string {
   return ed.sections.find((s) => s.id === sectionId)?.name ?? FALLBACK_NAMES[sectionId] ?? "News";
-}
-
-/** The legend key: a small swatch in the section's map colour. */
-export function legendKey(sectionId: string): string {
-  return `<span class="key ${tint(sectionId)}" aria-hidden="true"></span>`;
 }
 
 // ---------- places ----------
@@ -183,12 +182,33 @@ export function usableImageUrl(story: Story): string | null {
   return BLOCKED_IMAGE_HOSTS.has(new URL(src).hostname) ? null : src;
 }
 
-export type PicVariant = "lead" | "feature" | "sub" | "thumb" | "hero" | "mini";
+export type PicVariant = "lead" | "feature" | "card" | "thumb" | "hero" | "mini";
+
+const RATIOS: [string, number][] = [
+  ["r43", 4 / 3],
+  ["r32", 3 / 2],
+  ["r169", 16 / 9],
+  ["r21", 2],
+];
 
 /**
- * A picture box with a fixed aspect ratio (no layout shift). Behind the image sits a
- * typographic card in the section's tint; it shows when there is no image or when the image
- * fails to load (the head script marks the box `is-broken`).
+ * The aspect-ratio class nearest the photo's own shape, so a wide outlet picture is shown whole
+ * instead of being cut to 3:2. Portrait and square photos use 4:3; unknown sizes use 16:9.
+ */
+export function ratioClass(width?: number, height?: number): string {
+  if (!width || !height || width <= 0 || height <= 0) return "r169";
+  const r = width / height;
+  if (r < 1.2) return "r43";
+  let best = RATIOS[0];
+  for (const c of RATIOS) if (Math.abs(Math.log(r / c[1])) < Math.abs(Math.log(r / best[1]))) best = c;
+  return best[0];
+}
+
+/**
+ * A picture box with a fixed aspect ratio (no layout shift). Large pictures (lead, feature,
+ * hero) take the ratio nearest the photo's own; thumbnails are a fixed 4:3 crop. Behind the
+ * image sits a quiet placeholder naming the section and outlet; it shows while the photo loads,
+ * and on its own when there is no photo or it fails (the head script marks the box `is-broken`).
  */
 export function pic(story: Story, ed: Edition, variant: PicVariant, opts: { eager?: boolean } = {}): string {
   const sec = sectionName(ed, story.section);
@@ -196,18 +216,17 @@ export function pic(story: Story, ed: Edition, variant: PicVariant, opts: { eage
   const src = usableImageUrl(story);
   const outlet = (img && has(img.credit) ? img.credit : story.sources[0]?.outlet) ?? "";
   const small = variant === "thumb" || variant === "mini";
-  // Lettered like a sheet labels a place: the region in caps, the place in roman, the source in italic.
-  const place = variant !== "mini" && has(story.dateline) ? `<span class="pic-card-place">${esc(placeName(story.dateline))}</span>` : "";
-  const card = `<span class="pic-card" aria-hidden="true"><span class="pic-card-sec">${esc(sec)}</span>${place}${
+  const ratio = variant === "lead" || variant === "feature" || variant === "hero" ? ` ${ratioClass(img?.width, img?.height)}` : "";
+  const card = `<span class="pic-card" aria-hidden="true"><span class="pic-card-sec">${esc(sec)}</span>${
     !small && has(outlet) ? `<span class="pic-card-src">${esc(outlet)}</span>` : ""
   }</span>`;
   if (!src) {
-    return `<div class="pic pic--${variant} ${tint(story.section)} is-empty">${card}</div>`;
+    return `<div class="pic pic--${variant}${ratio} is-empty">${card}</div>`;
   }
   const w = img?.width && img.width > 0 ? Math.round(img.width) : 1200;
   const h = img?.height && img.height > 0 ? Math.round(img.height) : 800;
   const loading = opts.eager ? `fetchpriority="high"` : `loading="lazy"`;
-  return `<div class="pic pic--${variant} ${tint(story.section)}">${card}<img src="${esc(src)}" alt="${esc(img?.alt ?? "")}" width="${w}" height="${h}" ${loading} decoding="async" referrerpolicy="no-referrer"></div>`;
+  return `<div class="pic pic--${variant}${ratio}">${card}<img src="${esc(src)}" alt="${esc(img?.alt ?? "")}" width="${w}" height="${h}" ${loading} decoding="async" referrerpolicy="no-referrer"></div>`;
 }
 
 // ---------- sources & leaning ----------
@@ -234,10 +253,10 @@ export function outletCount(story: Story): number {
   return new Set(story.sources.map((s) => s.outlet.trim().toLowerCase())).size;
 }
 
-/** "[key] India · 4 outlets · 3 min read" plus a Developing marker. */
+/** "India · Developing · 4 outlets · 3 min read". Read marks are prepended by site.js. */
 export function cardMeta(story: Story, section?: string): string {
   const parts: string[] = [];
-  if (section) parts.push(`<span class="meta-section">${legendKey(story.section)}${esc(section)}</span>`);
+  if (section) parts.push(`<span class="meta-section">${esc(section)}</span>`);
   if (story.developing) parts.push(`<span class="developing"><i class="dot" aria-hidden="true"></i>Developing</span>`);
   const n = outletCount(story);
   if (n > 0) parts.push(`<span>${plural(n, "outlet")}</span>`);

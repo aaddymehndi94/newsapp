@@ -4,7 +4,7 @@
 import type { Edition, Story } from "../types.ts";
 import { rowStory } from "./front.ts";
 import type { SiteCtx } from "./layout.ts";
-import { page, slimMasthead } from "./layout.ts";
+import { ICON_BACK, page, slimMasthead } from "./layout.ts";
 import {
   byId,
   editionName,
@@ -12,9 +12,8 @@ import {
   esc,
   has,
   inline,
-  istTime,
+  istClock,
   leaningMark,
-  legendKey,
   paragraphs,
   pic,
   placeName,
@@ -23,13 +22,10 @@ import {
   usableImageUrl,
   sectionStories,
   shortDate,
-  tint,
 } from "./helpers.ts";
 
 const EXTERNAL = 'target="_blank" rel="noopener noreferrer nofollow"';
 
-
-const arrowLeft = `<svg class="icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M9.5 3.5 5 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
 /** Paths of the front pages this story was listed on; the back link uses history.back() from them. */
 function frontPaths(ed: Edition, ctx: SiteCtx): string {
@@ -39,7 +35,7 @@ function frontPaths(ed: Edition, ctx: SiteCtx): string {
 }
 
 function backLink(ed: Edition, s: Story, ctx: SiteCtx, cls: string, label: string): string {
-  return `<a class="${cls}" href="${editionPath(ed.id)}#${esc(s.id)}" data-back data-front="${esc(frontPaths(ed, ctx))}">${arrowLeft}<span>${label}</span></a>`;
+  return `<a class="${cls}" href="${editionPath(ed.id)}#${esc(s.id)}" data-back data-front="${esc(frontPaths(ed, ctx))}">${ICON_BACK}<span>${label}</span></a>`;
 }
 
 function hero(ed: Edition, s: Story): string {
@@ -144,23 +140,20 @@ export function renderArticle(ed: Edition, s: Story, ctx: SiteCtx): string {
   const sec = sectionName(ed, s.section);
   const { next, more } = keepReading(ed, s);
   const metaParts = [
-    s.developing ? `<span class="developing"><i class="dot" aria-hidden="true"></i>Developing story</span>` : "",
+    `<span class="meta-section">${esc(sec)}</span>`,
+    s.developing ? `<span class="developing"><i class="dot" aria-hidden="true"></i>Developing</span>` : "",
     has(s.dateline) ? `<span class="place">${esc(placeName(s.dateline))}</span>` : "",
-    `<time datetime="${esc(ed.publishedAt)}">${esc(shortDate(ed.date))}, ${istTime(ed.publishedAt)} IST</time>`,
+    `<time datetime="${esc(ed.publishedAt)}">${esc(shortDate(ed.date))}, ${istClock(ed.publishedAt)}</time>`,
     `<span>${Math.max(1, Math.round(s.readingMinutes))} min read</span>`,
   ].filter(Boolean);
 
   const main = `<div class="wrap article-wrap">
-<nav class="runninghead" aria-label="Where you are">
-${backLink(ed, s, ctx, "back", editionName(ed))}
-<span class="rh-section">${legendKey(s.section)}${esc(sec)}</span>
-</nav>
-<article class="story ${tint(s.section)}" aria-labelledby="story-h">
+<article class="story" aria-labelledby="story-h">
 ${hero(ed, s)}
 <header class="story-head">
 <h1 class="hl hl--story" id="story-h">${esc(s.headline)}</h1>
 ${has(s.dek) ? `<p class="dek">${esc(s.dek)}</p>` : ""}
-<p class="story-meta">${metaParts.join("")}</p>
+<p class="meta story-meta">${metaParts.join("")}</p>
 </header>
 <div class="story-grid">
 ${keyFacts(s)}
@@ -174,7 +167,7 @@ ${sources(s)}
 </div>
 </article>
 <aside class="keep-reading" aria-label="Keep reading">
-${next.length ? `<section class="kr-block"><h2 class="kr-title">${legendKey(s.section)}Next in ${esc(sec)}</h2><div class="rows">${next.map((x) => rowStory(ed, x)).join("\n")}</div></section>` : ""}
+${next.length ? `<section class="kr-block"><h2 class="kr-title">More in ${esc(sec)}</h2><div class="rows">${next.map((x) => rowStory(ed, x)).join("\n")}</div></section>` : ""}
 ${more.length ? `<section class="kr-block"><h2 class="kr-title">Also in this edition</h2><div class="rows">${more.map((x) => rowStory(ed, x, { withSection: true })).join("\n")}</div></section>` : ""}
 </aside>
 <p class="back-foot">${backLink(ed, s, ctx, "back back--foot", `Back to the ${editionName(ed).toLowerCase()}`)}</p>
@@ -185,7 +178,7 @@ ${more.length ? `<section class="kr-block"><h2 class="kr-title">Also in this edi
     description: has(s.dek) ? s.dek : s.summary,
     bodyClass: "page-article",
     bodyAttrs: { "data-edition": ed.id, "data-story": `${ed.id}/${s.id}` },
-    header: slimMasthead(ctx, ed),
+    header: slimMasthead(ctx, backLink(ed, s, ctx, "back", "Back")),
     main,
     ctx,
   });

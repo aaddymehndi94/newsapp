@@ -1,22 +1,20 @@
-// Edition front page: lead, secondary leads, then each section; ends with the colophon.
+// Edition front page: lead, top stories, then each section; ends with the colophon.
 
 import type { Edition, Story } from "../types.ts";
 import type { SiteCtx } from "./layout.ts";
-import { frontMasthead, neatline, page } from "./layout.ts";
+import { frontMasthead, page } from "./layout.ts";
 import {
   byId,
   cardMeta,
   editionName,
   editionPath,
   esc,
-  legendKey,
   longDate,
   num,
   pic,
   plural,
   slotName,
   storyPath,
-  tint,
   usableImageUrl,
 } from "./helpers.ts";
 
@@ -66,10 +64,14 @@ function headlineLink(ed: Edition, s: Story): string {
   return `<a class="stretch" href="${storyPath(ed.id, s.id)}">${esc(s.headline)}</a>`;
 }
 
+function sectionNameOf(ed: Edition, s: Story): string {
+  return ed.sections.find((x) => x.id === s.section)?.name ?? "";
+}
+
 function leadStory(ed: Edition, s: Story): string {
-  return `<article class="lead ${tint(s.section)}" ${storyAttrs(ed, s)}>
+  return `<article class="card lead" ${storyAttrs(ed, s)}>
 ${pic(s, ed, "lead", { eager: true })}
-<div class="lead-text">
+<div class="card-text">
 <h3 class="hl hl--lead">${headlineLink(ed, s)}</h3>
 <p class="summary">${esc(s.summary)}</p>
 ${cardMeta(s, sectionNameOf(ed, s))}
@@ -77,25 +79,10 @@ ${cardMeta(s, sectionNameOf(ed, s))}
 </article>`;
 }
 
-function subStory(ed: Edition, s: Story): string {
-  return `<article class="sub ${tint(s.section)}" ${storyAttrs(ed, s)}>
-${pic(s, ed, "sub")}
-<div class="sub-text">
-<h3 class="hl hl--sub">${headlineLink(ed, s)}</h3>
-<p class="summary">${esc(s.summary)}</p>
-${cardMeta(s, sectionNameOf(ed, s))}
-</div>
-</article>`;
-}
-
-function sectionNameOf(ed: Edition, s: Story): string {
-  return ed.sections.find((x) => x.id === s.section)?.name ?? "";
-}
-
 function featureStory(ed: Edition, s: Story): string {
-  return `<article class="feature" ${storyAttrs(ed, s)}>
+  return `<article class="card feature" ${storyAttrs(ed, s)}>
 ${pic(s, ed, "feature")}
-<div class="feature-text">
+<div class="card-text">
 <h3 class="hl hl--feature">${headlineLink(ed, s)}</h3>
 <p class="summary">${esc(s.summary)}</p>
 ${cardMeta(s)}
@@ -103,12 +90,19 @@ ${cardMeta(s)}
 </article>`;
 }
 
-/** Compact row: headline beside a thumbnail, summary beneath. Also used on article pages. */
-export function rowStory(ed: Edition, s: Story, opts: { headingLevel?: 3 | 4; withSection?: boolean } = {}): string {
+/**
+ * Row: headline with its thumbnail beside it, the summary underneath. Used for top stories,
+ * section lists and the article page's "keep reading". Every row has a thumbnail.
+ */
+export function rowStory(
+  ed: Edition,
+  s: Story,
+  opts: { headingLevel?: 3 | 4; withSection?: boolean; eager?: boolean } = {},
+): string {
   const h = opts.headingLevel ?? 3;
-  return `<article class="row" ${storyAttrs(ed, s)}>
-${pic(s, ed, "thumb")}
+  return `<article class="card row" ${storyAttrs(ed, s)}>
 <h${h} class="hl hl--row">${headlineLink(ed, s)}</h${h}>
+${pic(s, ed, "thumb", { eager: opts.eager })}
 <p class="summary">${esc(s.summary)}</p>
 ${cardMeta(s, opts.withSection ? sectionNameOf(ed, s) : undefined)}
 </article>`;
@@ -120,33 +114,37 @@ function sectionBlock(ed: Edition, sec: RenderSection): string {
   const fi = Math.max(0, sec.stories.findIndex((s) => usableImageUrl(s) !== null));
   const first = sec.stories[fi];
   const rest = sec.stories.filter((_, i) => i !== fi);
-  // Beside the feature: up to three rows. Anything more runs below as a grid of picture cards.
-  // Three rows sit beside the feature (a fourth only when it would otherwise be alone below).
-  const sideCount = rest.length === 4 ? 4 : 3;
-  const side = rest.slice(0, sideCount);
-  const more = rest.slice(sideCount);
-  // A 4-up grid would strand one card on its last row; 3-up doesn't.
-  const gridCols = more.length % 4 === 1 && more.length % 3 !== 1 ? " cols-3" : "";
-  const solo = rest.length === 0 ? " is-solo" : "";
-  return `<section class="section ${tint(sec.id)}" id="${esc(sec.id)}" aria-labelledby="h-${esc(sec.id)}">
+  // Up to three rows sit beside the feature on desktop; the rest run below in a grid.
+  // On phones it is one continuous list.
+  const side = rest.slice(0, 3);
+  const more = rest.slice(3);
+  return `<section class="section" id="${esc(sec.id)}" aria-labelledby="h-${esc(sec.id)}">
 <header class="section-head">
-<h2 class="section-title" id="h-${esc(sec.id)}">${legendKey(sec.id)}<span>${esc(sec.name)}</span></h2>
+<h2 class="section-title" id="h-${esc(sec.id)}">${esc(sec.name)}</h2>
 <p class="section-count">${plural(sec.stories.length, "story", "stories")}</p>
 </header>
-<div class="section-body${solo}">
+<div class="section-body${side.length ? "" : " is-solo"}">
 ${featureStory(ed, first)}
 ${side.length ? `<div class="rows">${side.map((s) => rowStory(ed, s)).join("\n")}</div>` : ""}
 </div>
-${more.length ? `<div class="rows rows--grid${gridCols}">${more.map((s) => rowStory(ed, s)).join("\n")}</div>` : ""}
+${more.length ? `<div class="rows rows--more">${more.map((s) => rowStory(ed, s)).join("\n")}</div>` : ""}
 </section>`;
 }
 
-function jumpBar(sections: RenderSection[]): string {
-  const links = sections
-    .map((s) => `<a href="#${esc(s.id)}" data-jump="${esc(s.id)}">${legendKey(s.id)}${esc(s.name)}</a>`)
+const CHEVRON = (d: "l" | "r") =>
+  `<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="${d === "r" ? "M6 3l5 5-5 5" : "M10 3 5 8l5 5"}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+/** Sticky section tabs. Anchors only (never a filter); site.js marks the one in view. */
+function tabBar(sections: RenderSection[]): string {
+  const tabs = [{ id: "top-stories", name: "Top stories" }, ...sections]
+    .map((s, i) => `<a class="tab${i === 0 ? " is-active" : ""}" href="#${esc(s.id)}" data-jump="${esc(s.id)}"${i === 0 ? ' aria-current="location"' : ""}>${esc(s.name)}</a>`)
     .join("");
-  return `<nav class="jumpbar" aria-label="Sections">
-<div class="wrap"><div class="jumpbar-track"><a href="#top-stories" data-jump="top-stories">Top stories</a>${links}</div></div>
+  return `<nav class="tabs at-start" aria-label="Sections">
+<div class="wrap tabs-inner">
+<button class="tabs-arrow tabs-arrow--l" type="button" data-scroll="-1" aria-label="Scroll sections left" tabindex="-1" hidden>${CHEVRON("l")}</button>
+<div class="tabs-track">${tabs}</div>
+<button class="tabs-arrow tabs-arrow--r" type="button" data-scroll="1" aria-label="Scroll sections right" tabindex="-1" hidden>${CHEVRON("r")}</button>
+</div>
 </nav>`;
 }
 
@@ -154,21 +152,23 @@ function colophon(ed: Edition, ctx: SiteCtx): string {
   const idx = ctx.editions.findIndex((e) => e.id === ed.id);
   const prev = idx > 0 ? ctx.editions[idx - 1] : undefined;
   const next = idx >= 0 && idx < ctx.editions.length - 1 ? ctx.editions[idx + 1] : undefined;
-  const nextLine = next
-    ? `<a class="colo-link" href="${editionPath(next.id)}">Next: ${slotName(next.slot).toLowerCase()} edition, ${esc(longDate(next.date))}</a>`
-    : `<span>The ${ed.slot === "morning" ? "evening edition is due at 17:00" : "next morning edition is due at 05:00"} IST.</span>`;
-  const prevLine = prev
-    ? `<a class="colo-link" href="${editionPath(prev.id)}">Previous: ${slotName(prev.slot).toLowerCase()} edition, ${esc(longDate(prev.date))}</a>`
-    : "";
+  const links: string[] = [];
+  if (next) links.push(`<a class="btn" href="${editionPath(next.id)}">Next: ${slotName(next.slot).toLowerCase()} edition, ${esc(longDate(next.date))}</a>`);
+  if (prev) links.push(`<a class="btn" href="${editionPath(prev.id)}">Previous: ${slotName(prev.slot).toLowerCase()} edition, ${esc(longDate(prev.date))}</a>`);
+  links.push(`<a class="btn" href="/archive/">All editions</a>`);
+  const due = next
+    ? ""
+    : `<p class="colo-due">The ${ed.slot === "morning" ? "evening edition is due at 5 pm" : "next morning edition is due at 5 am"} IST.</p>`;
   const st = ed.stats;
   const stats =
     st && st.itemsSeen > 0
       ? `<p class="colo-stats">Edited from ${plural(st.itemsSeen, "report")} across ${plural(st.feedsScanned, "feed")}; ${num(st.pagesRead)} articles read in full. Editing cost $${st.costUsd.toFixed(2)}.</p>`
       : "";
   return `<section class="colophon" aria-labelledby="colo-h">
-${neatline(ed.slot, { labels: false })}
-<h2 id="colo-h" class="colo-title">End of the ${editionName(ed).toLowerCase()}</h2>
-<p class="colo-nav">${nextLine}${prevLine ? `<span class="sep" aria-hidden="true"></span>${prevLine}` : ""}<span class="sep" aria-hidden="true"></span><a class="colo-link" href="/archive/">All editions</a></p>
+<h2 id="colo-h" class="colo-title">You’re all caught up</h2>
+<p class="colo-sub">That’s the end of the ${editionName(ed).toLowerCase()}.</p>
+${due}
+<p class="colo-nav">${links.join("")}</p>
 ${stats}
 </section>`;
 }
@@ -176,12 +176,12 @@ ${stats}
 export function renderFront(ed: Edition, ctx: SiteCtx): string {
   const { lead, sections } = frontLayout(ed);
   const [top, ...subs] = lead;
-  const main = `${jumpBar(sections)}
+  const main = `${tabBar(sections)}
 <div class="wrap front">
 <section class="top-stories${subs.length ? "" : " is-solo"}" id="top-stories" aria-labelledby="h-top">
 <h2 class="visually-hidden" id="h-top">Top stories</h2>
 ${top ? leadStory(ed, top) : ""}
-${subs.length ? `<div class="subs subs--${subs.length}">${subs.map((s) => subStory(ed, s)).join("\n")}</div>` : ""}
+${subs.length ? `<div class="rows subs">${subs.map((s) => rowStory(ed, s, { withSection: true, eager: true })).join("\n")}</div>` : ""}
 </section>
 ${sections.map((s) => sectionBlock(ed, s)).join("\n")}
 ${colophon(ed, ctx)}

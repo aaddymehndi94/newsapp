@@ -73,6 +73,11 @@ edition, which is the point.
 - The owner asked for a **classy**, calm, trustworthy, premium-newspaper feel, with dark and light
   themes. Not a social feed, not a startup landing page.
 - **Every headline with a relevant picture** — pictures are central.
+- **Look (owner's choice, 2026-11-24): the standard news app, played straight**, at the polish of the
+  BBC News app and the NYT / The Hindu apps: serif headlines in a clean app layout, real tabs, true
+  dark mode (neutral near-black, no grey-blue). Not a themed or metaphor-driven look.
+- Front page shows **a thumbnail for every headline** and a **3–4 line summary**.
+- Read stories get a **tick**; nothing is greyed out or dimmed.
 
 ## Evidence on Hand
 
