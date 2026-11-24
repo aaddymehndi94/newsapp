@@ -26,8 +26,16 @@ export const HEAD_SCRIPT =
 /** Browser chrome colours; must match --bg in site.css (site.js keeps them in sync on toggle). */
 export const THEME_COLORS = { light: "#ffffff", dark: "#111111" } as const;
 
+/** The public address. Each page names its own URL here as canonical, so the www and
+ * workers.dev copies of the site don't compete with it in search results. */
+export const SITE_ORIGIN = "https://measurededition.com";
+
 export interface PageOpts {
   title: string;
+  /** Site path of this page ("/e/<id>/<story>/"), given as its canonical URL. */
+  canonicalPath?: string;
+  /** Keep this page out of search (the 404 page). Fixture builds are always kept out. */
+  noindex?: boolean;
   description?: string;
   bodyClass: string;
   bodyAttrs?: Record<string, string>;
@@ -50,7 +58,8 @@ export function page(o: PageOpts): string {
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(o.title)}</title>
 ${o.description ? `<meta name="description" content="${esc(o.description)}">` : ""}
-<meta name="robots" content="noindex, nofollow">
+${o.ctx.sample ? `<meta name="robots" content="noindex, nofollow">` : o.noindex ? `<meta name="robots" content="noindex">` : ""}
+${o.canonicalPath && !o.ctx.sample ? `<link rel="canonical" href="${SITE_ORIGIN}${esc(o.canonicalPath)}">` : ""}
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="${THEME_COLORS.light}" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="${THEME_COLORS.dark}" media="(prefers-color-scheme: dark)">

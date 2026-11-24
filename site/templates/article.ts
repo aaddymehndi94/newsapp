@@ -9,6 +9,7 @@ import {
   byId,
   editionName,
   editionPath,
+  storyPath,
   esc,
   has,
   inline,
@@ -176,6 +177,7 @@ ${more.length ? `<section class="kr-block"><h2 class="kr-title">Also in this edi
   return page({
     title: `${s.headline} · Measured Edition`,
     description: has(s.dek) ? s.dek : s.summary,
+    canonicalPath: storyPath(ed.id, s.id),
     bodyClass: "page-article",
     bodyAttrs: { "data-edition": ed.id, "data-story": `${ed.id}/${s.id}` },
     header: slimMasthead(ctx, backLink(ed, s, ctx, "back", "Back")),

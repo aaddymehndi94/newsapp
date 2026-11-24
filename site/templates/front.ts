@@ -229,6 +229,8 @@ ${colophon(ed, ctx)}
   return page({
     title: `Measured Edition · ${editionName(ed)}, ${longDate(ed.date)}`,
     description: top ? `${top.headline}. ${top.dek}` : "Measured Edition: the day's news, balanced and in one place.",
+    // The latest edition lives at "/"; older editions keep their own address.
+    canonicalPath: ed.id === ctx.latest.id ? "/" : editionPath(ed.id),
     bodyClass: "page-front",
     bodyAttrs: { "data-edition": ed.id },
     header: frontMasthead(ed, ctx),

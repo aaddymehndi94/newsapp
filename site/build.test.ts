@@ -129,6 +129,49 @@ describe("buildSite", () => {
     assert.ok(page.includes(`<script>${HEAD_SCRIPT}</script>`));
   });
 
+  it("keeps fixture builds out of search and the sitemap", async () => {
+    const page = await readFile(path.join(outDir, "index.html"), "utf8");
+    assert.match(page, /<meta name="robots" content="noindex, nofollow">/);
+    await assert.rejects(readFile(path.join(outDir, "sitemap.xml")));
+  });
+
+  it("opens a real edition build to search, with canonical links and a sitemap", async () => {
+    const realData = path.join(tmp, "real-data");
+    const realOut = path.join(tmp, "real-dist");
+    await mkdir(realData);
+    let latest: { id: string; stories: { id: string }[] } | undefined;
+    for (const name of await readdir(FIXTURES)) {
+      if (!name.endsWith(".json")) continue;
+      const ed = JSON.parse(await readFile(path.join(FIXTURES, name), "utf8"));
+      delete ed.fixture;
+      if (!latest || ed.id > latest.id) latest = ed;
+      await writeFile(path.join(realData, name), JSON.stringify(ed));
+    }
+    await buildSite({ dataDir: realData, outDir: realOut, quiet: true });
+    const ORIGIN = "https://measurededition.com";
+    const story = latest!.stories[0];
+
+    const headers = await readFile(path.join(realOut, "_headers"), "utf8");
+    assert.doesNotMatch(headers, /X-Robots-Tag/);
+    const robots = await readFile(path.join(realOut, "robots.txt"), "utf8");
+    assert.doesNotMatch(robots, /Disallow: \//);
+    assert.match(robots, new RegExp(`Sitemap: ${ORIGIN}/sitemap.xml`));
+
+    const front = await readFile(path.join(realOut, "index.html"), "utf8");
+    assert.doesNotMatch(front, /name="robots"/);
+    assert.ok(front.includes(`<link rel="canonical" href="${ORIGIN}/">`), "front page names / as canonical");
+    const article = await readFile(path.join(realOut, "e", latest!.id, story.id, "index.html"), "utf8");
+    assert.ok(article.includes(`<link rel="canonical" href="${ORIGIN}/e/${latest!.id}/${story.id}/">`));
+    const notFound = await readFile(path.join(realOut, "404.html"), "utf8");
+    assert.match(notFound, /<meta name="robots" content="noindex">/);
+    assert.doesNotMatch(notFound, /rel="canonical"/);
+
+    const sitemap = await readFile(path.join(realOut, "sitemap.xml"), "utf8");
+    for (const p of ["/", "/archive/", `/e/${latest!.id}/${story.id}/`]) {
+      assert.ok(sitemap.includes(`<loc>${ORIGIN}${p}</loc>`), `sitemap lists ${p}`);
+    }
+  });
+
   it("labels fixture builds as invented on every page", async () => {
     for (const f of await htmlFiles(outDir)) {
       assert.ok((await readFile(f, "utf8")).includes(`class="sample-banner"`), `${f} lacks the sample banner`);

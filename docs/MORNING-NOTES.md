@@ -1,7 +1,7 @@
 # Good morning — Measured Edition is live
 
 **Read it here:** https://measurededition.com
-(Hidden from Google for now with a `noindex` header and `robots.txt`; anyone with the link can open it.)
+(Open to Google and other search engines, with a sitemap at /sitemap.xml.)
 
 ## What you'll find
 
@@ -62,7 +62,7 @@ Logs: `logs/`.
 
 ## Ideas for next steps (your call)
 
-1. **Your domain**: buy it, tell me, and I'll attach it and remove `noindex` when you're ready.
+1. **Your domain**: done, measurededition.com is live and open to search.
 2. **"Follow this story"**: link today's article to earlier coverage of the same event.
 3. **"Ask about this story"**: a small Q&A box under each article (uses credits per question).
 4. Tune anything: section sizes, which outlets, article length, the look.

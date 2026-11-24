@@ -54,6 +54,7 @@ ${days}
   return page({
     title: "All editions · Measured Edition",
     description: "Every edition of Measured Edition, newest first.",
+    canonicalPath: "/archive/",
     bodyClass: "page-archive",
     header: slimMasthead(ctx),
     main,
@@ -69,6 +70,7 @@ export function renderNotFound(ctx: SiteCtx): string {
 </div>`;
   return page({
     title: "Page not found · Measured Edition",
+    noindex: true,
     bodyClass: "page-404",
     header: slimMasthead(ctx),
     main,
