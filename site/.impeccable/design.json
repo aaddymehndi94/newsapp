@@ -1,65 +1,281 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-24T12:00:00+05:30",
+  "generatedAt": "2026-11-24T09:25:46+05:30",
   "title": "Design System: Meridian",
   "extensions": {
     "colorMeta": {
-      "accent": { "role": "primary", "displayName": "News Crimson", "canonical": "#c4122f", "tonalRamp": ["#3a0810", "#5e0c19", "#8a1023", "#c4122f", "#e0414f", "#f25a66", "#f7a3aa", "#fce4e6"] },
-      "accent-night": { "role": "primary", "displayName": "News Crimson (night text)", "canonical": "#f25a66", "tonalRamp": ["#3a0810", "#5e0c19", "#8a1023", "#c4122f", "#e0414f", "#f25a66", "#f7a3aa", "#fce4e6"] },
-      "accent-fill": { "role": "primary", "displayName": "Crimson Fill", "canonical": "#c4122f" },
-      "accent-fill-night": { "role": "primary", "displayName": "Crimson Fill (night)", "canonical": "#d0283a" },
-      "on-accent": { "role": "neutral", "displayName": "White on Fill", "canonical": "#ffffff" },
-      "ground": { "role": "neutral", "displayName": "Day Ground", "canonical": "#ffffff", "tonalRamp": ["#111111", "#262626", "#3d3d3d", "#656565", "#9d9d9d", "#c6c6c6", "#e9e9e9", "#ffffff"] },
-      "surface": { "role": "neutral", "displayName": "Surface", "canonical": "#f4f4f4" },
-      "surface-2": { "role": "neutral", "displayName": "Picture Ground", "canonical": "#e9e9e9" },
-      "chip": { "role": "neutral", "displayName": "Chip", "canonical": "#efefef" },
-      "chip-hover": { "role": "neutral", "displayName": "Chip Hover", "canonical": "#e4e4e4" },
-      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#121212" },
-      "ink-2": { "role": "neutral", "displayName": "Ink 2 (summaries, read marks)", "canonical": "#3d3d3d" },
-      "ink-3": { "role": "neutral", "displayName": "Ink 3 (meta)", "canonical": "#656565" },
-      "rule": { "role": "neutral", "displayName": "Hairline", "canonical": "#e3e3e3" },
-      "rule-strong": { "role": "neutral", "displayName": "Strong Hairline", "canonical": "#c6c6c6" },
-      "ground-night": { "role": "neutral", "displayName": "Night Ground", "canonical": "#111111", "tonalRamp": ["#111111", "#1b1b1b", "#262626", "#2e2e2e", "#474747", "#9d9d9d", "#cbcbcb", "#f3f3f3"] },
-      "surface-night": { "role": "neutral", "displayName": "Surface (night)", "canonical": "#1b1b1b" },
-      "surface-2-night": { "role": "neutral", "displayName": "Picture Ground (night)", "canonical": "#262626" },
-      "chip-night": { "role": "neutral", "displayName": "Chip (night)", "canonical": "#222222" },
-      "chip-hover-night": { "role": "neutral", "displayName": "Chip Hover (night)", "canonical": "#2e2e2e" },
-      "ink-night": { "role": "neutral", "displayName": "Ink (night)", "canonical": "#f3f3f3" },
-      "ink-2-night": { "role": "neutral", "displayName": "Ink 2 (night)", "canonical": "#cbcbcb" },
-      "ink-3-night": { "role": "neutral", "displayName": "Ink 3 (night)", "canonical": "#9d9d9d" },
-      "rule-night": { "role": "neutral", "displayName": "Hairline (night)", "canonical": "#2a2a2a" },
-      "rule-strong-night": { "role": "neutral", "displayName": "Strong Hairline (night)", "canonical": "#474747" }
+      "accent": {
+        "role": "primary",
+        "displayName": "News Crimson",
+        "canonical": "#c4122f",
+        "tonalRamp": [
+          "#3a0810",
+          "#5e0c19",
+          "#8a1023",
+          "#c4122f",
+          "#e0414f",
+          "#f25a66",
+          "#f7a3aa",
+          "#fce4e6"
+        ]
+      },
+      "accent-night": {
+        "role": "primary",
+        "displayName": "News Crimson (night text)",
+        "canonical": "#f25a66",
+        "tonalRamp": [
+          "#3a0810",
+          "#5e0c19",
+          "#8a1023",
+          "#c4122f",
+          "#e0414f",
+          "#f25a66",
+          "#f7a3aa",
+          "#fce4e6"
+        ]
+      },
+      "accent-fill": {
+        "role": "primary",
+        "displayName": "Crimson Fill",
+        "canonical": "#c4122f"
+      },
+      "accent-fill-night": {
+        "role": "primary",
+        "displayName": "Crimson Fill (night)",
+        "canonical": "#d0283a"
+      },
+      "on-accent": {
+        "role": "neutral",
+        "displayName": "White on Fill",
+        "canonical": "#ffffff"
+      },
+      "ground": {
+        "role": "neutral",
+        "displayName": "Day Ground",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#111111",
+          "#262626",
+          "#3d3d3d",
+          "#656565",
+          "#9d9d9d",
+          "#c6c6c6",
+          "#e9e9e9",
+          "#ffffff"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "canonical": "#f4f4f4"
+      },
+      "surface-2": {
+        "role": "neutral",
+        "displayName": "Picture Ground",
+        "canonical": "#e9e9e9"
+      },
+      "chip": {
+        "role": "neutral",
+        "displayName": "Chip",
+        "canonical": "#efefef"
+      },
+      "chip-hover": {
+        "role": "neutral",
+        "displayName": "Chip Hover",
+        "canonical": "#e4e4e4"
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#121212"
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Ink 2 (summaries, read marks)",
+        "canonical": "#3d3d3d"
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Ink 3 (meta)",
+        "canonical": "#656565"
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#e3e3e3"
+      },
+      "rule-strong": {
+        "role": "neutral",
+        "displayName": "Strong Hairline",
+        "canonical": "#c6c6c6"
+      },
+      "ground-night": {
+        "role": "neutral",
+        "displayName": "Night Ground",
+        "canonical": "#111111",
+        "tonalRamp": [
+          "#111111",
+          "#1b1b1b",
+          "#262626",
+          "#2e2e2e",
+          "#474747",
+          "#9d9d9d",
+          "#cbcbcb",
+          "#f3f3f3"
+        ]
+      },
+      "surface-night": {
+        "role": "neutral",
+        "displayName": "Surface (night)",
+        "canonical": "#1b1b1b"
+      },
+      "surface-2-night": {
+        "role": "neutral",
+        "displayName": "Picture Ground (night)",
+        "canonical": "#262626"
+      },
+      "chip-night": {
+        "role": "neutral",
+        "displayName": "Chip (night)",
+        "canonical": "#222222"
+      },
+      "chip-hover-night": {
+        "role": "neutral",
+        "displayName": "Chip Hover (night)",
+        "canonical": "#2e2e2e"
+      },
+      "ink-night": {
+        "role": "neutral",
+        "displayName": "Ink (night)",
+        "canonical": "#f3f3f3"
+      },
+      "ink-2-night": {
+        "role": "neutral",
+        "displayName": "Ink 2 (night)",
+        "canonical": "#cbcbcb"
+      },
+      "ink-3-night": {
+        "role": "neutral",
+        "displayName": "Ink 3 (night)",
+        "canonical": "#9d9d9d"
+      },
+      "rule-night": {
+        "role": "neutral",
+        "displayName": "Hairline (night)",
+        "canonical": "#2a2a2a"
+      },
+      "rule-strong-night": {
+        "role": "neutral",
+        "displayName": "Strong Hairline (night)",
+        "canonical": "#474747"
+      }
     },
     "typographyMeta": {
-      "wordmark": { "displayName": "Wordmark", "purpose": "\"Meridian\" in the masthead (34px phone, 44px from 600px) and the slim top bar (24px)." },
-      "headline-story": { "displayName": "Story Headline", "purpose": "Article H1; 30 / 38 / 44px at phone / 600 / 1024." },
-      "headline-lead": { "displayName": "Lead Headline", "purpose": "Edition lead card; 28 / 34 / 40px." },
-      "headline-feature": { "displayName": "Feature Headline", "purpose": "First card of each section; 23 / 26px." },
-      "headline-row": { "displayName": "Row Headline", "purpose": "Every row card; 18 / 19px." },
-      "body-article": { "displayName": "Article Body", "purpose": "Running text in a 720px column; 18.5 / 19px." },
-      "dek": { "displayName": "Dek", "purpose": "Standfirst under the article headline, ink-2." },
-      "summary": { "displayName": "Summary", "purpose": "Card summaries, ink-2; clamped to 4 lines in rows." },
-      "section-title": { "displayName": "Section Title", "purpose": "Front-page section heads under a 2px ink rule." },
-      "box-title": { "displayName": "Box Title", "purpose": "Key facts, framing, Background, Why it matters, Sources, Keep reading." },
-      "tab": { "displayName": "Tab", "purpose": "Section pills." },
-      "ui": { "displayName": "UI", "purpose": "Body default for chrome strings." },
-      "meta": { "displayName": "Meta", "purpose": "Section label, Developing, outlets, read time, read marks; ink-3." }
+      "wordmark": {
+        "displayName": "Wordmark",
+        "purpose": "\"Meridian\" in the masthead (34px phone, 44px from 600px) and the slim top bar (24px)."
+      },
+      "headline-story": {
+        "displayName": "Story Headline",
+        "purpose": "Article H1; 30 / 38 / 44px at phone / 600 / 1024."
+      },
+      "headline-lead": {
+        "displayName": "Lead Headline",
+        "purpose": "Edition lead card; 28 / 34 / 40px."
+      },
+      "headline-feature": {
+        "displayName": "Feature Headline",
+        "purpose": "First card of each section; 23 / 26px."
+      },
+      "headline-row": {
+        "displayName": "Row Headline",
+        "purpose": "Every row card; 18 / 19px."
+      },
+      "body-article": {
+        "displayName": "Article Body",
+        "purpose": "Running text in a 720px column; 18.5 / 19px."
+      },
+      "dek": {
+        "displayName": "Dek",
+        "purpose": "Standfirst under the article headline, ink-2."
+      },
+      "summary": {
+        "displayName": "Summary",
+        "purpose": "Card summaries, ink-2; clamped to 4 lines in rows."
+      },
+      "section-title": {
+        "displayName": "Section Title",
+        "purpose": "Front-page section heads under a 2px ink rule."
+      },
+      "box-title": {
+        "displayName": "Box Title",
+        "purpose": "Key facts, framing, Background, Why it matters, Sources, Keep reading."
+      },
+      "tab": {
+        "displayName": "Tab",
+        "purpose": "Section pills."
+      },
+      "ui": {
+        "displayName": "UI",
+        "purpose": "Body default for chrome strings."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Section label, Developing, outlets, read time, read marks; ink-3."
+      }
     },
     "shadows": [
-      { "name": "float", "value": "0 1px 2px rgb(0 0 0 / 0.08), 0 4px 12px rgb(0 0 0 / 0.08)", "purpose": "Tab-bar scroll arrows only (day)." },
-      { "name": "float-night", "value": "0 1px 2px rgb(0 0 0 / 0.5), 0 6px 16px rgb(0 0 0 / 0.45)", "purpose": "Tab-bar scroll arrows only (night)." }
+      {
+        "name": "float",
+        "value": "0 1px 2px rgb(0 0 0 / 0.08), 0 4px 12px rgb(0 0 0 / 0.08)",
+        "purpose": "Tab-bar scroll arrows only (day)."
+      },
+      {
+        "name": "float-night",
+        "value": "0 1px 2px rgb(0 0 0 / 0.5), 0 6px 16px rgb(0 0 0 / 0.45)",
+        "purpose": "Tab-bar scroll arrows only (night)."
+      }
     ],
     "motion": [
-      { "name": "state", "value": "0.16s ease-out", "purpose": "Hover fills on buttons, back link, icon buttons." },
-      { "name": "tab", "value": "0.18s ease-out", "purpose": "Tab fill/colour, edge fades and arrows." },
-      { "name": "page", "value": "0.18s", "purpose": "Cross-document root view transition." },
-      { "name": "hero", "value": "0.34s cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Card picture morphing into the article hero." },
-      { "name": "reduced", "value": "none", "purpose": "prefers-reduced-motion disables view transitions and all animation." }
+      {
+        "name": "state",
+        "value": "0.16s ease-out",
+        "purpose": "Hover fills on buttons, back link, icon buttons."
+      },
+      {
+        "name": "tab",
+        "value": "0.18s ease-out",
+        "purpose": "Tab fill/colour, edge fades and arrows."
+      },
+      {
+        "name": "page",
+        "value": "0.18s",
+        "purpose": "Cross-document root view transition."
+      },
+      {
+        "name": "hero",
+        "value": "0.34s cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Card picture morphing into the article hero."
+      },
+      {
+        "name": "reduced",
+        "value": "none",
+        "purpose": "prefers-reduced-motion disables view transitions and all animation."
+      }
     ],
     "breakpoints": [
-      { "name": "tablet", "value": "600px" },
-      { "name": "desktop", "value": "1024px" },
-      { "name": "wide", "value": "1240px" }
+      {
+        "name": "tablet",
+        "value": "600px"
+      },
+      {
+        "name": "desktop",
+        "value": "1024px"
+      },
+      {
+        "name": "wide",
+        "value": "1240px"
+      }
     ]
   },
   "components": [
@@ -117,6 +333,22 @@
       "description": "Crimson-fill pill with white caps text on the newest archive edition.",
       "html": "<span class=\"ds-latest\">Latest</span>",
       "css": ".ds-latest { display: inline-block; padding: 2px 8px; border-radius: 999px; background: var(--accent-fill, #c4122f); color: #fff; font: 700 0.6875rem/1.4 \"Schibsted Grotesk\", system-ui, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; }"
+    },
+    {
+      "name": "Market Tile",
+      "kind": "card",
+      "refersTo": "surface",
+      "description": "One quote: price and its date, two labelled changes coloured by their own sign, and a neutral month chart with a dashed start level, high/low on the right and dates below. One per row on phones, 2 at 600px, 4 at 1024px.",
+      "html": "<div class=\"ds-mk\"><div class=\"ds-mk-top\"><span class=\"ds-mk-name\">Sensex</span><span class=\"ds-mk-when\">23 Nov close</span></div><p class=\"ds-mk-value\">82,435.99</p><dl class=\"ds-mk-moves\"><div><dt>On the day</dt><dd class=\"down\">−1,483.72 (−1.77%)</dd></div><div><dt>Since 26 Oct</dt><dd class=\"up\">+8,829.24 (+12.00%)</dd></div></dl><div class=\"ds-mk-plot\"><svg viewBox=\"0 0 600 120\" preserveAspectRatio=\"none\" aria-hidden=\"true\"><path d=\"M0,120 L0,112 L120,104 L240,60 L360,40 L480,30 L560,18 L600,28 L600,120 Z\" fill=\"currentColor\" opacity=\"0.07\"/><line x1=\"0\" y1=\"112\" x2=\"600\" y2=\"112\" stroke=\"#9d9d9d\" stroke-dasharray=\"3 4\" vector-effect=\"non-scaling-stroke\"/><polyline points=\"0,112 120,104 240,60 360,40 480,30 560,18 600,28\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" vector-effect=\"non-scaling-stroke\"/></svg><span class=\"ds-mk-axis\"><span>83,920</span><span>73,246</span></span></div><div class=\"ds-mk-dates\"><span>26 Oct</span><span>23 Nov</span></div></div>",
+      "css": ".ds-mk { padding: 14px 16px 12px; background: var(--surface, #f4f4f4); border-radius: 12px; font-family: \"Schibsted Grotesk\", system-ui, sans-serif; color: var(--ink, #121212); } .ds-mk-top { display: flex; justify-content: space-between; align-items: baseline; } .ds-mk-name { font-weight: 700; font-size: 1rem; } .ds-mk-when { font-size: 0.8125rem; color: var(--ink-3, #656565); } .ds-mk-value { margin: 4px 0 0; font-weight: 700; font-size: 1.625rem; letter-spacing: -0.015em; } .ds-mk-moves { display: grid; gap: 3px; margin: 8px 0 0; } .ds-mk-moves div { display: flex; justify-content: space-between; } .ds-mk-moves dt { font-size: 0.84375rem; color: var(--ink-3, #656565); } .ds-mk-moves dd { margin: 0; font-weight: 600; font-size: 0.90625rem; } .ds-mk-moves .up { color: var(--up, #0a7a3d); } .ds-mk-moves .down { color: var(--down, #c4122f); } .ds-mk-plot { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-top: 12px; color: var(--ink-2, #3d3d3d); } .ds-mk-plot svg { width: 100%; height: 88px; } .ds-mk-axis { display: flex; flex-direction: column; justify-content: space-between; font-size: 0.75rem; color: var(--ink-3, #656565); } .ds-mk-dates { display: flex; justify-content: space-between; margin-top: 6px; padding-right: calc(3.5em + 10px); font-size: 0.75rem; color: var(--ink-3, #656565); }"
+    },
+    {
+      "name": "Film Card",
+      "kind": "card",
+      "refersTo": "thumbnail",
+      "description": "A 2:3 poster in a horizontally scrolling strip (136px columns), title, release date and language, and a crimson Trailer link that opens the trailer in a native dialog. The poster with a trailer shows a play badge and also opens it.",
+      "html": "<div class=\"ds-film\"><div class=\"ds-film-poster\"><span class=\"ds-film-play\"><svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" aria-hidden=\"true\"><path d=\"M8 5.5v13l10.5-6.5z\" fill=\"currentColor\"/></svg></span></div><a class=\"ds-film-name\" href=\"#\">Avengers: Doomsday</a><span class=\"ds-film-meta\">Out 18 Dec · Hollywood</span><a class=\"ds-film-trailer\" href=\"#\"><svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" aria-hidden=\"true\"><path d=\"M8 5.5v13l10.5-6.5z\" fill=\"currentColor\"/></svg>Trailer</a></div>",
+      "css": ".ds-film { display: flex; flex-direction: column; gap: 4px; width: 136px; font-family: \"Schibsted Grotesk\", system-ui, sans-serif; } .ds-film-poster { position: relative; aspect-ratio: 2 / 3; margin-bottom: 4px; border-radius: 8px; background: var(--surface-2, #e9e9e9); } .ds-film-play { position: absolute; left: 8px; bottom: 8px; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: rgb(0 0 0 / 0.72); color: #fff; } .ds-film-name { font-weight: 600; font-size: 0.9375rem; line-height: 1.3; color: var(--ink, #121212); text-decoration: none; } .ds-film-meta { font-size: 0.8125rem; color: var(--ink-3, #656565); } .ds-film-trailer { display: inline-flex; align-items: center; gap: 5px; padding: 4px 0; font-weight: 600; font-size: 0.8125rem; color: var(--accent, #c4122f); text-decoration: none; }"
     }
   ],
   "narrative": {
@@ -131,13 +363,41 @@
       "Read state is a drawn tick. A card is never dimmed."
     ],
     "rules": [
-      { "name": "The One Crimson Rule", "body": "The accent appears only in its listed roles: the section label in meta, Developing, links in running text, key-fact bullets, the active tab, the Latest badge, and focus, caret and selection. It never appears on headlines, rules, backgrounds or icons beyond these.", "section": "colors" },
-      { "name": "The White-On-Fill Rule", "body": "White text sits only on accent-fill, never on the text accent. At night the text accent is too light to carry white.", "section": "colors" },
-      { "name": "The No-Tint Rule", "body": "The greys are true neutrals (R = G = B). The night ground is #111, not a blue-grey. Sections are not colour-coded. Left and right politics are never coloured: the leaning scale is ink on rule-strong.", "section": "colors" },
-      { "name": "The Serif Speaks, Sans Serves Rule", "body": "Headlines and anything you read as prose are serif. Every control, label and count is Grotesk. Neither family crosses over.", "section": "typography" },
-      { "name": "The No-Kicker Rule", "body": "Nothing sits above a headline. The section label lives in the meta line under the summary on cards, and first in the meta line on articles.", "section": "typography" },
-      { "name": "The Own-Shape Rule", "body": "Large pictures (lead, feature, article hero) take the aspect-ratio class nearest the photo's own shape: 4:3, 3:2, 16:9 or 2:1. Portrait and square photos use 4:3, and photos of unknown size use 16:9. A share image with a masthead burned in is shown whole. Only thumbnails are a fixed 4:3 crop.", "section": "layout" },
-      { "name": "The Flat Card Rule", "body": "Story cards are never raised, boxed or filled. A hairline separates them and the photo carries the weight.", "section": "elevation" }
+      {
+        "name": "The One Crimson Rule",
+        "body": "The accent appears only in its listed roles: the section label in meta, Developing, links in running text, key-fact bullets, the active tab, the Latest badge, and focus, caret and selection. It never appears on headlines, rules, backgrounds or icons beyond these.",
+        "section": "colors"
+      },
+      {
+        "name": "The White-On-Fill Rule",
+        "body": "White text sits only on accent-fill, never on the text accent. At night the text accent is too light to carry white.",
+        "section": "colors"
+      },
+      {
+        "name": "The No-Tint Rule",
+        "body": "The greys are true neutrals (R = G = B). The night ground is #111, not a blue-grey. Sections are not colour-coded. Left and right politics are never coloured: the leaning scale is ink on rule-strong.",
+        "section": "colors"
+      },
+      {
+        "name": "The Serif Speaks, Sans Serves Rule",
+        "body": "Headlines and anything you read as prose are serif. Every control, label and count is Grotesk. Neither family crosses over.",
+        "section": "typography"
+      },
+      {
+        "name": "The No-Kicker Rule",
+        "body": "Nothing sits above a headline. The section label lives in the meta line under the summary on cards, and first in the meta line on articles.",
+        "section": "typography"
+      },
+      {
+        "name": "The Own-Shape Rule",
+        "body": "Large pictures (lead, feature, article hero) take the aspect-ratio class nearest the photo's own shape: 4:3, 3:2, 16:9 or 2:1. Portrait and square photos use 4:3, and photos of unknown size use 16:9. A share image with a masthead burned in is shown whole. Only thumbnails are a fixed 4:3 crop.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat Card Rule",
+        "body": "Story cards are never raised, boxed or filled. A hairline separates them and the photo carries the weight.",
+        "section": "elevation"
+      }
     ],
     "dos": [
       "Do put every headline with a picture: a thumbnail for rows, or a ratio-matched photo for the lead and features.",
@@ -146,7 +406,8 @@
       "Do separate stories with 1px rule hairlines, and open sections with a 2px ink rule.",
       "Do use the leading-dot plus clip-path meta list. Every item carries its own `::before` dot.",
       "Do choose the desktop section grid so that no card is orphaned: 3 or 4 rows beside the feature, then 3 or 2 columns.",
-      "Do keep every control a pill or circle at a 36–44px tap height."
+      "Do keep every control a pill or circle at a 36–44px tap height.",
+      "Do label every market number with the period it covers (“On the day”, “Since 26 Oct”), and give every chart the same month so tiles compare."
     ],
     "donts": [
       "Don't add eyebrows or kickers above headlines.",
@@ -156,7 +417,8 @@
       "Don't use the crimson outside its listed roles: not on headlines, rules, backgrounds or decorative icons.",
       "Don't tint the greys or move the night ground toward blue-grey.",
       "Don't crop large pictures to a house ratio.",
-      "Don't bring back neatlines, legend keys or other ornament that does not help the reader find their way."
+      "Don't bring back neatlines, legend keys or other ornament that does not help the reader find their way.",
+      "Don't colour a chart by a different period from the number beside it; chart lines stay neutral and colour belongs to the labelled changes."
     ]
   }
 }
