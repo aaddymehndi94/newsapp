@@ -17,7 +17,7 @@
 
 ## How it works
 
-Once a day (owner's choice from 2026-11-24; cron on this computer **03:30 → 05:00 edition**, standing down once GitHub Actions runs it):
+Once a day (owner's choice from 2026-11-24). **GitHub Actions makes it at 03:37 IST**; this computer only steps in at 05:15 if that edition isn't live:
 1. Reads 78 feeds: Indian outlets from left to right (The Hindu, Indian Express, HT, TOI, NDTV,
    Scroll, The Wire, ThePrint, News18, Swarajya, Organiser, Firstpost…), international (BBC, Al Jazeera,
    Guardian, NYT, WSJ, Fox, NPR, DW, France 24, CNA, SCMP, Reuters/AP headlines…), science, tech,
@@ -30,8 +30,8 @@ Once a day (owner's choice from 2026-11-24; cron on this computer **03:30 → 05
 4. Picture: the best outlet photo, credited and linked, else a free Wikimedia Commons photo.
 5. Builds the static site and deploys it to your Cloudflare account (Workers, free plan).
 
-**Keep this laptop on and plugged in.** On AC power it is set to never sleep. If the lid is closed
-or it's on battery it may sleep and skip an edition; the site then keeps showing the last one.
+The laptop no longer needs to be on: GitHub makes the edition. If it is on at 05:15 and GitHub
+hasn't put the edition live, it makes it instead.
 Logs: `logs/`.
 
 ## Cost so far
@@ -63,10 +63,8 @@ Logs: `logs/`.
 ## Ideas for next steps (your call)
 
 1. **Your domain**: buy it, tell me, and I'll attach it and remove `noindex` when you're ready.
-2. **Run on GitHub instead of this laptop.** You'd create a Cloudflare API token and add 3 repo secrets;
-   the instructions are at the top of `.github/workflows/edition.yml`.
-3. **"Follow this story"**: link today's article to earlier coverage of the same event.
-4. **"Ask about this story"**: a small Q&A box under each article (uses credits per question).
-5. Tune anything: section sizes, which outlets, article length, the look.
+2. **"Follow this story"**: link today's article to earlier coverage of the same event.
+3. **"Ask about this story"**: a small Q&A box under each article (uses credits per question).
+4. Tune anything: section sizes, which outlets, article length, the look.
 
 Just tell me what you liked and what bugged you after reading the first edition.

@@ -172,16 +172,6 @@ Fonts: Source Serif 4 (wordmark, headline-story, headline-lead, headline-feature
 Spacing: gutter-phone 16px, gutter-tablet 24px, gutter-desktop 32px, row 16px, column-gap 40px, grid-gap 32px, section-phone 32px, section-desktop 48px
 Radius: focus 4px, thumb 8px, pic 10px, box 12px, pill 999px
 North Star: "The Straight Edition"
-Rules:
-- The One Crimson Rule. The accent appears only in its listed roles: the section label in meta, Developing, links in running text, key-fact bullets, the active tab, the Latest badge, and focus, caret and selection.
-- The White-On-Fill Rule. White text sits only on accent-fill, never on the text accent.
-- The No-Tint Rule. The greys are true neutrals (R = G = B).
-- The Serif Speaks, Sans Serves Rule. Headlines and anything you read as prose are serif.
-- The No-Kicker Rule. Nothing sits above a headline.
-- The Own-Shape Rule. Large pictures (lead, feature, article hero) take the aspect-ratio class nearest the photo's own shape: 4:3, 3:2, 16:9 or 2:1.
-- The Flat Card Rule. Story cards are never raised, boxed or filled.
-Elevation:
-- Float: 0 1px 2px rgb(0 0 0 / 0.08), 0 4px 12px rgb(0 0 0 / 0.08)
 Don't:
 - Don't add eyebrows or kickers above headlines.
 - Don't colour left/right politics, or colour-code sections.
@@ -192,12 +182,4 @@ Don't:
 - Don't crop large pictures to a house ratio.
 - Don't bring back neatlines, legend keys or other ornament that does not help the reader find their way.
 - Don't add a second inline script: its hash would also have to be pinned in `_headers`.
-Map: build.ts
-Map: schema.ts
-Map: templates/helpers.ts
-Map: templates/layout.ts
-Map: templates/front.ts
-Map: assets/site.css
-Map: assets/site.js
-Map: assets/fonts/
 Full: .impeccable/design-full.md (read a section when you need its detail)
