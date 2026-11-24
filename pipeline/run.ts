@@ -129,10 +129,12 @@ async function main() {
   if (!slate) {
     const { req, aliases } = buildEditorRequest({ items: gathered.items, videos, previousHeadlines: previousHeadlines(), editionLabel });
     log(`editor: asking ${req.model} (${req.user.length} chars)…`);
-    // Batch (half price) with a 25-minute deadline, then falls back to a direct call.
+    // Batch (half price). The owner prefers cost to punctuality, so wait until 40 minutes before
+    // publication (at least 25 minutes) before paying full price for a direct call. On
+    // 2026-11-24 a 25-minute limit expired and the direct re-run doubled the editor's cost.
     const res = await planEdition(req, meter, {
       batch: useBatch,
-      deadline: new Date(Date.now() + 25 * 60e3),
+      deadline: new Date(Math.max(publishAt.getTime() - 40 * 60e3, Date.now() + 25 * 60e3)),
       stateFile: path.join(WORK, "batch-editor.json"),
     });
     if (!res.ok) throw new Error(`editor failed: ${res.error}`);

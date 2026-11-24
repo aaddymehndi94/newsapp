@@ -26,7 +26,7 @@ concurrency: edition
 jobs:
   edition:
     runs-on: ubuntu-latest
-    timeout-minutes: 100
+    timeout-minutes: 150   # half-price batches can be slow; waiting is cheaper than re-running
     permissions:
       contents: write
     steps:
