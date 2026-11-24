@@ -89,7 +89,7 @@ export function frontMasthead(ed: Edition, ctx: SiteCtx): string {
     : "";
   return `<header class="masthead">
 <div class="wrap mast-row">
-<h1 class="wordmark"><a href="/">Meridian</a></h1>
+<h1 class="wordmark"><a href="/">Measured Edition</a></h1>
 ${themeToggle()}
 </div>
 <div class="wrap mast-sub">
@@ -109,7 +109,7 @@ export function slimMasthead(ctx: SiteCtx, back?: string): string {
   return `<header class="topbar">
 <div class="wrap topbar-row">
 <div class="topbar-left">${left}</div>
-<a class="wordmark wordmark--slim" href="/">Meridian</a>
+<a class="wordmark wordmark--slim" href="/">Measured Edition</a>
 <div class="topbar-right">${themeToggle()}</div>
 </div>
 </header>`;
@@ -118,9 +118,9 @@ export function slimMasthead(ctx: SiteCtx, back?: string): string {
 function footer(ctx: SiteCtx): string {
   return `<footer class="site-foot">
 <div class="wrap foot-grid">
-<p class="foot-mark">Meridian</p>
+<p class="foot-mark">Measured Edition</p>
 <div class="foot-note">
-<p>Stories on Meridian are written by AI from the reporting of the outlets credited on each story, and edited for balance across outlets of different leanings. Pictures belong to their credited owners and link to where they were published.</p>
+<p>Stories on Measured Edition are written by AI from the reporting of the outlets credited on each story, and edited for balance across outlets of different leanings. Pictures belong to their credited owners and link to where they were published.</p>
 <p>No ads, no tracking. Which stories you have read is remembered only in this browser.</p>
 </div>
 <nav class="foot-nav" aria-label="Site">

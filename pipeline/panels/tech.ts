@@ -17,7 +17,7 @@ interface Candidate {
 
 async function getJson<T>(url: string, headers: Record<string, string> = {}): Promise<T> {
   const r = await fetch(url, {
-    headers: { "user-agent": "MeridianNewsReader/0.1 (personal news reader)", accept: "application/json", ...headers },
+    headers: { "user-agent": "MeasuredEditionReader/0.1 (personal news reader)", accept: "application/json", ...headers },
     signal: AbortSignal.timeout(30_000),
   });
   if (!r.ok) throw new Error(`${r.status} ${url}`);
@@ -91,7 +91,7 @@ async function githubRepos(): Promise<{ repos: Omit<RepoItem, "what">[]; cands: 
     let excerpt = "";
     try {
       const res = await fetch(`https://api.github.com/repos/${r.full_name}/readme`, {
-        headers: { ...githubHeaders(), accept: "application/vnd.github.raw", "user-agent": "MeridianNewsReader/0.1 (personal news reader)" },
+        headers: { ...githubHeaders(), accept: "application/vnd.github.raw", "user-agent": "MeasuredEditionReader/0.1 (personal news reader)" },
         signal: AbortSignal.timeout(20_000),
       });
       if (res.ok) excerpt = readmeExcerpt(await res.text());
@@ -150,7 +150,7 @@ async function showHn(): Promise<{ tools: Omit<ToolItem, "what">[]; cands: Candi
   return { tools, cands };
 }
 
-const NOTES_SYSTEM = `You write the one-line notes in the "AI & software" panel of Meridian, a news site for a general reader in India who wants to keep up with technology. Each item is a new GitHub repository, a trending Hugging Face model, or a tool someone launched on Hacker News.
+const NOTES_SYSTEM = `You write the one-line notes in the "AI & software" panel of Measured Edition, a news site for a general reader in India who wants to keep up with technology. Each item is a new GitHub repository, a trending Hugging Face model, or a tool someone launched on Hacker News.
 
 For each item write "what": one plain sentence of at most 20 words saying what it is or does and who would use it. Use only the material given; do not guess at features. No hype or marketing words (no "powerful", "seamless", "revolutionary", "cutting-edge", "game-changing"). Avoid jargon a curious non-programmer would not know, or explain it in a few words. Start with the thing itself, e.g. "A command-line tool that…", "An open-weight model from …".
 

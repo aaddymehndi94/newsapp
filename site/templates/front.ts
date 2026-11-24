@@ -227,8 +227,8 @@ ${sections.map((s) => sectionBlock(ed, s)).join("\n")}
 ${colophon(ed, ctx)}
 </div>`;
   return page({
-    title: `Meridian · ${editionName(ed)}, ${longDate(ed.date)}`,
-    description: top ? `${top.headline}. ${top.dek}` : "Meridian: a balanced daily edition.",
+    title: `Measured Edition · ${editionName(ed)}, ${longDate(ed.date)}`,
+    description: top ? `${top.headline}. ${top.dek}` : "Measured Edition: the day's news, balanced and in one place.",
     bodyClass: "page-front",
     bodyAttrs: { "data-edition": ed.id },
     header: frontMasthead(ed, ctx),

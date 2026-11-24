@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 // Honest, identifiable user agent. If a site refuses it, we respect that and drop the site.
-export const UA = "Mozilla/5.0 (compatible; MeridianNewsReader/0.1; personal news reader)";
+export const UA = "Mozilla/5.0 (compatible; MeasuredEditionReader/0.1; personal news reader)";
 
 export async function fetchText(
   url: string,

@@ -174,7 +174,7 @@ ${more.length ? `<section class="kr-block"><h2 class="kr-title">Also in this edi
 </div>`;
 
   return page({
-    title: `${s.headline} · Meridian`,
+    title: `${s.headline} · Measured Edition`,
     description: has(s.dek) ? s.dek : s.summary,
     bodyClass: "page-article",
     bodyAttrs: { "data-edition": ed.id, "data-story": `${ed.id}/${s.id}` },

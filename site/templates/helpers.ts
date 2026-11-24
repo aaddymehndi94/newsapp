@@ -170,7 +170,7 @@ export function sectionName(ed: Edition, sectionId: string): string {
 
 // ---------- places ----------
 
-/** "NEW DELHI" -> "New Delhi". Where the event happened; Meridian has no reporter there. */
+/** "NEW DELHI" -> "New Delhi". Where the event happened; Measured Edition has no reporter there. */
 export function placeName(dateline: string): string {
   const t = dateline.trim().replace(/[\s,\u2014\u2013-]+$/, "");
   if (t !== t.toUpperCase()) return t;

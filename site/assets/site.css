@@ -1,4 +1,4 @@
-/* Meridian — the standard news app, played straight: serif headlines in a clean app layout,
+/* Measured Edition — the standard news app, played straight: serif headlines in a clean app layout,
    neutral white / near-black grounds, one crimson accent. See site/DESIGN.md. */
 
 /* ---------- fonts (self-hosted, OFL) ---------- */
@@ -212,9 +212,11 @@ main:focus { outline: none; }
 .masthead { padding-top: max(14px, env(safe-area-inset-top)); }
 .mast-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .wordmark {
-  font: 700 2.125rem/1 var(--serif);
+  /* "Measured Edition" stays on one line: 34px from 354px wide, scaling to ~31px at 320px. */
+  font: 700 clamp(1.75rem, 9.6vw, 2.125rem)/1 var(--serif);
   font-variation-settings: "opsz" 60;
   letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 .wordmark a, a.wordmark { color: var(--ink); text-decoration: none; }
 .mast-sub {
@@ -479,7 +481,7 @@ main:focus { outline: none; }
 }
 .topbar-left { justify-self: start; min-width: 0; }
 .topbar-right { justify-self: end; }
-.wordmark--slim { font-size: 1.5rem; }
+.wordmark--slim { font-size: clamp(1.25rem, 6.4vw, 1.5rem); }
 
 /* ---------- article ---------- */
 .article-wrap { max-width: calc(720px + 2 * var(--gutter)); }

@@ -1,4 +1,4 @@
-# Good morning — Meridian is live
+# Good morning — Measured Edition is live
 
 **Read it here:** https://meridian-news.aadarsh-mehndiratta.workers.dev
 (Hidden from Google for now with a `noindex` header and `robots.txt`; anyone with the link can open it.)

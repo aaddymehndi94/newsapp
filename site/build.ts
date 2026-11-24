@@ -1,4 +1,4 @@
-// Meridian static site builder.
+// Measured Edition static site builder.
 //
 //   node site/build.ts [--data data/editions] [--out dist]
 //

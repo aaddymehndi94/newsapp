@@ -223,7 +223,7 @@ export function techPanel(p: TechPanel): string {
   if (!lists.length) return "";
   return `<div class="panel panel--tech">
 <div class="tl-grid">${lists.join("\n")}</div>
-<p class="panel-note">From GitHub (repositories under a month old gaining the most stars a day, with spam and piracy screened out), Hugging Face’s trending list and Hacker News “Show HN” posts. The one-line descriptions are Meridian’s.</p>
+<p class="panel-note">From GitHub (repositories under a month old gaining the most stars a day, with spam and piracy screened out), Hugging Face’s trending list and Hacker News “Show HN” posts. The one-line descriptions are ours.</p>
 </div>`;
 }
 

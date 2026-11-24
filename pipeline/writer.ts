@@ -53,7 +53,7 @@ export const STORY_SCHEMA = {
   },
 };
 
-const WRITER_SYSTEM = `You write news stories for Meridian, a non-partisan news site read in India. You receive an assignment from the editor and the reporting of several outlets on one event. Synthesise them into one original, accurate, balanced story.
+const WRITER_SYSTEM = `You write news stories for Measured Edition, a non-partisan news site read in India. You receive an assignment from the editor and the reporting of several outlets on one event. Synthesise them into one original, accurate, balanced story.
 
 ${WRITER_STYLE}`;
 

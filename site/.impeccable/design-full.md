@@ -1,5 +1,5 @@
 ---
-name: Meridian
+name: Measured Edition
 description: A daily balanced news edition, read like a standard news app played straight.
 colors:
   accent: "#c4122f"
@@ -163,13 +163,13 @@ components:
     padding: "28px 0 36px"
 ---
 
-# Design System: Meridian
+# Design System: Measured Edition
 
 ## Overview
 
 **Creative North Star: "The Straight Edition"**
 
-Meridian looks like the news apps its reader already trusts (BBC News, the NYT app, The Hindu app) and does not try to be cleverer than them. Bold serif headlines sit inside a clean, modern app layout: a white day ground or a near-black night ground, neutral greys with no tint, black and white ink, and one crimson accent. Each edition is finite, read from top to bottom, and ends with "You're all caught up".
+Measured Edition looks like the news apps its reader already trusts (BBC News, the NYT app, The Hindu app) and does not try to be cleverer than them. Bold serif headlines sit inside a clean, modern app layout: a white day ground or a near-black night ground, neutral greys with no tint, black and white ink, and one crimson accent. Each edition is finite, read from top to bottom, and ends with "You're all caught up".
 
 The density is a news app's density: every headline gets a picture and a 3–4 line summary. Hairlines separate the stories, and a heavy 2px ink rule opens each section. Nothing is decorative unless it helps the reader find their way. The editorial voice comes from the serif and from restraint, never from ornament. The replaced "survey sheet" world (neatline, legend tints, grey-blue night) is gone and none of its apparatus comes back.
 
@@ -219,7 +219,7 @@ At night, photos take `brightness(0.93)` so they don't glare.
 **Character:** A bold, newsy serif carries the headlines and the reading, the way NYT and BBC set them. A sturdy grotesk carries everything a news app's chrome would: tabs, meta, section titles, buttons, the footer.
 
 ### Hierarchy
-- **Wordmark** (700, 34px phone / 44px from 600px / 24px slim in the top bar, opsz 60): "Meridian" in the masthead and top bar.
+- **Wordmark** (700, opsz 60, one line, never wraps): "Measured Edition" in the masthead (34px phone, scaling down to about 31px at 320px; 44px from 600px) and the top bar (24px, scaling to about 20px at 320px). The favicon is the same face's bold "M" in white on a #111 rounded square.
 - **Story headline** (700, 30 / 38 / 44px at phone / 600px / 1024px, 1.12): the article H1.
 - **Lead headline** (700, 28 / 34 / 40px, 1.14): the edition's lead card.
 - **Feature headline** (700, 23 / 26px, 1.18): the first card of each section.

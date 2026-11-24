@@ -1,4 +1,4 @@
-# Meridian
+# Measured Edition
 
 A calm, balanced, ad-free news site. Every morning (05:00 IST) it reads ~80 news feeds
 from across the political spectrum, has **Claude Opus 5.5** pick a balanced slate of ~40 stories,

@@ -28,7 +28,7 @@ function parseRobots(txt: string): string[] {
     const val = m[2].trim();
     if (key === "user-agent") {
       const ua = val.toLowerCase();
-      const hit = ua === "*" || ua.includes("meridian");
+      const hit = ua === "*" || ua.includes("measurededition");
       applies = lastWasAgent ? applies || hit : hit;
       lastWasAgent = true;
       continue;

@@ -32,13 +32,13 @@ were on the front page to keep going.
 
 ## Product Purpose
 
-Meridian replaces the 6–7-site routine with one calm, ad-free edition published every morning. A
+Measured Edition replaces the 6–7-site routine with one calm, ad-free edition published every morning. A
 pipeline reads reporting from outlets across the political spectrum, an AI editor clusters and
 picks a balanced slate (~35–40 stories across India, World, Business, Science & Tech, Sports,
 Health & Environment, Bengaluru), and an AI writer produces neutral, wire-style articles with key
 facts, background, why it matters and — only on contested stories — how it is being framed.
 
-Success: the owner stops opening the other sites, because Meridian is faster to skim, pleasanter to
+Success: the owner stops opening the other sites, because Measured Edition is faster to skim, pleasanter to
 read, and visibly balanced.
 
 ## Positioning
@@ -70,7 +70,7 @@ edition, which is the point.
 
 ## Brand Commitments
 
-- Name: **Meridian**.
+- Name: **Measured Edition**, at measurededition.com (owner's choice, 2026-11-24; "Meridian" was the working name). Written as two words; never "The Measured Edition".
 - The owner asked for a **classy**, calm, trustworthy, premium-newspaper feel, with dark and light
   themes. Not a social feed, not a startup landing page.
 - **Every headline with a relevant picture** — pictures are central.

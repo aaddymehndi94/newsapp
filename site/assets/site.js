@@ -1,4 +1,4 @@
-// Meridian: theme toggle, read ticks, return-to-place, click-to-load video, section tabs.
+// Measured Edition: theme toggle, read ticks, return-to-place, click-to-load video, section tabs.
 // Progressive: every page works without this file.
 (() => {
   "use strict";

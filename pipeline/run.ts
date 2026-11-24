@@ -1,4 +1,4 @@
-// Produce one Meridian edition end to end.
+// Produce one Measured Edition edition end to end.
 //   node pipeline/run.ts [--slot am|pm] [--date YYYY-MM-DD] [--batch] [--no-deploy] [--fresh] [--max N]
 import fs from "node:fs";
 import path from "node:path";

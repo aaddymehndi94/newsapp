@@ -1,5 +1,5 @@
 ---
-name: Meridian
+name: Measured Edition
 description: A daily balanced news edition, read like a standard news app played straight.
 colors:
   accent: "#c4122f"
@@ -163,10 +163,10 @@ components:
     padding: "28px 0 36px"
 ---
 
-# Design System: Meridian
+# Design System: Measured Edition
 
 <!-- impeccable:design-map -->
-Name: Meridian
+Name: Measured Edition
 Colors: primary: accent #c4122f; neutral: on-accent #ffffff; primary: accent-night #f25a66; primary: accent-fill #c4122f; primary: accent-fill-night #d0283a; neutral: ground #ffffff (+19 more in the sidecar)
 Fonts: Source Serif 4 (wordmark, headline-story, headline-lead, headline-feature, headline-row, body-article, dek, summary); Schibsted Grotesk (section-title, box-title, tab, ui, meta)
 Spacing: gutter-phone 16px, gutter-tablet 24px, gutter-desktop 32px, row 16px, column-gap 40px, grid-gap 32px, section-phone 32px, section-desktop 48px

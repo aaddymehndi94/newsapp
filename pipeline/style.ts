@@ -46,7 +46,7 @@ export function findAiTells(text: string): string[] {
 }
 
 export const WRITER_STYLE = `
-HOW MERIDIAN STORIES ARE WRITTEN
+HOW MEASURED EDITION STORIES ARE WRITTEN
 
 Voice: a seasoned wire-service journalist (Reuters, AP, PTI tradition) writing for intelligent readers in India. Calm, exact, plain. The reader should never notice the writing — only the news.
 

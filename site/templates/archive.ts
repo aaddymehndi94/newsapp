@@ -52,8 +52,8 @@ ${days}
 </ol>
 </div>`;
   return page({
-    title: "All editions · Meridian",
-    description: "Every Meridian edition, newest first.",
+    title: "All editions · Measured Edition",
+    description: "Every edition of Measured Edition, newest first.",
     bodyClass: "page-archive",
     header: slimMasthead(ctx),
     main,
@@ -68,7 +68,7 @@ export function renderNotFound(ctx: SiteCtx): string {
 <p class="nf-links"><a href="/">Read the latest edition (${editionName(ctx.latest).toLowerCase()}, ${esc(longDate(ctx.latest.date))})</a><a href="/archive/">Browse all editions</a></p>
 </div>`;
   return page({
-    title: "Page not found · Meridian",
+    title: "Page not found · Measured Edition",
     bodyClass: "page-404",
     header: slimMasthead(ctx),
     main,

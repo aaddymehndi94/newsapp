@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2026-11-24T09:30:59+05:30",
-  "title": "Design System: Meridian",
+  "title": "Design System: Measured Edition",
   "extensions": {
     "colorMeta": {
       "accent": {
@@ -173,7 +173,7 @@
     "typographyMeta": {
       "wordmark": {
         "displayName": "Wordmark",
-        "purpose": "\"Meridian\" in the masthead (34px phone, 44px from 600px) and the slim top bar (24px)."
+        "purpose": "\"Measured Edition\" on one line in the masthead (34px phone, scaling to about 31px at 320px; 44px from 600px) and the slim top bar (24px, about 20px at 320px). The favicon is the bold serif \"M\" in white on #111."
       },
       "headline-story": {
         "displayName": "Story Headline",
@@ -353,7 +353,7 @@
   ],
   "narrative": {
     "northStar": "The Straight Edition",
-    "overview": "Meridian looks like the news apps its reader already trusts (BBC News, the NYT app, The Hindu app) and does not try to be cleverer than them. Bold serif headlines sit inside a clean, modern app layout: a white day ground or a near-black night ground, neutral greys with no tint, black and white ink, and one crimson accent. Each edition is finite, read from top to bottom, and ends with \"You're all caught up\".\n\nThe density is a news app's density: every headline gets a picture and a 3–4 line summary. Hairlines separate the stories, and a heavy 2px ink rule opens each section. Nothing is decorative unless it helps the reader find their way. The editorial voice comes from the serif and from restraint, never from ornament. The replaced \"survey sheet\" world (neatline, legend tints, grey-blue night) is gone and none of its apparatus comes back.\n\nOn a phone the page is one column with a full-bleed lead photo. On desktop it becomes a 7:5 lead-and-rows split, with the same components throughout.",
+    "overview": "Measured Edition looks like the news apps its reader already trusts (BBC News, the NYT app, The Hindu app) and does not try to be cleverer than them. Bold serif headlines sit inside a clean, modern app layout: a white day ground or a near-black night ground, neutral greys with no tint, black and white ink, and one crimson accent. Each edition is finite, read from top to bottom, and ends with \"You're all caught up\".\n\nThe density is a news app's density: every headline gets a picture and a 3–4 line summary. Hairlines separate the stories, and a heavy 2px ink rule opens each section. Nothing is decorative unless it helps the reader find their way. The editorial voice comes from the serif and from restraint, never from ornament. The replaced \"survey sheet\" world (neatline, legend tints, grey-blue night) is gone and none of its apparatus comes back.\n\nOn a phone the page is one column with a full-bleed lead photo. On desktop it becomes a 7:5 lead-and-rows split, with the same components throughout.",
     "keyCharacteristics": [
       "Two grounds with real contrast: pure white, and near-black (#111) with neutral greys.",
       "One crimson accent, used only in its listed roles.",
