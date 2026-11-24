@@ -366,21 +366,27 @@ main:focus { outline: none; }
 /* Read marks (added by site.js): a tick, never a dimmed card. */
 .state { display: inline-flex; align-items: center; color: var(--ink-2); font-weight: 600; }
 .state svg { flex: none; margin-right: 4px; }
-.state.is-last { color: var(--accent); }
+.state.is-last { color: var(--ink-2); font-weight: 500; }
 
 /* Lead */
 .lead .pic { margin-inline: calc(-1 * var(--gutter)); border-radius: 0; }
 .card-text { padding-top: 14px; }
 
-/* Rows: thumbnail floated beside the headline; the summary wraps around it. */
+/* Rows: headline beside its thumbnail, then a summary of at most four lines, then meta. */
 .rows > .row { padding: 16px 0; border-top: 1px solid var(--rule); }
-.row { display: flow-root; }
-.row .pic--thumb {
-  float: right;
-  width: clamp(104px, 31%, 168px);
-  margin: 3px 0 8px 14px;
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(100px, 28%, 150px);
+  grid-template-areas: "hl pic" "sum sum" "meta meta";
+  column-gap: 14px; align-items: start;
 }
-.row .meta { clear: right; }
+.row .hl { grid-area: hl; }
+.row .pic--thumb { grid-area: pic; }
+.row .summary {
+  grid-area: sum; margin-top: 10px;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; line-clamp: 4; overflow: hidden;
+}
+.row .meta { grid-area: meta; }
 
 /* Top stories */
 .top-stories { padding-bottom: 8px; }
@@ -423,6 +429,7 @@ main:focus { outline: none; }
     display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 32px;
     margin-top: 20px;
   }
+  .rows--more.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* ---------- colophon ---------- */
@@ -487,7 +494,7 @@ main:focus { outline: none; }
   margin: 24px 0 26px; padding: 18px 20px;
   background: var(--surface); border-radius: 12px;
 }
-.box-title { font: 800 0.8125rem/1.2 var(--sans); letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink); }
+.box-title { font: 800 1.1875rem/1.25 var(--sans); color: var(--ink); }
 .keyfacts ul { list-style: none; margin-top: 10px; display: grid; gap: 9px; }
 .keyfacts li { position: relative; padding-left: 18px; font: 400 1.03125rem/1.45 var(--serif); }
 .keyfacts li::before {

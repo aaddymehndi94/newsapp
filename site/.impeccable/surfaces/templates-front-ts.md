@@ -20,7 +20,7 @@ OWN-WORLD: White day ground and near-black (#111) night ground, neutral greys wi
 
 STORY: The reader sees the date and edition, scans the lead and top stories (picture + 3–4 lines each), jumps by section with tabs, opens a story, goes back to the same spot, and sees a tick on everything already read.
 
-FIRST VIEWPORT (390x844): wordmark left, theme button right; edition line (Morning edition · date · time, All editions); sticky pill tab bar, Top stories filled in ink, later pills cut at the right edge under a fade with a scroll chevron; lead photo full width at its own aspect ratio, uncropped; 28px serif bold headline, summary, meta.
+FIRST VIEWPORT (390x844): wordmark left, theme button right; edition line (Morning edition · date · time, All editions); sticky pill tab bar, active tab filled crimson (the accent), later pills cut at the right edge under a fade with a scroll chevron; lead photo full width at its own aspect ratio, uncropped; 28px serif bold headline, summary, meta.
 
 FORM: canon (the standing exit, chosen by the owner), benchmarked to BBC News app + NYT/The Hindu app. seed:4d6348bd38542e38. Signature interaction: the tab bar follows the section in view and keeps the active pill centred; Back restores the exact scroll spot; read ticks appear on return.
 

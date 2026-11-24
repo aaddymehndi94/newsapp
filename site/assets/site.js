@@ -85,13 +85,20 @@
       const meta = el.querySelector(".meta");
       if (!meta) return;
       let badge = meta.querySelector(".state");
-      if (!isRead && !isLast) { if (badge) badge.remove(); return; }
-      if (!badge) {
+      meta.querySelectorAll(".state").forEach((b) => b.remove());
+      // A read story always shows the tick; the last one opened also says so, in quiet ink.
+      if (isLast) {
+        const last = document.createElement("span");
+        last.className = "state is-last";
+        last.innerHTML = `${PIN}Last opened`;
+        meta.prepend(last);
+      }
+      if (isRead || isLast) {
         badge = document.createElement("span");
+        badge.className = "state";
+        badge.innerHTML = `${TICK}Read`;
         meta.prepend(badge);
       }
-      badge.className = isLast ? "state is-last" : "state";
-      badge.innerHTML = isLast ? `${PIN}Last opened` : `${TICK}Read`;
     });
   };
   markCards();

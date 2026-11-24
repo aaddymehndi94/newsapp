@@ -93,7 +93,7 @@ export function frontMasthead(ed: Edition, ctx: SiteCtx): string {
 ${themeToggle()}
 </div>
 <div class="wrap mast-sub">
-<p class="edition-line"><strong>${editionName(ed)}</strong><span><time datetime="${esc(ed.publishedAt)}"><span class="date-long">${esc(longDate(ed.date))}</span><span class="date-short">${esc(shortDate(ed.date))}</span></time></span><span class="date-long">Updated ${istClock(ed.publishedAt)}</span></p>
+<p class="edition-line"><strong>${editionName(ed)}</strong><span><time datetime="${esc(ed.publishedAt)}"><span class="date-long">${esc(longDate(ed.date))}</span><span class="date-short">${esc(shortDate(ed.date))}</span></time></span><span><span class="date-long">Updated </span>${istClock(ed.publishedAt)}</span></p>
 <p class="mast-links">${otherLink}<a class="mast-link" href="/archive/">All editions</a></p>
 </div>
 </header>`;

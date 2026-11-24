@@ -116,8 +116,12 @@ function sectionBlock(ed: Edition, sec: RenderSection): string {
   const rest = sec.stories.filter((_, i) => i !== fi);
   // Up to three rows sit beside the feature on desktop; the rest run below in a grid.
   // On phones it is one continuous list.
-  const side = rest.slice(0, 3);
-  const more = rest.slice(3);
+  // A three-column grid would strand one card on its last row, so take a fourth row beside
+  // the feature instead; two left over get a two-column row.
+  const sideCount = (rest.length - 3) % 3 === 1 ? 4 : 3;
+  const side = rest.slice(0, sideCount);
+  const more = rest.slice(sideCount);
+  const moreCols = more.length % 3 !== 0 && more.length % 2 === 0 ? " cols-2" : "";
   return `<section class="section" id="${esc(sec.id)}" aria-labelledby="h-${esc(sec.id)}">
 <header class="section-head">
 <h2 class="section-title" id="h-${esc(sec.id)}">${esc(sec.name)}</h2>
@@ -127,7 +131,7 @@ function sectionBlock(ed: Edition, sec: RenderSection): string {
 ${featureStory(ed, first)}
 ${side.length ? `<div class="rows">${side.map((s) => rowStory(ed, s)).join("\n")}</div>` : ""}
 </div>
-${more.length ? `<div class="rows rows--more">${more.map((s) => rowStory(ed, s)).join("\n")}</div>` : ""}
+${more.length ? `<div class="rows rows--more${moreCols}">${more.map((s) => rowStory(ed, s)).join("\n")}</div>` : ""}
 </section>`;
 }
 
