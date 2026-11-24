@@ -6,7 +6,7 @@ import { execFileSync } from "node:child_process";
 import { SOURCES, canonicalOutlet, leaningFor } from "../config/sources.ts";
 import { type FeedItem, gatherAll } from "./feeds.ts";
 import { type PageInfo, readPage } from "./enrich.ts";
-import { type Slate, type SlatePick, SECTION_IDS, SECTION_NAMES, buildEditorRequest, cleanSlate, planEdition, unalias } from "./editor.ts";
+import { type Slate, type SlatePick, CITY_SECTIONS, SECTION_IDS, SECTION_NAMES, buildEditorRequest, cleanSlate, planEdition, unalias } from "./editor.ts";
 import { type WrittenStory, buildRevisionRequest, buildWriterRequest, sourceDocs, storyCustomId, storyText } from "./writer.ts";
 import { CostMeter, type JsonResult, callJson, runBatch } from "./llm.ts";
 import { findAiTells } from "./style.ts";
@@ -99,7 +99,8 @@ async function main() {
   let gathered = cached<{ items: FeedItem[]; stats: { feedsTried: number; feedsOk: number; itemsSeen: number } }>("items.json");
   if (!gathered) {
     const { items, stats } = await gatherAll(SOURCES, slot === "am" ? 16 : 14);
-    // Keep the 16 most recent items per feed so one prolific feed can't flood the editor.
+    // Keep the 16 most recent items per feed (10 for a city feed: a city gets three stories)
+    // so one prolific feed can't flood the editor.
     const bySource = new Map<string, FeedItem[]>();
     for (const it of items) {
       if (!isMostlyLatin(it.title)) continue;
@@ -109,7 +110,9 @@ async function main() {
       bySource.set(it.sourceId, arr);
     }
     const trimmed = [...bySource.values()].flatMap((arr) =>
-      arr.sort((a, b) => Date.parse(b.published ?? "0") - Date.parse(a.published ?? "0")).slice(0, 16),
+      arr
+        .sort((a, b) => Date.parse(b.published ?? "0") - Date.parse(a.published ?? "0"))
+        .slice(0, (CITY_SECTIONS as readonly string[]).includes(arr[0].region) ? 10 : 16),
     );
     gathered = { items: trimmed, stats };
     writeJson(path.join(WORK, "items.json"), gathered);

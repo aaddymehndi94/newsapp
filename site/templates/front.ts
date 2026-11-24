@@ -7,6 +7,8 @@ import { culturePanel, marketsPanel, techPanel, weatherPanel } from "./panels.ts
 import {
   byId,
   cardMeta,
+  CITIES,
+  isCity,
   editionName,
   editionPath,
   esc,
@@ -27,14 +29,17 @@ interface RenderSection {
   id: string;
   name: string;
   stories: Story[];
+  /** The city section only: one group per city, in CITIES order. */
+  groups?: RenderSection[];
 }
 
 /** Work out what goes where, tolerating leads inside sections and unreferenced stories. */
 export function frontLayout(ed: Edition): { lead: Story[]; sections: RenderSection[] } {
   const map = byId(ed);
   const ranked = [...ed.stories].sort((a, b) => a.rank - b.rank);
-  let lead = ed.lead.map((id) => map.get(id)).filter((s): s is Story => Boolean(s));
-  if (lead.length === 0) lead = ranked.slice(0, 4);
+  // City stories are shown only to that city's readers, so they never lead the edition.
+  let lead = ed.lead.map((id) => map.get(id)).filter((s): s is Story => Boolean(s) && !isCity(s!.section));
+  if (lead.length === 0) lead = ranked.filter((s) => !isCity(s.section)).slice(0, 4);
   lead = lead.slice(0, 5);
   const shown = new Set(lead.map((s) => s.id));
 
@@ -49,6 +54,7 @@ export function frontLayout(ed: Edition): { lead: Story[]; sections: RenderSecti
     }
     return { id: sec.id, name: sec.name, stories };
   });
+  for (const c of CITIES) if (!sections.some((s) => s.id === c.id)) sections.push({ id: c.id, name: c.name, stories: [] });
   // Stories no section listed: file them under their own section, else under "More stories".
   const more: Story[] = [];
   for (const s of ranked) {
@@ -57,6 +63,12 @@ export function frontLayout(ed: Edition): { lead: Story[]; sections: RenderSecti
     (home ? home.stories : more).push(s);
     shown.add(s.id);
   }
+  // Every city goes into one section; the reader picks which city it shows.
+  const groups = CITIES.map((c) => ({ id: c.id, name: c.name, stories: sections.find((s) => s.id === c.id)!.stories }));
+  const others = sections.filter((s) => !isCity(s.id));
+  sections.length = 0;
+  sections.push(...others);
+  if (groups.some((g) => g.stories.length)) sections.push({ id: "city", name: "Cities", stories: groups.flatMap((g) => g.stories), groups });
   // Data panels get their section even when no story was filed there.
   for (const key of Object.keys(PANEL_SECTION) as (keyof typeof PANEL_SECTION)[]) {
     const sid = PANEL_SECTION[key];
@@ -136,7 +148,45 @@ ${cardMeta(s, opts.withSection ? sectionNameOf(ed, s) : undefined)}
 </article>`;
 }
 
+/**
+ * One label per city plus one for "all cities"; site.css shows the one matching
+ * <html data-city>, which the head script sets before first paint.
+ */
+function perCity(all: string, groups: RenderSection[], each: (g: RenderSection) => string): string {
+  return `<span class="pc pc--all">${esc(all)}</span>${groups.map((g) => `<span class="pc" data-c="${esc(g.id)}">${esc(each(g))}</span>`).join("")}`;
+}
+
+const cityTabLabel = (sec: RenderSection) => perCity(sec.name, sec.groups ?? [], (g) => g.name);
+
+/** The city section: a picker, then one group per city. Without a choice, every group shows. */
+function citySection(ed: Edition, sec: RenderSection): string {
+  const groups = sec.groups ?? [];
+  const chips = groups
+    .map((g) => `<button type="button" class="city-chip" data-pick="${esc(g.id)}" aria-pressed="false">${esc(g.name)}</button>`)
+    .join("");
+  const body = groups
+    .map(
+      (g) => `<div class="city-group" data-city="${esc(g.id)}">
+<h3 class="city-name">${esc(g.name)}</h3>
+${g.stories.length ? storiesBlock(ed, g) : `<p class="city-empty">No ${esc(g.name)} stories in this edition.</p>`}
+</div>`,
+    )
+    .join("\n");
+  return `<section class="section" id="city" aria-labelledby="h-city">
+<header class="section-head">
+<h2 class="section-title" id="h-city">${cityTabLabel(sec)}</h2>
+<p class="section-count">${perCity(plural(sec.stories.length, "story", "stories"), groups, (g) => (g.stories.length ? plural(g.stories.length, "story", "stories") : ""))}</p>
+</header>
+<div class="city-picker" role="group" aria-label="Your city">
+<p class="city-ask">Pick your city. We’ll remember it on this device.</p>
+<div class="city-chips">${chips}<button type="button" class="city-chip" data-pick="" aria-pressed="true">All cities</button></div>
+</div>
+${body}
+</section>`;
+}
+
 function sectionBlock(ed: Edition, sec: RenderSection): string {
+  if (sec.groups) return citySection(ed, sec);
   const panel = panelOf(ed, sec.id);
   const stories = sec.stories.length ? storiesBlock(ed, sec) : "";
   const count = sec.stories.length ? plural(sec.stories.length, "story", "stories") : panel ? `Updated ${istClock(panel.fetchedAt)}` : "";
@@ -177,7 +227,7 @@ const CHEVRON = (d: "l" | "r") =>
 /** Sticky section tabs. Anchors only (never a filter); site.js marks the one in view. */
 function tabBar(sections: RenderSection[]): string {
   const tabs = [{ id: "top-stories", name: "Top stories" }, ...sections]
-    .map((s, i) => `<a class="tab${i === 0 ? " is-active" : ""}" href="#${esc(s.id)}" data-jump="${esc(s.id)}"${i === 0 ? ' aria-current="location"' : ""}>${esc(s.name)}</a>`)
+    .map((s, i) => `<a class="tab${i === 0 ? " is-active" : ""}" href="#${esc(s.id)}" data-jump="${esc(s.id)}"${i === 0 ? ' aria-current="location"' : ""}>${"groups" in s && s.groups ? cityTabLabel(s) : esc(s.name)}</a>`)
     .join("");
   return `<nav class="tabs at-start" aria-label="Sections">
 <div class="wrap tabs-inner">

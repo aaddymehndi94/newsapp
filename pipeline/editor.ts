@@ -2,10 +2,13 @@ import type { FeedItem } from "./feeds.ts";
 import type { VideoItem } from "./videos.ts";
 import { EDITOR_MODEL, type CostMeter, type JsonRequest, type JsonResult, callJson, runBatch } from "./llm.ts";
 
+/** City sections. Readers pick one city on the site; each gets its own small section here. */
+export const CITY_SECTIONS = ["bengaluru", "chennai", "delhi", "hyderabad", "kochi", "kolkata", "mumbai"] as const;
+
 export const SECTION_IDS = [
   "india",
   "world",
-  "bengaluru",
+  ...CITY_SECTIONS,
   "weather",
   "business",
   "ai-software",
@@ -20,6 +23,12 @@ export const SECTION_NAMES: Record<SectionId, string> = {
   india: "India",
   world: "World",
   bengaluru: "Bengaluru",
+  chennai: "Chennai",
+  delhi: "Delhi",
+  hyderabad: "Hyderabad",
+  kochi: "Kochi",
+  kolkata: "Kolkata",
+  mumbai: "Mumbai",
   weather: "Weather",
   business: "Business",
   "ai-software": "AI & Software",
@@ -33,6 +42,12 @@ export const QUOTAS: Record<SectionId, number> = {
   india: 9,
   world: 9,
   bengaluru: 3,
+  chennai: 3,
+  delhi: 3,
+  hyderabad: 3,
+  kochi: 3,
+  kolkata: 3,
+  mumbai: 3,
   weather: 2,
   business: 5,
   "ai-software": 5,
@@ -85,7 +100,7 @@ const SLATE_SCHEMA = {
   },
 };
 
-const EDITOR_SYSTEM = `You are the editor-in-chief of Measured Edition, a non-partisan news site. Its reader lives in Bengaluru, India, and wants one calm, complete, balanced picture of the news each morning instead of reading six or seven sites. You choose which stories go into this edition. Writers will then produce each story from the source items you assign.
+const EDITOR_SYSTEM = `You are the editor-in-chief of Measured Edition, a non-partisan news site. Its readers live in India's big cities (Bengaluru, Chennai, Delhi, Hyderabad, Kochi, Kolkata, Mumbai) and want one calm, complete, balanced picture of the news each morning instead of reading six or seven sites. You choose which stories go into this edition. Writers will then produce each story from the source items you assign.
 
 How to choose
 - Group items that report the same event or development. One story = one event.
@@ -95,8 +110,8 @@ How to choose
   .join(", ")}.
   * india: national politics, government and courts, security, states, society, infrastructure.
   * world: international news, including events abroad that involve India.
-  * bengaluru: the city and Karnataka — civic issues, transport, water, local government, the city's tech and startup scene. Avoid minor crime items unless they matter to the city.
-  * weather: real weather news — IMD warnings, monsoon, cyclones, heat and cold waves, fog, floods and heavy rain in India (Bengaluru's weather included), and major storms, floods or heatwaves abroad. Skip routine "weather today" filler; fewer stories (even none) is fine when nothing notable is happening. A page of forecasts already sits in this section.
+  * city sections (bengaluru, chennai, delhi, hyderabad, kochi, kolkata, mumbai): each city's own news and its state's where it touches the city — civic issues, transport, water, housing, local government and politics, the city's economy and jobs, its schools and hospitals. Each reader sees only their own city, so pick what that city's residents most need to know. Avoid minor crime items unless they matter to the city. A city story of national importance belongs in india instead. Use the city's own feeds first; fewer stories is fine on a quiet day.
+  * weather: real weather news — IMD warnings, monsoon, cyclones, heat and cold waves, fog, floods and heavy rain in India (the seven cities' weather included), and major storms, floods or heatwaves abroad. Skip routine "weather today" filler; fewer stories (even none) is fine when nothing notable is happening. A page of forecasts already sits in this section.
   * business: economy, markets, companies, jobs, trade — India first, plus major global business news.
   * ai-software: AI models and labs, AI policy, safety and lawsuits, major software releases, developer tools and open source, big tech's AI moves, and India's AI and software industry. Pick what someone who wants to keep up with AI and software should know today; explain-the-trend pieces only with a news peg.
   * science-tech: research, space, gadgets and consumer technology, telecom and the internet (AI and software stories go to ai-software).
@@ -104,13 +119,13 @@ How to choose
   * entertainment: the paper's Page 3 — Bollywood, Hollywood and South Indian cinema (including Kannada), OTT and TV, music (new albums and songs, charts, tours), awards (Oscars, Emmys, Grammys, Filmfare and others), fashion, and the celebrity news people are talking about. Fun is welcome here. Mix Indian and international. Skip anything cruel, invasive or sexualised about people's private lives, rumours that no outlet stands behind, and paid promotions.
   * sports: results and major developments; cricket plus at least one other sport (football, tennis, chess, F1, hockey, badminton, athletics…). Results over previews.
 - Balance: across the edition, Indian politics must not be one-sided — cover government actions and decisions, opposition activity and criticism, and courts on their merits. Keep the world section global (not only US/UK); include Asia, the Middle East, Africa, Latin America and Europe when there is real news.
-- Lead: mark exactly 4 stories as lead — the most important overall, normally a mix of India and world. Rank all stories 1..N by importance across the whole edition.
+- Lead: mark exactly 4 stories as lead — the most important overall, normally a mix of India and world. Never a city-section story: city stories are shown only to that city's readers. Rank all stories 1..N by importance across the whole edition.
 - Freshness: the previous edition's headlines are listed. Do not repeat a story unless there is a material new development; if you do, make the angle about what is new.
 
 Assigning sources (itemIds)
 - Give each story 2–6 item ids reporting that same event, from different outlets where possible. Put the most informative first: items from outlets' own feeds before Google News headline-only items.
 - For political or disputed stories, include outlets from different leanings (each feed shows its leaning code) so the writer sees how each side reports it. For every contested story, assign at least one left-of-centre (L/CL) and one right-of-centre (CR/R) item whenever any feed carries the event; check the right- and left-leaning feeds (including the Google News headline feeds) for it before settling on a one-sided set.
-- A single-source story is acceptable only for significant news from a reliable outlet (e.g. a science paper, a local Bengaluru report).
+- A single-source story is acceptable only for significant news from a reliable outlet (e.g. a science paper, a local city report).
 - Only use ids that appear in the list (like i3f).
 
 Other fields
@@ -207,9 +222,11 @@ export function cleanSlate(slate: Slate, items: Map<string, FeedItem>, videoIds:
     stories.push({ ...s, key, itemIds: ids, videoId: videoIds.has(s.videoId) ? s.videoId : "" });
   }
   stories.forEach((s, i) => (s.rank = i + 1));
-  // Exactly up to 4 leads, falling back to top-ranked stories.
-  const leads = stories.filter((s) => s.lead).slice(0, 4);
-  if (leads.length < 4) for (const s of stories) if (!s.lead && leads.length < 4) (s.lead = true), leads.push(s);
+  // Exactly up to 4 leads, falling back to top-ranked stories. City stories are shown only to
+  // that city's readers, so they never lead the edition.
+  const canLead = (s: SlatePick) => !(CITY_SECTIONS as readonly string[]).includes(s.section);
+  const leads = stories.filter((s) => s.lead && canLead(s)).slice(0, 4);
+  if (leads.length < 4) for (const s of stories) if (!leads.includes(s) && canLead(s) && leads.length < 4) leads.push(s);
   for (const s of stories) s.lead = leads.includes(s);
   return { stories };
 }

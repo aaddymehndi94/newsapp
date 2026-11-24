@@ -126,11 +126,27 @@ export function storyPath(editionId: string, storyId: string): string {
 
 // ---------- sections ----------
 
+/**
+ * The cities a reader can pick. The front page gathers them into one "city" section that
+ * shows the reader's city (remembered in the browser); with no choice, or no JavaScript, all show.
+ */
+export const CITIES = [
+  { id: "bengaluru", name: "Bengaluru" },
+  { id: "chennai", name: "Chennai" },
+  { id: "delhi", name: "Delhi" },
+  { id: "hyderabad", name: "Hyderabad" },
+  { id: "kochi", name: "Kochi" },
+  { id: "kolkata", name: "Kolkata" },
+  { id: "mumbai", name: "Mumbai" },
+] as const;
+const CITY_IDS = new Set<string>(CITIES.map((c) => c.id));
+export const isCity = (sectionId: string): boolean => CITY_IDS.has(sectionId);
+
 /** Front-page order of every section the site knows. */
 export const SECTION_ORDER = [
   "india",
   "world",
-  "bengaluru",
+  "city",
   "weather",
   "business",
   "markets",
@@ -140,7 +156,7 @@ export const SECTION_ORDER = [
   "entertainment",
   "sports",
 ] as const;
-const KNOWN_SECTIONS = new Set<string>(SECTION_ORDER);
+const KNOWN_SECTIONS = new Set<string>([...SECTION_ORDER, ...CITY_IDS]);
 
 /** A safe CSS class naming the section (for hooks and tests; sections are not colour-coded). */
 export function tint(sectionId: string): string {
@@ -154,7 +170,8 @@ const FALLBACK_NAMES: Record<string, string> = {
   "science-tech": "Science & Tech",
   sports: "Sports",
   "health-environment": "Health & Environment",
-  bengaluru: "Bengaluru",
+  ...Object.fromEntries(CITIES.map((c) => [c.id, c.name])),
+  city: "Cities",
   weather: "Weather",
   markets: "Markets",
   "ai-software": "AI & Software",

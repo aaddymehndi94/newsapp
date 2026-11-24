@@ -4,7 +4,8 @@
 // the spectrum. They are not a judgement of accuracy.
 
 export type Leaning = "left" | "centre-left" | "centre" | "centre-right" | "right";
-export type Region = "india" | "world" | "bengaluru";
+export type City = "bengaluru" | "chennai" | "delhi" | "hyderabad" | "kochi" | "kolkata" | "mumbai";
+export type Region = "india" | "world" | City;
 export type SectionHint =
   | "general"
   | "india"
@@ -15,7 +16,7 @@ export type SectionHint =
   | "sports"
   | "health"
   | "environment"
-  | "bengaluru"
+  | City
   | "ai"
   | "weather"
   | "entertainment";
@@ -73,6 +74,36 @@ export const SOURCES: Source[] = [
   { id: "hindu-karnataka", outlet: "The Hindu", url: "https://www.thehindu.com/news/national/karnataka/feeder/default.rss", region: "bengaluru", section: "bengaluru", leaning: "centre-left" },
 
   { id: "gn-dh-blr", outlet: "Deccan Herald", url: gnews("site:deccanherald.com bengaluru when:1d"), region: "bengaluru", section: "bengaluru", leaning: "centre", kind: "gnews" },
+
+  // ───────────── Other cities (readers pick one on the site) ─────────────
+  // The Hindu, Indian Express, Hindustan Times and The Times of India city feeds, as for
+  // Bengaluru, where each outlet keeps its city feed up to date (Indian Express's Chennai,
+  // Hyderabad and Kolkata feeds post about once a week, so The New Indian Express, The
+  // Hindu's West Bengal feed and The Telegraph's headlines via Google News stand in; The
+  // Telegraph refuses feed readers directly). Kochi: The New Indian Express and The Hindu's
+  // Kerala feed.
+  { id: "hindu-del", outlet: "The Hindu", url: "https://www.thehindu.com/news/cities/Delhi/feeder/default.rss", region: "delhi", section: "delhi", leaning: "centre-left" },
+  { id: "ie-delhi", outlet: "The Indian Express", url: "https://indianexpress.com/section/cities/delhi/feed/", region: "delhi", section: "delhi", leaning: "centre-left" },
+  { id: "ht-delhi", outlet: "Hindustan Times", url: "https://www.hindustantimes.com/feeds/rss/cities/delhi-news/rssfeed.xml", region: "delhi", section: "delhi", leaning: "centre" },
+  { id: "toi-delhi", outlet: "The Times of India", url: "https://timesofindia.indiatimes.com/rssfeeds/-2128839596.cms", region: "delhi", section: "delhi", leaning: "centre-right" },
+  { id: "hindu-mum", outlet: "The Hindu", url: "https://www.thehindu.com/news/cities/Mumbai/feeder/default.rss", region: "mumbai", section: "mumbai", leaning: "centre-left" },
+  { id: "ie-mumbai", outlet: "The Indian Express", url: "https://indianexpress.com/section/cities/mumbai/feed/", region: "mumbai", section: "mumbai", leaning: "centre-left" },
+  { id: "ht-mumbai", outlet: "Hindustan Times", url: "https://www.hindustantimes.com/feeds/rss/cities/mumbai-news/rssfeed.xml", region: "mumbai", section: "mumbai", leaning: "centre" },
+  { id: "toi-mumbai", outlet: "The Times of India", url: "https://timesofindia.indiatimes.com/rssfeeds/-2128838597.cms", region: "mumbai", section: "mumbai", leaning: "centre-right" },
+  { id: "hindu-hyd", outlet: "The Hindu", url: "https://www.thehindu.com/news/cities/Hyderabad/feeder/default.rss", region: "hyderabad", section: "hyderabad", leaning: "centre-left" },
+  { id: "nie-hyderabad", outlet: "The New Indian Express", url: "https://www.newindianexpress.com/cities/hyderabad/rssfeed/", region: "hyderabad", section: "hyderabad", leaning: "centre" },
+  { id: "toi-hyderabad", outlet: "The Times of India", url: "https://timesofindia.indiatimes.com/rssfeeds/-2128816011.cms", region: "hyderabad", section: "hyderabad", leaning: "centre-right" },
+  { id: "hindu-che", outlet: "The Hindu", url: "https://www.thehindu.com/news/cities/chennai/feeder/default.rss", region: "chennai", section: "chennai", leaning: "centre-left" },
+  { id: "nie-chennai", outlet: "The New Indian Express", url: "https://www.newindianexpress.com/cities/chennai/rssfeed/", region: "chennai", section: "chennai", leaning: "centre" },
+  { id: "toi-chennai", outlet: "The Times of India", url: "https://timesofindia.indiatimes.com/rssfeeds/2950623.cms", region: "chennai", section: "chennai", leaning: "centre-right" },
+  { id: "hindu-kol", outlet: "The Hindu", url: "https://www.thehindu.com/news/cities/kolkata/feeder/default.rss", region: "kolkata", section: "kolkata", leaning: "centre-left" },
+  { id: "hindu-wb", outlet: "The Hindu", url: "https://www.thehindu.com/news/national/west-bengal/feeder/default.rss", region: "kolkata", section: "kolkata", leaning: "centre-left" },
+  { id: "ht-kolkata", outlet: "Hindustan Times", url: "https://www.hindustantimes.com/feeds/rss/cities/kolkata-news/rssfeed.xml", region: "kolkata", section: "kolkata", leaning: "centre" },
+  { id: "gn-telegraph-kol", outlet: "The Telegraph", url: gnews("site:telegraphindia.com kolkata when:1d"), region: "kolkata", section: "kolkata", leaning: "centre-left", kind: "gnews" },
+  { id: "toi-kolkata", outlet: "The Times of India", url: "https://timesofindia.indiatimes.com/rssfeeds/-2128830821.cms", region: "kolkata", section: "kolkata", leaning: "centre-right" },
+  { id: "hindu-kochi", outlet: "The Hindu", url: "https://www.thehindu.com/news/cities/Kochi/feeder/default.rss", region: "kochi", section: "kochi", leaning: "centre-left" },
+  { id: "nie-kochi", outlet: "The New Indian Express", url: "https://www.newindianexpress.com/cities/kochi/rssfeed/", region: "kochi", section: "kochi", leaning: "centre" },
+  { id: "hindu-kerala", outlet: "The Hindu", url: "https://www.thehindu.com/news/national/kerala/feeder/default.rss", region: "kochi", section: "kochi", leaning: "centre-left" },
 
   // ───────────── World ─────────────
   { id: "bbc-world", outlet: "BBC News", url: "https://feeds.bbci.co.uk/news/world/rss.xml", region: "world", section: "world", leaning: "centre-left" },

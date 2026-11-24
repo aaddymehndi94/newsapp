@@ -90,7 +90,7 @@ function cityRow(c: WeatherCity): string {
   const aqi = c.aqi
     ? `<span class="aqi${c.aqi.value > 200 ? " is-bad" : ""}">Air quality ${num(c.aqi.value)}, ${esc(c.aqi.category.toLowerCase())}</span>`
     : "";
-  return `<li class="wx-city">
+  return `<li class="wx-city" data-wx="${esc(c.name.toLowerCase())}">
 <div class="wx-name"><h4>${esc(c.name)}</h4><p>${bits.join(" · ")}</p>${aqi ? `<p>${aqi}</p>` : ""}</div>
 ${skyIcon(w.sky)}
 <p class="wx-temps"><span class="hi">${c.today.max}°</span><span class="lo"><span class="visually-hidden">low </span>${c.today.min}°</span></p>

@@ -43,6 +43,11 @@ before(async () => {
       story.headline = EVIL;
       story.body[0] = `Before [click](javascript:alert(1)) and *ok* and [fine](https://example.com/a?b=1&c=2) ${EVIL}`;
       evilStoryPath = path.join("e", ed.id, story.id, "index.html");
+      // A Delhi story, wrongly listed as a lead: it must stay in the city section.
+      const delhi = { ...ed.stories.find((x: Story) => x.section === "bengaluru"), id: "delhi-test-story", section: "delhi", rank: 1, headline: "Delhi test story" };
+      ed.stories.push(delhi);
+      ed.sections.push({ id: "delhi", name: "Delhi", storyIds: [] });
+      ed.lead = [delhi.id, ...ed.lead];
     }
     await writeFile(path.join(dataDir, name), JSON.stringify(ed));
   }
@@ -127,6 +132,23 @@ describe("buildSite", () => {
     assert.match(robots, /Disallow: \//);
     const page = await readFile(path.join(outDir, "index.html"), "utf8");
     assert.ok(page.includes(`<script>${HEAD_SCRIPT}</script>`));
+  });
+
+  it("gathers every city into one section with a picker, and keeps city stories out of Top stories", async () => {
+    const html = await readFile(path.join(outDir, "index.html"), "utf8");
+    assert.equal((html.match(/<section class="section" id="city"/g) ?? []).length, 1);
+    assert.doesNotMatch(html, /id="bengaluru"/);
+    assert.match(html, /<a class="tab[^"]*" href="#city"/);
+    const order = [...html.matchAll(/class="city-group" data-city="([a-z]+)"/g)].map((m) => m[1]);
+    assert.deepEqual(order, ["bengaluru", "chennai", "delhi", "hyderabad", "kochi", "kolkata", "mumbai"]);
+    const picks = [...html.matchAll(/data-pick="([a-z]+)"/g)].map((m) => m[1]);
+    assert.deepEqual(picks, order);
+    const group = (c: string) => html.split(`data-city="${c}"`)[1].split('class="city-group"')[0];
+    assert.ok(group("delhi").includes("/delhi-test-story/"), "the Delhi story sits in the Delhi group");
+    assert.ok(group("bengaluru").includes("/namma-metro-pink-line-opening-date/"));
+    assert.match(group("chennai"), /No Chennai stories in this edition/);
+    const top = html.split('id="top-stories"')[1].split("</section>")[0];
+    assert.ok(!top.includes("delhi-test-story"), "a city story never leads the edition");
   });
 
   it("keeps fixture builds out of search and the sitemap", async () => {

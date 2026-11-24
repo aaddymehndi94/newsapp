@@ -34,8 +34,8 @@ were on the front page to keep going.
 
 Measured Edition replaces the 6–7-site routine with one calm, ad-free edition published every morning. A
 pipeline reads reporting from outlets across the political spectrum, an AI editor clusters and
-picks a balanced slate (~35–40 stories across India, World, Business, Science & Tech, Sports,
-Health & Environment, Bengaluru), and an AI writer produces neutral, wire-style articles with key
+picks a balanced slate (~70 stories across India, World, seven cities, Business, Science & Tech,
+Sports, Health & Environment and more), and an AI writer produces neutral, wire-style articles with key
 facts, background, why it matters and — only on contested stories — how it is being framed.
 
 Success: the owner stops opening the other sites, because Measured Edition is faster to skim, pleasanter to
@@ -50,7 +50,7 @@ edition, which is the point.
 ## Operating Context
 
 - One edition a day at 05:00 IST (owner's choice, 2026-11-24, to keep costs down). Times are shown in IST.
-- Sections: India, World, Bengaluru, Weather (city forecasts, air quality, satellite view), Business, Markets (Sensex, Nifty 50, S&P 500, Nasdaq, USD/INR, gold, silver, bitcoin with month charts), AI & Software (news plus new GitHub repos, trending Hugging Face models, Show HN launches), Science & Tech, Health & Environment, Entertainment (Page 3: films, music, fashion, celebrity news, Apple Music charts, new and upcoming films), Sports.
+- Sections: India, World, your city (Bengaluru, Chennai, Delhi, Hyderabad, Kochi, Kolkata or Mumbai; three stories each, one section with a city picker), Weather (city forecasts, air quality, satellite view), Business, Markets (Sensex, Nifty 50, S&P 500, Nasdaq, USD/INR, gold, silver, bitcoin with month charts), AI & Software (news plus new GitHub repos, trending Hugging Face models, Show HN launches), Science & Tech, Health & Environment, Entertainment (Page 3: films, music, fashion, celebrity news, Apple Music charts, new and upcoming films), Sports.
 - Static pages; browser back restores scroll position natively.
 - Pictures are hotlinked from the originating outlet (og:image) or Wikimedia Commons, always
   credited and linked; when none is usable a typographic card stands in.
@@ -65,6 +65,9 @@ edition, which is the point.
   background, why it matters, framing box (contested stories only), click-to-load video, sources
   with leaning labels, next-in-section and other top stories.
 - Read stories are dimmed on the front page (per-browser localStorage, nothing sent anywhere).
+- Your city: the reader picks a city once in the city section and it's remembered in the browser
+  (nothing sent anywhere). The section and its tab then show only that city, and Weather lists it
+  first. With no pick, or no JavaScript, every city shows. City stories never lead the edition.
 - Light and dark themes; follows the system by default, with one toggle.
 - Works without JavaScript.
 

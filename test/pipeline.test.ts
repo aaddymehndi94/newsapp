@@ -94,6 +94,28 @@ test("cleanSlate removes unknown ids, dedupes items across stories, renumbers, f
   assert.deepEqual(s.stories.map((x) => [x.key, x.rank, x.itemIds.join(), x.lead, x.videoId]), [["y", 1, "b,a", true, ""]]);
 });
 
+test("cleanSlate never makes a city story a lead, even when marked or needed to fill", () => {
+  const items = new Map(["a", "b", "c", "d", "e"].map((k) => [k, {} as never]));
+  const pick = (key: string, section: string, rank: number, lead: boolean, id: string) =>
+    ({ key, section, rank, lead, workingHeadline: "", angle: "", itemIds: [id], contested: false, videoId: "" }) as never;
+  const s = cleanSlate(
+    {
+      stories: [
+        pick("delhi-metro", "delhi", 1, true, "a"),
+        pick("kochi-port", "kochi", 2, false, "b"),
+        pick("budget", "india", 3, true, "c"),
+        pick("summit", "world", 4, false, "d"),
+        pick("rates", "business", 5, false, "e"),
+      ],
+    },
+    items,
+    new Set(),
+  );
+  const leads = s.stories.filter((x) => x.lead).map((x) => x.key);
+  assert.deepEqual(leads, ["budget", "summit", "rates"]);
+  assert.ok(s.stories.some((x) => x.key === "delhi-metro"), "the city story is kept, just not as a lead");
+});
+
 test("batch custom ids satisfy the API pattern", async () => {
   const { storyCustomId } = await import("../pipeline/writer.ts");
   for (const key of ["india-nepal-package", "x".repeat(80), "a-b_c"]) assert.match(storyCustomId(key), /^[a-zA-Z0-9_-]{1,64}$/);

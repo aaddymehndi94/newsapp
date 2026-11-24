@@ -1,4 +1,5 @@
-// Measured Edition: theme toggle, read ticks, return-to-place, click-to-load video, section tabs.
+// Measured Edition: theme toggle, read ticks, return-to-place, click-to-load video, your city,
+// section tabs.
 // Progressive: every page works without this file.
 (() => {
   "use strict";
@@ -167,6 +168,42 @@
       f.focus();
     });
   });
+
+
+  // ---- your city: the city section shows one city, remembered; weather lists it first ----
+  const CITY = "meridian:city";
+  const picks = document.querySelectorAll("button[data-pick]");
+  const wxList = document.querySelector(".wx-list");
+  const wxRows = wxList ? [...wxList.children] : [];
+  const applyCity = (c) => {
+    if (c) doc.setAttribute("data-city", c); else doc.removeAttribute("data-city");
+    picks.forEach((b) => b.setAttribute("aria-pressed", String((b.getAttribute("data-pick") || "") === c)));
+    document.querySelectorAll(".city-group.is-open").forEach((g) => g.classList.remove("is-open"));
+    if (wxList) {
+      const mine = wxRows.find((r) => r.getAttribute("data-wx") === c);
+      wxList.replaceChildren(...(mine ? [mine, ...wxRows.filter((r) => r !== mine)] : wxRows));
+    }
+  };
+  applyCity(doc.getAttribute("data-city") || "");
+  picks.forEach((b) => {
+    b.addEventListener("click", () => {
+      const c = b.getAttribute("data-pick") || "";
+      store.set(CITY, c);
+      applyCity(c);
+    });
+  });
+  // A link to a story from another city (say, "back" from a shared article) still lands on it.
+  const openLinkedCity = () => {
+    let target = null;
+    try { target = location.hash ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null; } catch { target = null; }
+    const group = target ? target.closest(".city-group") : null;
+    if (group && group.getAttribute("data-city") !== doc.getAttribute("data-city") && doc.hasAttribute("data-city")) {
+      group.classList.add("is-open");
+      target.scrollIntoView();
+    }
+  };
+  openLinkedCity();
+  addEventListener("hashchange", openLinkedCity);
 
   // ---- section tabs: edge fades/arrows when there's more, and the tab for where you are ----
   const tabs = document.querySelector(".tabs");

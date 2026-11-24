@@ -5,8 +5,10 @@
 
 ## What you'll find
 
-- ~40 stories per edition across India, World, Bengaluru, Business, Science & Tech,
-  Health & Environment and Sports. Every story has a picture; about a quarter have a news video.
+- About 70 stories per edition across India, World, your city, Weather, Business, Markets,
+  AI & Software, Science & Tech, Health & Environment, Entertainment and Sports. The city section
+  covers Bengaluru, Chennai, Delhi, Hyderabad, Kochi, Kolkata and Mumbai: pick yours once and the
+  site remembers it. Every story has a picture; about a quarter have a news video.
 - Front page: big lead story, three more top stories, then sections. Tap a story, read it, tap
   "Back" (or swipe back) and you land exactly where you were; stories you've read are dimmed, and
   the last one you opened is marked.
@@ -18,10 +20,10 @@
 ## How it works
 
 Once a day (owner's choice from 2026-11-24). **GitHub Actions makes it at 03:37 IST**; this computer only steps in at 05:15 if that edition isn't live:
-1. Reads 78 feeds: Indian outlets from left to right (The Hindu, Indian Express, HT, TOI, NDTV,
+1. Reads 129 feeds: Indian outlets from left to right (The Hindu, Indian Express, HT, TOI, NDTV,
    Scroll, The Wire, ThePrint, News18, Swarajya, Organiser, Firstpost…), international (BBC, Al Jazeera,
    Guardian, NYT, WSJ, Fox, NPR, DW, France 24, CNA, SCMP, Reuters/AP headlines…), science, tech,
-   sport, and Bengaluru city feeds. Also 18 YouTube news channels for video, read through the YouTube Data API only when YOUTUBE_API_KEY is set (YouTube's robots.txt disallows its channel feeds).
+   sport, and city feeds for the seven cities. Also 18 YouTube news channels for video, read through the YouTube Data API only when YOUTUBE_API_KEY is set (YouTube's robots.txt disallows its channel feeds).
 2. **Claude Opus 5.5** (editor) groups reports of the same event, picks a balanced slate with
    section quotas, and assigns each story 2–6 sources from different outlets and leanings.
 3. **Claude Sonnet 5.5** (writer) writes each story in its own words from those sources, under a

@@ -411,6 +411,43 @@ main:focus { outline: none; }
 .section-count { font-size: 0.8125rem; color: var(--ink-3); }
 .feature + .rows { margin-top: 18px; }
 
+/* Cities: one section for seven cities. The reader's pick (<html data-city>, set by the head
+   script before first paint) shows only that city; with no pick, or no JavaScript, all show. */
+.pc:not(.pc--all) { display: none; }
+.city-picker { display: none; }
+.js .city-picker { display: block; margin-bottom: 20px; }
+.city-ask { font-size: 0.875rem; color: var(--ink-3); margin-bottom: 10px; }
+.city-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.city-chip {
+  display: inline-flex; align-items: center; height: 36px; padding: 0 14px;
+  border: 0; border-radius: 999px; background: var(--chip); color: var(--ink);
+  font: 600 0.875rem/1 var(--sans); cursor: pointer;
+  transition: background-color 0.18s ease-out, color 0.18s ease-out;
+}
+.city-chip:hover { background: var(--chip-hover); }
+.city-chip[aria-pressed="true"] { background: var(--accent-fill); color: #fff; }
+.city-group + .city-group { margin-top: 30px; }
+.city-name { font: 700 1.0625rem/1.25 var(--sans); margin-bottom: 12px; }
+.city-empty { font-size: 0.9375rem; color: var(--ink-3); padding: 2px 0 6px; }
+.js[data-city] .pc--all,
+.js[data-city] .city-ask,
+.js[data-city] .city-name { display: none; }
+.js[data-city] .city-group:not(.is-open) { display: none; }
+.js[data-city="bengaluru"] .city-group[data-city="bengaluru"],
+.js[data-city="chennai"] .city-group[data-city="chennai"],
+.js[data-city="delhi"] .city-group[data-city="delhi"],
+.js[data-city="hyderabad"] .city-group[data-city="hyderabad"],
+.js[data-city="kochi"] .city-group[data-city="kochi"],
+.js[data-city="kolkata"] .city-group[data-city="kolkata"],
+.js[data-city="mumbai"] .city-group[data-city="mumbai"] { display: block; }
+.js[data-city="bengaluru"] .pc[data-c="bengaluru"],
+.js[data-city="chennai"] .pc[data-c="chennai"],
+.js[data-city="delhi"] .pc[data-c="delhi"],
+.js[data-city="hyderabad"] .pc[data-c="hyderabad"],
+.js[data-city="kochi"] .pc[data-c="kochi"],
+.js[data-city="kolkata"] .pc[data-c="kolkata"],
+.js[data-city="mumbai"] .pc[data-c="mumbai"] { display: inline; }
+
 @media (min-width: 600px) {
   .lead .pic { margin-inline: 0; border-radius: var(--r-pic); }
   .hl--lead { font-size: 2.125rem; }

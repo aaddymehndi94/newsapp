@@ -1,7 +1,7 @@
 // Document shell, mastheads and footer shared by every page.
 
 import type { Edition } from "../types.ts";
-import { editionName, editionPath, esc, istClock, longDate, shortDate } from "./helpers.ts";
+import { CITIES, editionName, editionPath, esc, istClock, longDate, shortDate } from "./helpers.ts";
 
 export interface SiteCtx {
   /** All editions, oldest first. */
@@ -16,11 +16,12 @@ export interface SiteCtx {
 
 /**
  * Runs in <head> before first paint: applies a saved theme (or ?theme=light|dark, not saved)
+ * and the reader's city (so the city section opens on it without a flash),
  * and swaps any picture that fails to load for its placeholder. Must stay byte-identical
  * across pages: its hash is pinned in the Content-Security-Policy.
  */
 export const HEAD_SCRIPT =
-  `(function(){var d=document.documentElement;d.className+=" js";try{var q=new URLSearchParams(location.search).get("theme"),t=q==="light"||q==="dark"?q:localStorage.getItem("meridian:theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t)}catch(e){}` +
+  `(function(){var d=document.documentElement;d.className+=" js";try{var q=new URLSearchParams(location.search).get("theme"),t=q==="light"||q==="dark"?q:localStorage.getItem("meridian:theme");if(t==="light"||t==="dark")d.setAttribute("data-theme",t);var c=localStorage.getItem("meridian:city");if(/^(${CITIES.map((c) => c.id).join("|")})$/.test(c))d.setAttribute("data-city",c)}catch(e){}` +
   `document.addEventListener("error",function(e){var i=e.target;if(i&&i.tagName==="IMG"){var p=i.closest(".pic");if(p){p.classList.add("is-broken");i.remove()}}},true)})();`;
 
 /** Browser chrome colours; must match --bg in site.css (site.js keeps them in sync on toggle). */
