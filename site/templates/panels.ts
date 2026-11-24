@@ -154,7 +154,7 @@ export function marketsPanel(p: MarketsPanel): string {
   if (p.quotes.length === 0) return "";
   return `<div class="panel panel--markets">
 <ul class="mk-grid">${p.quotes.map(quoteTile).join("\n")}</ul>
-<p class="panel-note">Closing prices, with the change from the previous close; bitcoin is the latest price. Charts cover about a month. Sensex, the S&amp;P 500 and the Nasdaq aren’t here yet: their publishers don’t allow automated use of their data.</p>
+<p class="panel-note">Closing prices, with the change from the previous close; bitcoin is the latest price. Charts cover about a month.</p>
 </div>`;
 }
 
@@ -220,6 +220,16 @@ function filmRow(m: Movie, upcoming: boolean): string {
 </li>`;
 }
 
+/** Posters when the source has them (TMDB); otherwise a dated list. */
+function filmList(ms: Movie[], upcoming: boolean): string {
+  if (ms.some((m) => m.poster)) return `<ul class="film-strip">${ms.map((m) => filmRow(m, upcoming)).join("")}</ul>`;
+  return `<ul class="film-list">${ms
+    .map(
+      (m) => `<li><time datetime="${esc(m.date)}">${esc(dayMonth(m.date))}</time><span class="film-title"><a href="${esc(m.url)}" ${EXT}>${esc(m.title)}</a>${m.language ? `<span class="film-lang">${esc(m.language)}</span>` : ""}</span></li>`,
+    )
+    .join("")}</ul>`;
+}
+
 export function culturePanel(p: CulturePanel): string {
   const parts: string[] = [];
   if (p.charts.length) {
@@ -233,12 +243,17 @@ ${c.songs.length > 5 ? `<details class="songs-more"><summary>Show ${c.songs.leng
       .join("\n");
     parts.push(`<div class="charts"><h3 class="panel-title">Most played on Apple Music</h3><div class="chart-cols">${cols}</div></div>`);
   }
-  if (p.nowShowing?.length)
-    parts.push(`<div class="films"><h3 class="panel-title">In cinemas</h3><ul class="film-strip">${p.nowShowing.map((m) => filmRow(m, false)).join("")}</ul></div>`);
-  if (p.comingSoon?.length)
-    parts.push(`<div class="films"><h3 class="panel-title">Coming soon</h3><ul class="film-strip">${p.comingSoon.map((m) => filmRow(m, true)).join("")}</ul></div>`);
+  const films: string[] = [];
+  if (p.nowShowing?.length) films.push(`<section class="films" aria-labelledby="fl-now"><h3 class="panel-title" id="fl-now">New releases</h3>${filmList(p.nowShowing, false)}</section>`);
+  if (p.comingSoon?.length) films.push(`<section class="films" aria-labelledby="fl-soon"><h3 class="panel-title" id="fl-soon">Coming soon</h3>${filmList(p.comingSoon, true)}</section>`);
+  if (films.length) parts.push(`<div class="film-cols">${films.join("\n")}</div>`);
   if (!parts.length) return "";
-  const tmdb = p.nowShowing?.length || p.comingSoon?.length ? " Film listings use the TMDB API but are not endorsed or certified by TMDB." : "";
+  const anyFilms = [...(p.nowShowing ?? []), ...(p.comingSoon ?? [])];
+  const tmdb = anyFilms.some((m) => m.url.includes("themoviedb.org"))
+    ? " Film listings use the TMDB API but are not endorsed or certified by TMDB."
+    : anyFilms.length
+      ? " Film release dates from Wikipedia’s lists of Hindi, Kannada, Tamil, Telugu, Malayalam and American films (cinema and streaming)."
+      : "";
   return `<div class="panel panel--culture">
 ${parts.join("\n")}
 <p class="panel-note">Charts from Apple Music, updated daily.${tmdb}</p>

@@ -2,9 +2,11 @@
 //   Nifty 50, Nifty Bank: NSE's daily index closing file (nsearchives.nseindia.com).
 //   US dollar in rupees: European Central Bank reference rates, via api.frankfurter.dev.
 //   Gold (24 carat, ₹ per 10 g) and silver (₹ per kg): India Bullion and Jewellers Association.
+//   Sensex, S&P 500, Nasdaq: Google Finance quote pages (robots.txt allows them, and Google's
+//     terms allow automated access that robots.txt permits). Each page embeds the latest value
+//     and about a month of daily closes.
 //   Bitcoin: Coinbase Exchange public market data.
-// Sensex, S&P 500 and Nasdaq are left out: their publishers either block automated access
-// (BSE, Cboe, Nasdaq) or only license the data for private use, and we don't work around that.
+// Yahoo Finance, BSE, Cboe, Stooq, CNBC and MarketWatch refuse automated access, so they are not used.
 import fs from "node:fs";
 import path from "node:path";
 import type { MarketPoint, MarketQuote, MarketsPanel } from "../../site/types.ts";
@@ -58,7 +60,7 @@ interface NseCache {
   closed: string[];
 }
 
-const NSE_INDICES = ["Nifty 50", "Nifty Bank"];
+const NSE_INDICES = ["Nifty 50"];
 
 async function nse(dataDir: string): Promise<MarketQuote[]> {
   const file = path.join(dataDir, "nse.json");
@@ -98,10 +100,61 @@ async function nse(dataDir: string): Promise<MarketQuote[]> {
     Object.entries(cache.days)
       .filter(([, v]) => typeof v[name] === "number")
       .map(([date, v]) => ({ date, value: v[name] }));
-  return [
-    quoteFrom({ id: "nifty50", name: "Nifty 50", unit: "", decimals: 2, source: "NSE" }, series("Nifty 50")),
-    quoteFrom({ id: "niftybank", name: "Nifty Bank", unit: "", decimals: 2, source: "NSE" }, series("Nifty Bank")),
-  ].filter((q): q is MarketQuote => !!q);
+  return [quoteFrom({ id: "nifty50", name: "Nifty 50", unit: "", decimals: 2, source: "NSE" }, series("Nifty 50"))].filter(
+    (q): q is MarketQuote => !!q,
+  );
+}
+
+// ───────────── Google Finance ─────────────
+
+/**
+ * Pull the latest value and the daily closes for one symbol out of a Google Finance quote page.
+ * The page carries its data in AF_initDataCallback blocks; the daily series is the block for this
+ * symbol whose points fall on many different dates (the intraday one is all one date).
+ */
+export function parseGoogleFinance(html: string, sym: string, exch: string): MarketPoint[] {
+  const tag = `["${sym}","${exch}"]`;
+  const blocks = html.split("AF_initDataCallback(").slice(1).map((b) => b.slice(0, b.indexOf("</script>")));
+  let daily: MarketPoint[] = [];
+  // [year, month, day, hour, minute|null, …, [utc offset]] then [value, …]
+  const pt = /\[\[(\d{4}),(\d{1,2}),(\d{1,2}),(?:\d{1,2}|null),(?:\d{1,2}|null),(?:\d{1,2}|null),(?:\d{1,2}|null),\[-?\d+\]\],\[(-?\d+(?:\.\d+)?(?:E-?\d+)?),/g;
+  for (const b of blocks) {
+    if (!b.includes(tag)) continue;
+    const byDate = new Map<string, number>();
+    for (const m of b.matchAll(pt)) byDate.set(`${m[1]}-${m[2].padStart(2, "0")}-${m[3].padStart(2, "0")}`, Number(m[4]));
+    if (byDate.size >= 10 && byDate.size > daily.length) daily = [...byDate].map(([date, value]) => ({ date, value }));
+  }
+  // The live quote: [price, change, change%] right after the symbol and its name, then the
+  // quote's epoch time and the exchange's UTC offset in seconds.
+  const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const live = html.match(new RegExp(`\\["${esc(sym)}","${esc(exch)}"\\],"[^"]*",\\d+,null,\\[(-?[\\d.]+),[\\s\\S]{0,200}?\\[(\\d{10})\\],"[^"]+",(-?\\d+)`));
+  if (live) {
+    const value = Number(live[1]);
+    const date = new Date((Number(live[2]) + Number(live[3])) * 1000).toISOString().slice(0, 10);
+    if (Number.isFinite(value) && value > 0) {
+      daily = daily.filter((p) => p.date !== date);
+      daily.push({ date, value });
+    }
+  }
+  return daily.sort((a, b) => a.date.localeCompare(b.date));
+}
+
+const GOOGLE: { id: string; name: string; sym: string; exch: string }[] = [
+  { id: "sensex", name: "Sensex", sym: "SENSEX", exch: "INDEXBOM" },
+  { id: "sp500", name: "S&P 500", sym: ".INX", exch: "INDEXSP" },
+  { id: "nasdaq", name: "Nasdaq", sym: ".IXIC", exch: "INDEXNASDAQ" },
+];
+
+async function googleFinance(): Promise<MarketQuote[]> {
+  const out = await mapLimit(GOOGLE, 2, async (g) => {
+    const r = await fetchText(`https://www.google.com/finance/quote/${g.sym}:${g.exch}?hl=en`, { timeoutMs: 30_000, maxBytes: 4_000_000 });
+    if (!r.ok) {
+      log(`markets: google finance ${g.id} ${r.status}`);
+      return undefined;
+    }
+    return quoteFrom({ id: g.id, name: g.name, unit: "", decimals: 2, source: "Google Finance" }, parseGoogleFinance(r.text, g.sym, g.exch));
+  });
+  return out.filter((q): q is MarketQuote => !!q);
 }
 
 // ───────────── ECB (Frankfurter) ─────────────
@@ -114,7 +167,7 @@ async function usdInr(): Promise<MarketQuote | undefined> {
   const hist = Object.entries(j.rates)
     .filter(([, v]) => typeof v.INR === "number")
     .map(([date, v]) => ({ date, value: v.INR! }));
-  return quoteFrom({ id: "usdinr", name: "US dollar", unit: "₹", decimals: 2, source: "European Central Bank" }, hist);
+  return quoteFrom({ id: "usdinr", name: "USD/INR", unit: "₹", decimals: 2, source: "European Central Bank" }, hist);
 }
 
 // ───────────── IBJA ─────────────
@@ -177,13 +230,16 @@ export async function marketsPanel(dataDir: string): Promise<MarketsPanel | unde
       return undefined;
     }
   };
-  const [n, fx, metals, btc] = await Promise.all([
+  const [gf, n, fx, metals, btc] = await Promise.all([
+    safe("google finance", googleFinance()),
     safe("nse", nse(dataDir)),
     safe("usdinr", usdInr()),
     safe("ibja", ibja()),
     safe("bitcoin", bitcoin()),
   ]);
-  const quotes = [...(n ?? []), fx, ...(metals ?? []), btc].filter((q): q is MarketQuote => !!q);
+  const byId = new Map([...(gf ?? []), ...(n ?? []), fx, ...(metals ?? []), btc].filter((q): q is MarketQuote => !!q).map((q) => [q.id, q]));
+  // Board order: India, then the US, then money and metals, then crypto.
+  const quotes = ["sensex", "nifty50", "sp500", "nasdaq", "usdinr", "gold", "silver", "bitcoin"].flatMap((id) => (byId.has(id) ? [byId.get(id)!] : []));
   if (quotes.length === 0) return undefined;
   return { fetchedAt: new Date().toISOString(), quotes };
 }

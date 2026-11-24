@@ -90,3 +90,28 @@ test("panel schema drops bad rows and unsafe links instead of failing", () => {
   assert.equal(p.tech?.repos[0].name, "c/d");
   assert.equal(p.markets, undefined);
 });
+
+test("Google Finance pages yield the live value plus daily closes", async () => {
+  const { parseGoogleFinance } = await import("../pipeline/panels/markets.ts");
+  const html =
+    `<script>AF_initDataCallback({key: 'ds:2', data:[[[["/m/x",["SENSEX","INDEXBOM"],"BSE SENSEX",1,null,[82435.99,-1483.7,-1.77,2,2,2],null,83919.71,null,null,null,[1795428146],"Asia/Calcutta",19800]]]]});</script>` +
+    `<script>AF_initDataCallback({key: 'ds:11', data:[[[["SENSEX","INDEXBOM"],null,[[[1],[` +
+    Array.from({ length: 12 }, (_, i) => `[[2026,11,${i + 1},16,null,null,null,[19800]],[${80000 + i},0,0]]`).join(",") +
+    `]]]]]]});</script>`;
+  const h = parseGoogleFinance(html, "SENSEX", "INDEXBOM");
+  assert.equal(h.length, 13);
+  assert.deepEqual(h.at(-1), { date: "2026-11-23", value: 82435.99 });
+  assert.deepEqual(h[0], { date: "2026-11-01", value: 80000 });
+});
+
+test("Wikipedia film tables carry month and day down the rows and skip red links", async () => {
+  const { parseWikiFilms } = await import("../pipeline/panels/culture.ts");
+  const html = `<table class="wikitable"><tr><th>Opening</th><th>Title</th></tr>
+<tr><td rowspan="3"><b>N<br />O<br />V</b></td><td rowspan="2"><b>20</b></td><td><i><a href="/wiki/Pratap" title="Pratap">Pratap</a></i></td></tr>
+<tr><td><i><a href="/w/index.php?title=Nobody&amp;action=edit&amp;redlink=1" class="new">Nobody</a></i></td></tr>
+<tr><td><b>27</b></td><td><i><a href="/wiki/Gunmaaster_G9">Gunmaaster G9</a></i></td></tr></table>`;
+  assert.deepEqual(parseWikiFilms(html, 2026, "Hindi"), [
+    { title: "Pratap", date: "2026-11-20", url: "https://en.wikipedia.org/wiki/Pratap", language: "Hindi" },
+    { title: "Gunmaaster G9", date: "2026-11-27", url: "https://en.wikipedia.org/wiki/Gunmaaster_G9", language: "Hindi" },
+  ]);
+});

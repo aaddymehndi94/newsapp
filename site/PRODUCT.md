@@ -50,7 +50,7 @@ edition, which is the point.
 ## Operating Context
 
 - One edition a day at 05:00 IST (owner's choice, 2026-11-24, to keep costs down). Times are shown in IST.
-- Sections: India, World, Bengaluru, Weather (city forecasts, air quality, satellite view), Business, Markets (Nifty, Bank Nifty, rupee, gold, silver, bitcoin with month charts), AI & Software (news plus new GitHub repos, trending Hugging Face models, Show HN launches), Science & Tech, Health & Environment, Entertainment (Page 3: films, music, fashion, celebrity news, Apple Music charts), Sports.
+- Sections: India, World, Bengaluru, Weather (city forecasts, air quality, satellite view), Business, Markets (Sensex, Nifty 50, S&P 500, Nasdaq, USD/INR, gold, silver, bitcoin with month charts), AI & Software (news plus new GitHub repos, trending Hugging Face models, Show HN launches), Science & Tech, Health & Environment, Entertainment (Page 3: films, music, fashion, celebrity news, Apple Music charts, new and upcoming films), Sports.
 - Static pages; browser back restores scroll position natively.
 - Pictures are hotlinked from the originating outlet (og:image) or Wikimedia Commons, always
   credited and linked; when none is usable a typographic card stands in.
