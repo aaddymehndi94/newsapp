@@ -12,6 +12,8 @@ import { CostMeter, type JsonResult, callJson, runBatch } from "./llm.ts";
 import { findAiTells } from "./style.ts";
 import { type ImageCandidate, type StoryImage, chooseOutletImage, wikimediaImage } from "./images.ts";
 import { type VideoItem, gatherVideos } from "./videos.ts";
+import { gatherPanels } from "./panels/index.ts";
+import type { Panels } from "../site/types.ts";
 import { istParts, loadDotEnv, log, mapLimit, readJson, slugify, writeJson } from "./util.ts";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
@@ -27,7 +29,7 @@ const opt = (name: string) => {
 };
 const now = new Date();
 const ist = istParts(now);
-// Scheduled runs start ~90 min before the 05:00 / 17:00 edition time (03:30 → am, 15:30 → pm).
+// One edition a day (05:00 IST); the scheduled run starts ~90 min before. "pm" still works by hand.
 const slot = (opt("slot") as "am" | "pm" | undefined) ?? (ist.hour < 14 ? "am" : "pm");
 const date = opt("date") ?? ist.date;
 if (slot !== "am" && slot !== "pm") throw new Error(`--slot must be am or pm, got ${slot}`);
@@ -188,7 +190,8 @@ async function main() {
   let results: Map<string, JsonResult<WrittenStory>>;
   if (useBatch) {
     results = await runBatch<WrittenStory>(reqs, meter, {
-      deadline: new Date(publishAt.getTime() - 15 * 60e3),
+      // Re-running a past edition: give the batch an hour rather than an already-passed deadline.
+      deadline: new Date(Math.max(publishAt.getTime() - 15 * 60e3, Date.now() + 60 * 60e3)),
       stateFile: path.join(WORK, "batch-writer.json"),
     });
   } else {
@@ -244,7 +247,14 @@ async function main() {
   });
   writeJson(imagesFile, Object.fromEntries(images));
 
-  // 7. Assemble edition
+  // 7. Data panels (weather, markets, AI & software lists, charts)
+  let panels = cached<Panels>("panels.json");
+  if (!panels) {
+    panels = await gatherPanels({ meter, marketsDir: path.join(ROOT, "data/markets") });
+    writeJson(path.join(WORK, "panels.json"), panels);
+  }
+
+  // 8. Assemble edition
   const usedSlugs = new Set<string>();
   const stories = picks
     .filter((p) => written.has(p.key))
@@ -291,7 +301,7 @@ async function main() {
     id: sid,
     name: SECTION_NAMES[sid],
     storyIds: stories.filter((s) => s.section === sid && !s.lead).sort((a, b) => a.rank - b.rank).map((s) => s.id),
-  })).filter((s) => s.storyIds.length > 0);
+  })).filter((s) => s.storyIds.length > 0 || (s.id === "weather" && panels.weather) || (s.id === "ai-software" && panels.tech) || (s.id === "entertainment" && panels.culture));
 
   const edition = {
     id: editionId,
@@ -301,6 +311,7 @@ async function main() {
     lead,
     sections,
     stories: stories.map(({ key: _k, lead: _l, ...rest }) => rest),
+    panels,
     stats: {
       feedsScanned: gathered.stats.feedsOk,
       itemsSeen: gathered.stats.itemsSeen,
@@ -313,7 +324,7 @@ async function main() {
   writeJson(path.join(WORK, "cost.json"), { total: meter.total, byModel: meter.byModel, calls: meter.calls });
   log(`edition written: ${stories.length} stories, ${stories.filter((s) => s.image).length} with pictures, ${stories.filter((s) => s.video).length} with video. Cost $${meter.total.toFixed(3)}`);
 
-  // 8. Build + deploy
+  // 9. Build + deploy
   if (!build) return;
   execFileSync(process.execPath, ["site/build.ts", "--data", "data/editions", "--out", "dist"], { stdio: "inherit" });
   if (deploy) {

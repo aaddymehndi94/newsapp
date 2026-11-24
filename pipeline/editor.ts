@@ -2,16 +2,30 @@ import type { FeedItem } from "./feeds.ts";
 import type { VideoItem } from "./videos.ts";
 import { EDITOR_MODEL, type CostMeter, type JsonRequest, type JsonResult, callJson, runBatch } from "./llm.ts";
 
-export const SECTION_IDS = ["india", "world", "bengaluru", "business", "science-tech", "health-environment", "sports"] as const;
+export const SECTION_IDS = [
+  "india",
+  "world",
+  "bengaluru",
+  "weather",
+  "business",
+  "ai-software",
+  "science-tech",
+  "health-environment",
+  "entertainment",
+  "sports",
+] as const;
 export type SectionId = (typeof SECTION_IDS)[number];
 
 export const SECTION_NAMES: Record<SectionId, string> = {
   india: "India",
   world: "World",
   bengaluru: "Bengaluru",
+  weather: "Weather",
   business: "Business",
+  "ai-software": "AI & Software",
   "science-tech": "Science & Tech",
   "health-environment": "Health & Environment",
+  entertainment: "Entertainment",
   sports: "Sports",
 };
 
@@ -19,9 +33,12 @@ export const QUOTAS: Record<SectionId, number> = {
   india: 9,
   world: 9,
   bengaluru: 3,
+  weather: 2,
   business: 5,
-  "science-tech": 5,
+  "ai-software": 5,
+  "science-tech": 4,
   "health-environment": 3,
+  entertainment: 6,
   sports: 4,
 };
 
@@ -68,20 +85,23 @@ const SLATE_SCHEMA = {
   },
 };
 
-const EDITOR_SYSTEM = `You are the editor-in-chief of Meridian, a non-partisan news site. Its reader lives in Bengaluru, India, and wants one calm, complete, balanced picture of the news twice a day instead of reading six or seven sites. You choose which stories go into this edition. Writers will then produce each story from the source items you assign.
+const EDITOR_SYSTEM = `You are the editor-in-chief of Meridian, a non-partisan news site. Its reader lives in Bengaluru, India, and wants one calm, complete, balanced picture of the news each morning instead of reading six or seven sites. You choose which stories go into this edition. Writers will then produce each story from the source items you assign.
 
 How to choose
 - Group items that report the same event or development. One story = one event.
-- Judge importance the way a serious national newspaper would: consequences for many people, significance for India and the world, genuinely new developments. Prefer hard news. Skip celebrity gossip, entertainment fluff, horoscopes, shopping deals, product promotions, listicles, explainers with no news peg, opinion columns, sponsored posts, "how to watch" pieces, and trivial viral stories.
+- Judge importance the way a serious national newspaper would: consequences for many people, significance for India and the world, genuinely new developments. Prefer hard news in every section except entertainment. Everywhere, skip horoscopes, shopping deals, product promotions, listicles, explainers with no news peg, opinion columns, sponsored posts, "how to watch" pieces, and trivial viral stories. Outside the entertainment section, also skip celebrity gossip and entertainment fluff.
 - Fill the sections close to these targets (±1 if the day's news clearly calls for it): ${Object.entries(QUOTAS)
   .map(([k, v]) => `${k} ${v}`)
   .join(", ")}.
   * india: national politics, government and courts, security, states, society, infrastructure.
   * world: international news, including events abroad that involve India.
-  * bengaluru: the city and Karnataka — civic issues, transport, water, weather, local government, the city's tech and startup scene. Avoid minor crime items unless they matter to the city.
+  * bengaluru: the city and Karnataka — civic issues, transport, water, local government, the city's tech and startup scene. Avoid minor crime items unless they matter to the city.
+  * weather: real weather news — IMD warnings, monsoon, cyclones, heat and cold waves, fog, floods and heavy rain in India (Bengaluru's weather included), and major storms, floods or heatwaves abroad. Skip routine "weather today" filler; fewer stories (even none) is fine when nothing notable is happening. A page of forecasts already sits in this section.
   * business: economy, markets, companies, jobs, trade — India first, plus major global business news.
-  * science-tech: research, space, technology and AI developments with substance (not gadget deals).
+  * ai-software: AI models and labs, AI policy, safety and lawsuits, major software releases, developer tools and open source, big tech's AI moves, and India's AI and software industry. Pick what someone who wants to keep up with AI and software should know today; explain-the-trend pieces only with a news peg.
+  * science-tech: research, space, gadgets and consumer technology, telecom and the internet (AI and software stories go to ai-software).
   * health-environment: public health, medicine, climate, pollution, wildlife, disasters' environmental side.
+  * entertainment: the paper's Page 3 — Bollywood, Hollywood and South Indian cinema (including Kannada), OTT and TV, music (new albums and songs, charts, tours), awards (Oscars, Emmys, Grammys, Filmfare and others), fashion, and the celebrity news people are talking about. Fun is welcome here. Mix Indian and international. Skip anything cruel, invasive or sexualised about people's private lives, rumours that no outlet stands behind, and paid promotions.
   * sports: results and major developments; cricket plus at least one other sport (football, tennis, chess, F1, hockey, badminton, athletics…). Results over previews.
 - Balance: across the edition, Indian politics must not be one-sided — cover government actions and decisions, opposition activity and criticism, and courts on their merits. Keep the world section global (not only US/UK); include Asia, the Middle East, Africa, Latin America and Europe when there is real news.
 - Lead: mark exactly 4 stories as lead — the most important overall, normally a mix of India and world. Rank all stories 1..N by importance across the whole edition.

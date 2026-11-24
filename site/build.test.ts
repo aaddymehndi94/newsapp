@@ -165,3 +165,24 @@ describe("pictures and places", () => {
     assert.equal(placeName("Port-au-Prince"), "Port-au-Prince");
   });
 });
+
+it("renders data panels in their own sections, even with no stories there", async () => {
+  const { frontLayout, renderFront } = await import("./templates/front.ts");
+  const { parseEdition } = await import("./schema.ts");
+  const raw = JSON.parse(await readFile(path.join(path.dirname(fileURLToPath(import.meta.url)), "fixtures/2026-11-24-am.json"), "utf8"));
+  raw.panels = {
+    markets: {
+      fetchedAt: "2026-11-24T02:00:00Z",
+      quotes: [{ id: "nifty50", name: "Nifty 50", unit: "", decimals: 2, value: 25349.65, change: -450.95, changePct: -1.75, asOf: "2026-11-23", history: [{ date: "2026-11-20", value: 25800.6 }, { date: "2026-11-21", value: 25700 }, { date: "2026-11-23", value: 25349.65 }], source: "NSE" }],
+    },
+  };
+  const ed = parseEdition(raw, "t").edition!;
+  const ids = frontLayout(ed).sections.map((s) => s.id);
+  assert.ok(ids.includes("markets"), ids.join(","));
+  if (ids.includes("business")) assert.ok(ids.indexOf("markets") > ids.indexOf("business"));
+  const html = renderFront(ed, { editions: [ed], latest: ed, sample: true, css: "/a.css", js: "/a.js", fontPreloads: [] });
+  assert.match(html, /id="markets"/);
+  assert.match(html, /25,349\.65/);
+  assert.match(html, /\u2212450\.95/);
+  assert.match(html, /data-jump="markets"/);
+});

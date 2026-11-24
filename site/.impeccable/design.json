@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-24T12:00:00+05:30",
+  "title": "Design System: Meridian",
+  "extensions": {
+    "colorMeta": {
+      "accent": { "role": "primary", "displayName": "News Crimson", "canonical": "#c4122f", "tonalRamp": ["#3a0810", "#5e0c19", "#8a1023", "#c4122f", "#e0414f", "#f25a66", "#f7a3aa", "#fce4e6"] },
+      "accent-night": { "role": "primary", "displayName": "News Crimson (night text)", "canonical": "#f25a66", "tonalRamp": ["#3a0810", "#5e0c19", "#8a1023", "#c4122f", "#e0414f", "#f25a66", "#f7a3aa", "#fce4e6"] },
+      "accent-fill": { "role": "primary", "displayName": "Crimson Fill", "canonical": "#c4122f" },
+      "accent-fill-night": { "role": "primary", "displayName": "Crimson Fill (night)", "canonical": "#d0283a" },
+      "on-accent": { "role": "neutral", "displayName": "White on Fill", "canonical": "#ffffff" },
+      "ground": { "role": "neutral", "displayName": "Day Ground", "canonical": "#ffffff", "tonalRamp": ["#111111", "#262626", "#3d3d3d", "#656565", "#9d9d9d", "#c6c6c6", "#e9e9e9", "#ffffff"] },
+      "surface": { "role": "neutral", "displayName": "Surface", "canonical": "#f4f4f4" },
+      "surface-2": { "role": "neutral", "displayName": "Picture Ground", "canonical": "#e9e9e9" },
+      "chip": { "role": "neutral", "displayName": "Chip", "canonical": "#efefef" },
+      "chip-hover": { "role": "neutral", "displayName": "Chip Hover", "canonical": "#e4e4e4" },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#121212" },
+      "ink-2": { "role": "neutral", "displayName": "Ink 2 (summaries, read marks)", "canonical": "#3d3d3d" },
+      "ink-3": { "role": "neutral", "displayName": "Ink 3 (meta)", "canonical": "#656565" },
+      "rule": { "role": "neutral", "displayName": "Hairline", "canonical": "#e3e3e3" },
+      "rule-strong": { "role": "neutral", "displayName": "Strong Hairline", "canonical": "#c6c6c6" },
+      "ground-night": { "role": "neutral", "displayName": "Night Ground", "canonical": "#111111", "tonalRamp": ["#111111", "#1b1b1b", "#262626", "#2e2e2e", "#474747", "#9d9d9d", "#cbcbcb", "#f3f3f3"] },
+      "surface-night": { "role": "neutral", "displayName": "Surface (night)", "canonical": "#1b1b1b" },
+      "surface-2-night": { "role": "neutral", "displayName": "Picture Ground (night)", "canonical": "#262626" },
+      "chip-night": { "role": "neutral", "displayName": "Chip (night)", "canonical": "#222222" },
+      "chip-hover-night": { "role": "neutral", "displayName": "Chip Hover (night)", "canonical": "#2e2e2e" },
+      "ink-night": { "role": "neutral", "displayName": "Ink (night)", "canonical": "#f3f3f3" },
+      "ink-2-night": { "role": "neutral", "displayName": "Ink 2 (night)", "canonical": "#cbcbcb" },
+      "ink-3-night": { "role": "neutral", "displayName": "Ink 3 (night)", "canonical": "#9d9d9d" },
+      "rule-night": { "role": "neutral", "displayName": "Hairline (night)", "canonical": "#2a2a2a" },
+      "rule-strong-night": { "role": "neutral", "displayName": "Strong Hairline (night)", "canonical": "#474747" }
+    },
+    "typographyMeta": {
+      "wordmark": { "displayName": "Wordmark", "purpose": "\"Meridian\" in the masthead (34px phone, 44px from 600px) and the slim top bar (24px)." },
+      "headline-story": { "displayName": "Story Headline", "purpose": "Article H1; 30 / 38 / 44px at phone / 600 / 1024." },
+      "headline-lead": { "displayName": "Lead Headline", "purpose": "Edition lead card; 28 / 34 / 40px." },
+      "headline-feature": { "displayName": "Feature Headline", "purpose": "First card of each section; 23 / 26px." },
+      "headline-row": { "displayName": "Row Headline", "purpose": "Every row card; 18 / 19px." },
+      "body-article": { "displayName": "Article Body", "purpose": "Running text in a 720px column; 18.5 / 19px." },
+      "dek": { "displayName": "Dek", "purpose": "Standfirst under the article headline, ink-2." },
+      "summary": { "displayName": "Summary", "purpose": "Card summaries, ink-2; clamped to 4 lines in rows." },
+      "section-title": { "displayName": "Section Title", "purpose": "Front-page section heads under a 2px ink rule." },
+      "box-title": { "displayName": "Box Title", "purpose": "Key facts, framing, Background, Why it matters, Sources, Keep reading." },
+      "tab": { "displayName": "Tab", "purpose": "Section pills." },
+      "ui": { "displayName": "UI", "purpose": "Body default for chrome strings." },
+      "meta": { "displayName": "Meta", "purpose": "Section label, Developing, outlets, read time, read marks; ink-3." }
+    },
+    "shadows": [
+      { "name": "float", "value": "0 1px 2px rgb(0 0 0 / 0.08), 0 4px 12px rgb(0 0 0 / 0.08)", "purpose": "Tab-bar scroll arrows only (day)." },
+      { "name": "float-night", "value": "0 1px 2px rgb(0 0 0 / 0.5), 0 6px 16px rgb(0 0 0 / 0.45)", "purpose": "Tab-bar scroll arrows only (night)." }
+    ],
+    "motion": [
+      { "name": "state", "value": "0.16s ease-out", "purpose": "Hover fills on buttons, back link, icon buttons." },
+      { "name": "tab", "value": "0.18s ease-out", "purpose": "Tab fill/colour, edge fades and arrows." },
+      { "name": "page", "value": "0.18s", "purpose": "Cross-document root view transition." },
+      { "name": "hero", "value": "0.34s cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Card picture morphing into the article hero." },
+      { "name": "reduced", "value": "none", "purpose": "prefers-reduced-motion disables view transitions and all animation." }
+    ],
+    "breakpoints": [
+      { "name": "tablet", "value": "600px" },
+      { "name": "desktop", "value": "1024px" },
+      { "name": "wide", "value": "1240px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Section Tab",
+      "kind": "nav",
+      "refersTo": "tab",
+      "description": "Sticky, scrollable pill tabs; the active one is crimson fill with white text.",
+      "html": "<nav class=\"ds-tabs\"><a class=\"ds-tab is-active\" href=\"#\">Top stories</a><a class=\"ds-tab\" href=\"#\">India</a><a class=\"ds-tab\" href=\"#\">World</a><a class=\"ds-tab\" href=\"#\">Business</a></nav>",
+      "css": ".ds-tabs { display: flex; gap: 8px; padding: 10px 0; overflow-x: auto; background: var(--bg, #fff); border-bottom: 1px solid var(--rule, #e3e3e3); } .ds-tab { flex: none; display: inline-flex; align-items: center; height: 36px; padding: 0 16px; border-radius: 999px; background: var(--chip, #efefef); color: var(--ink, #121212); font: 600 0.90625rem/1 \"Schibsted Grotesk\", system-ui, sans-serif; white-space: nowrap; text-decoration: none; transition: background-color 0.18s ease-out, color 0.18s ease-out; } .ds-tab:hover { background: var(--chip-hover, #e4e4e4); } .ds-tab:focus-visible { outline: 2px solid var(--focus, #c4122f); outline-offset: 2px; } .ds-tab.is-active { background: var(--accent-fill, #c4122f); color: #fff; }"
+    },
+    {
+      "name": "Pill Button",
+      "kind": "button",
+      "refersTo": "button-pill",
+      "description": "Outlined pill for navigation such as colophon links and 404 links.",
+      "html": "<a class=\"ds-btn\" href=\"#\">All editions</a>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 18px; border: 1px solid var(--rule-strong, #c6c6c6); border-radius: 999px; color: var(--ink, #121212); font: 600 0.9375rem/1.2 \"Schibsted Grotesk\", system-ui, sans-serif; text-decoration: none; transition: background-color 0.16s ease-out; } .ds-btn:hover { background: var(--chip, #efefef); } .ds-btn:focus-visible { outline: 2px solid var(--focus, #c4122f); outline-offset: 2px; }"
+    },
+    {
+      "name": "Icon Button",
+      "kind": "button",
+      "refersTo": "icon-button",
+      "description": "40px outlined circle; the theme toggle.",
+      "html": "<button class=\"ds-icon-btn\" type=\"button\" aria-label=\"Switch theme\"><svg viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" aria-hidden=\"true\"><circle cx=\"10\" cy=\"10\" r=\"7.25\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\"/><path d=\"M10 2.75a7.25 7.25 0 0 1 0 14.5z\" fill=\"currentColor\"/></svg></button>",
+      "css": ".ds-icon-btn { display: inline-grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 1px solid var(--rule-strong, #c6c6c6); border-radius: 50%; background: var(--bg, #fff); color: var(--ink, #121212); cursor: pointer; transition: background-color 0.16s ease-out; } .ds-icon-btn:hover { background: var(--chip, #efefef); } .ds-icon-btn:focus-visible { outline: 2px solid var(--focus, #c4122f); outline-offset: 2px; }"
+    },
+    {
+      "name": "Row Card",
+      "kind": "card",
+      "refersTo": "thumbnail",
+      "description": "Headline beside a 4:3 thumbnail, summary clamped to 4 lines, then meta with a Read tick.",
+      "html": "<article class=\"ds-row\"><h3 class=\"ds-row-hl\"><a href=\"#\">Zelenskyy says Ukrainian drones sank Russian corvette at Benghazi base</a></h3><div class=\"ds-row-pic\"></div><p class=\"ds-row-sum\">President Volodymyr Zelenskyy said Ukrainian naval drones sank the Russian corvette and hit a cargo ship off Benghazi on Sunday. Libya's eastern government has asked for an explanation.</p><p class=\"ds-meta\"><span class=\"ds-read\"><svg viewBox=\"0 0 14 14\" width=\"13\" height=\"13\" aria-hidden=\"true\"><circle cx=\"7\" cy=\"7\" r=\"7\" fill=\"currentColor\"/><path d=\"m3.9 7.2 2.1 2.1 4.1-4.4\" fill=\"none\" stroke=\"#fff\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>Read</span><span class=\"ds-sec\">World</span><span>6 outlets</span><span>2 min read</span></p></article>",
+      "css": ".ds-row { display: grid; grid-template-columns: minmax(0, 1fr) clamp(100px, 28%, 150px); grid-template-areas: \"hl pic\" \"sum sum\" \"meta meta\"; column-gap: 14px; padding: 16px 0; border-top: 1px solid var(--rule, #e3e3e3); } .ds-row-hl { grid-area: hl; margin: 0; font: 700 1.125rem/1.25 \"Source Serif 4\", Georgia, serif; color: var(--ink, #121212); } .ds-row-hl a { color: inherit; text-decoration: none; } .ds-row:hover .ds-row-hl a { text-decoration: underline; text-decoration-thickness: 1px; } .ds-row-pic { grid-area: pic; aspect-ratio: 4 / 3; border-radius: 8px; background: var(--surface-2, #e9e9e9); } .ds-row-sum { grid-area: sum; margin: 10px 0 0; font: 400 1.03125rem/1.5 \"Source Serif 4\", Georgia, serif; color: var(--ink-2, #3d3d3d); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; } .ds-meta { grid-area: meta; display: flex; flex-wrap: wrap; align-items: center; margin: 10px 0 0 -15px; clip-path: inset(-6px -6px -6px 15px); font: 400 0.8125rem/1.4 \"Schibsted Grotesk\", system-ui, sans-serif; color: var(--ink-3, #656565); } .ds-meta > *::before { content: \"\\00B7\"; display: inline-block; width: 15px; text-align: center; } .ds-sec { color: var(--accent, #c4122f); font-weight: 700; } .ds-read { display: inline-flex; align-items: center; color: var(--ink-2, #3d3d3d); font-weight: 600; } .ds-read svg { margin-right: 4px; }"
+    },
+    {
+      "name": "Key Facts",
+      "kind": "card",
+      "refersTo": "key-facts",
+      "description": "Surface box with a Grotesk title and crimson-dot serif bullets.",
+      "html": "<aside class=\"ds-kf\"><h2 class=\"ds-kf-title\">Key facts</h2><ul><li>The board reinstated the chief executive 11 days after he resigned.</li><li>Shares rose on the news.</li></ul></aside>",
+      "css": ".ds-kf { padding: 18px 20px; background: var(--surface, #f4f4f4); border-radius: 12px; } .ds-kf-title { margin: 0; font: 800 1.1875rem/1.25 \"Schibsted Grotesk\", system-ui, sans-serif; color: var(--ink, #121212); } .ds-kf ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 9px; } .ds-kf li { position: relative; padding-left: 18px; font: 400 1.03125rem/1.45 \"Source Serif 4\", Georgia, serif; } .ds-kf li::before { content: \"\"; position: absolute; left: 2px; top: 0.6em; width: 7px; height: 7px; border-radius: 50%; background: var(--accent, #c4122f); }"
+    },
+    {
+      "name": "Section Head",
+      "kind": "custom",
+      "description": "2px ink rule, Grotesk 800 title left, story count right.",
+      "html": "<header class=\"ds-sec-head\"><h2>India</h2><p>7 stories</p></header>",
+      "css": ".ds-sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-top: 12px; border-top: 2px solid var(--ink, #121212); } .ds-sec-head h2 { margin: 0; font: 800 1.3125rem/1.2 \"Schibsted Grotesk\", system-ui, sans-serif; letter-spacing: -0.01em; } .ds-sec-head p { margin: 0; font: 400 0.8125rem/1.4 \"Schibsted Grotesk\", system-ui, sans-serif; color: var(--ink-3, #656565); }"
+    },
+    {
+      "name": "Latest Badge",
+      "kind": "chip",
+      "refersTo": "latest-badge",
+      "description": "Crimson-fill pill with white caps text on the newest archive edition.",
+      "html": "<span class=\"ds-latest\">Latest</span>",
+      "css": ".ds-latest { display: inline-block; padding: 2px 8px; border-radius: 999px; background: var(--accent-fill, #c4122f); color: #fff; font: 700 0.6875rem/1.4 \"Schibsted Grotesk\", system-ui, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Straight Edition",
+    "overview": "Meridian looks like the news apps its reader already trusts (BBC News, the NYT app, The Hindu app) and does not try to be cleverer than them. Bold serif headlines sit inside a clean, modern app layout: a white day ground or a near-black night ground, neutral greys with no tint, black and white ink, and one crimson accent. Each edition is finite, read from top to bottom, and ends with \"You're all caught up\".\n\nThe density is a news app's density: every headline gets a picture and a 3–4 line summary. Hairlines separate the stories, and a heavy 2px ink rule opens each section. Nothing is decorative unless it helps the reader find their way. The editorial voice comes from the serif and from restraint, never from ornament. The replaced \"survey sheet\" world (neatline, legend tints, grey-blue night) is gone and none of its apparatus comes back.\n\nOn a phone the page is one column with a full-bleed lead photo. On desktop it becomes a 7:5 lead-and-rows split, with the same components throughout.",
+    "keyCharacteristics": [
+      "Two grounds with real contrast: pure white, and near-black (#111) with neutral greys.",
+      "One crimson accent, used only in its listed roles.",
+      "Source Serif 4 bold for headlines and reading text. Schibsted Grotesk for every UI string.",
+      "Solid pill tabs, hairline rows, softly rounded photos.",
+      "Photos are shown at their own shape. The large ones are never cropped to a house ratio.",
+      "Read state is a drawn tick. A card is never dimmed."
+    ],
+    "rules": [
+      { "name": "The One Crimson Rule", "body": "The accent appears only in its listed roles: the section label in meta, Developing, links in running text, key-fact bullets, the active tab, the Latest badge, and focus, caret and selection. It never appears on headlines, rules, backgrounds or icons beyond these.", "section": "colors" },
+      { "name": "The White-On-Fill Rule", "body": "White text sits only on accent-fill, never on the text accent. At night the text accent is too light to carry white.", "section": "colors" },
+      { "name": "The No-Tint Rule", "body": "The greys are true neutrals (R = G = B). The night ground is #111, not a blue-grey. Sections are not colour-coded. Left and right politics are never coloured: the leaning scale is ink on rule-strong.", "section": "colors" },
+      { "name": "The Serif Speaks, Sans Serves Rule", "body": "Headlines and anything you read as prose are serif. Every control, label and count is Grotesk. Neither family crosses over.", "section": "typography" },
+      { "name": "The No-Kicker Rule", "body": "Nothing sits above a headline. The section label lives in the meta line under the summary on cards, and first in the meta line on articles.", "section": "typography" },
+      { "name": "The Own-Shape Rule", "body": "Large pictures (lead, feature, article hero) take the aspect-ratio class nearest the photo's own shape: 4:3, 3:2, 16:9 or 2:1. Portrait and square photos use 4:3, and photos of unknown size use 16:9. A share image with a masthead burned in is shown whole. Only thumbnails are a fixed 4:3 crop.", "section": "layout" },
+      { "name": "The Flat Card Rule", "body": "Story cards are never raised, boxed or filled. A hairline separates them and the photo carries the weight.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do put every headline with a picture: a thumbnail for rows, or a ratio-matched photo for the lead and features.",
+      "Do choose large-picture ratios with `ratioClass()` (r43 / r32 / r169 / r21), so photos keep their own shape.",
+      "Do keep the accent in its listed roles, and put white text only on accent-fill.",
+      "Do separate stories with 1px rule hairlines, and open sections with a 2px ink rule.",
+      "Do use the leading-dot plus clip-path meta list. Every item carries its own `::before` dot.",
+      "Do choose the desktop section grid so that no card is orphaned: 3 or 4 rows beside the feature, then 3 or 2 columns.",
+      "Do keep every control a pill or circle at a 36–44px tap height."
+    ],
+    "donts": [
+      "Don't add eyebrows or kickers above headlines.",
+      "Don't colour left/right politics, or colour-code sections.",
+      "Don't dim, grey or desaturate read cards. Read state is the tick.",
+      "Don't add inline `style=\"\"` attributes (the CSP forbids them).",
+      "Don't use the crimson outside its listed roles: not on headlines, rules, backgrounds or decorative icons.",
+      "Don't tint the greys or move the night ground toward blue-grey.",
+      "Don't crop large pictures to a house ratio.",
+      "Don't bring back neatlines, legend keys or other ornament that does not help the reader find their way."
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 # Meridian
 
-A calm, balanced, ad-free news site. Twice a day (05:00 and 17:00 IST) it reads ~80 news feeds
+A calm, balanced, ad-free news site. Every morning (05:00 IST) it reads ~80 news feeds
 from across the political spectrum, has **Claude Opus 5.5** pick a balanced slate of ~40 stories,
 has **Claude Sonnet 5.5** write each one from several outlets' reporting, adds a credited picture
 (and a news-channel video where one exists), and publishes a static site to Cloudflare.

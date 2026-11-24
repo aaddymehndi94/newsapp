@@ -23,7 +23,7 @@ Served as Cloudflare Workers static assets on a workers.dev URL, `noindex` until
 
 One primary reader for now: the owner, living in Bengaluru, who today reads 6–7 news sites a day
 (Reuters, BBC, The Hindu, Indian Express …) to assemble an unbiased picture. Reads mostly on a
-phone, also on a desktop. Reads twice a day, matching the 05:00 and 17:00 IST editions — early
+phone, also on a desktop. Reads once a day, matching the 05:00 IST edition — early
 morning and evening.
 
 Their job: get through the day's headlines quickly, see a picture and a little extra for each,
@@ -32,7 +32,7 @@ were on the front page to keep going.
 
 ## Product Purpose
 
-Meridian replaces the 6–7-site routine with one calm, ad-free edition published twice a day. A
+Meridian replaces the 6–7-site routine with one calm, ad-free edition published every morning. A
 pipeline reads reporting from outlets across the political spectrum, an AI editor clusters and
 picks a balanced slate (~35–40 stories across India, World, Business, Science & Tech, Sports,
 Health & Environment, Bengaluru), and an AI writer produces neutral, wire-style articles with key
@@ -49,7 +49,8 @@ edition, which is the point.
 
 ## Operating Context
 
-- Two editions a day: morning (05:00 IST) and evening (17:00 IST). Times are shown in IST.
+- One edition a day at 05:00 IST (owner's choice, 2026-11-24, to keep costs down). Times are shown in IST.
+- Sections: India, World, Bengaluru, Weather (city forecasts, air quality, satellite view), Business, Markets (Nifty, Bank Nifty, rupee, gold, silver, bitcoin with month charts), AI & Software (news plus new GitHub repos, trending Hugging Face models, Show HN launches), Science & Tech, Health & Environment, Entertainment (Page 3: films, music, fashion, celebrity news, Apple Music charts), Sports.
 - Static pages; browser back restores scroll position natively.
 - Pictures are hotlinked from the originating outlet (og:image) or Wikimedia Commons, always
   credited and linked; when none is usable a typographic card stands in.

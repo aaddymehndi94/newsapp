@@ -3033,5 +3033,1324 @@
     "itemsSeen": 4580,
     "pagesRead": 94,
     "costUsd": 0.69
+  },
+  "panels": {
+    "weather": {
+      "fetchedAt": "2026-11-24T02:52:15.754Z",
+      "cities": [
+        {
+          "name": "Bengaluru",
+          "lat": 12.9716,
+          "lon": 77.5946,
+          "today": {
+            "date": "2026-11-24",
+            "max": 28,
+            "min": 21,
+            "code": 80,
+            "rainChance": 96
+          },
+          "tomorrow": {
+            "date": "2026-11-25",
+            "max": 27,
+            "min": 21,
+            "code": 81,
+            "rainChance": 96
+          },
+          "aqi": {
+            "value": 27,
+            "category": "Good",
+            "pm25": 16,
+            "pm10": 17
+          }
+        },
+        {
+          "name": "Delhi",
+          "lat": 28.6139,
+          "lon": 77.209,
+          "today": {
+            "date": "2026-11-24",
+            "max": 24,
+            "min": 13,
+            "code": 0,
+            "rainChance": 0
+          },
+          "tomorrow": {
+            "date": "2026-11-25",
+            "max": 24,
+            "min": 12,
+            "code": 2,
+            "rainChance": 0
+          },
+          "aqi": {
+            "value": 128,
+            "category": "Moderate",
+            "pm25": 68,
+            "pm10": 69
+          }
+        },
+        {
+          "name": "Mumbai",
+          "lat": 19.076,
+          "lon": 72.8777,
+          "today": {
+            "date": "2026-11-24",
+            "max": 34,
+            "min": 25,
+            "code": 2,
+            "rainChance": 0
+          },
+          "tomorrow": {
+            "date": "2026-11-25",
+            "max": 34,
+            "min": 24,
+            "code": 1,
+            "rainChance": 0
+          },
+          "aqi": {
+            "value": 132,
+            "category": "Moderate",
+            "pm25": 69,
+            "pm10": 71
+          }
+        },
+        {
+          "name": "Chennai",
+          "lat": 13.0827,
+          "lon": 80.2707,
+          "today": {
+            "date": "2026-11-24",
+            "max": 28,
+            "min": 25,
+            "code": 81,
+            "rainChance": 100
+          },
+          "tomorrow": {
+            "date": "2026-11-25",
+            "max": 27,
+            "min": 25,
+            "code": 80,
+            "rainChance": 98
+          },
+          "aqi": {
+            "value": 7,
+            "category": "Good",
+            "pm25": 4,
+            "pm10": 6
+          }
+        },
+        {
+          "name": "Kolkata",
+          "lat": 22.5726,
+          "lon": 88.3639,
+          "today": {
+            "date": "2026-11-24",
+            "max": 28,
+            "min": 21,
+            "code": 3,
+            "rainChance": 2
+          },
+          "tomorrow": {
+            "date": "2026-11-25",
+            "max": 26,
+            "min": 18,
+            "code": 0,
+            "rainChance": 0
+          },
+          "aqi": {
+            "value": 84,
+            "category": "Satisfactory",
+            "pm25": 50,
+            "pm10": 50
+          }
+        },
+        {
+          "name": "Hyderabad",
+          "lat": 17.385,
+          "lon": 78.4867,
+          "today": {
+            "date": "2026-11-24",
+            "max": 31,
+            "min": 23,
+            "code": 3,
+            "rainChance": 0
+          },
+          "tomorrow": {
+            "date": "2026-11-25",
+            "max": 31,
+            "min": 23,
+            "code": 80,
+            "rainChance": 79
+          },
+          "aqi": {
+            "value": 59,
+            "category": "Satisfactory",
+            "pm25": 35,
+            "pm10": 36
+          }
+        },
+        {
+          "name": "Pune",
+          "lat": 18.5204,
+          "lon": 73.8567,
+          "today": {
+            "date": "2026-11-24",
+            "max": 31,
+            "min": 19,
+            "code": 3,
+            "rainChance": 0
+          },
+          "tomorrow": {
+            "date": "2026-11-25",
+            "max": 32,
+            "min": 19,
+            "code": 0,
+            "rainChance": 0
+          },
+          "aqi": {
+            "value": 83,
+            "category": "Satisfactory",
+            "pm25": 50,
+            "pm10": 51
+          }
+        },
+        {
+          "name": "Kochi",
+          "lat": 9.9312,
+          "lon": 76.2673,
+          "today": {
+            "date": "2026-11-24",
+            "max": 33,
+            "min": 26,
+            "code": 53,
+            "rainChance": 72
+          },
+          "tomorrow": {
+            "date": "2026-11-25",
+            "max": 30,
+            "min": 26,
+            "code": 80,
+            "rainChance": 90
+          },
+          "aqi": {
+            "value": 152,
+            "category": "Moderate",
+            "pm25": 76,
+            "pm10": 77
+          }
+        }
+      ],
+      "satellite": {
+        "url": "https://view.eumetsat.int/geoserver/ows?service=WMS&version=1.3.0&request=GetMap&layers=msg_iodc%3Air108%2Cbackgrounds%3Ane_10m_coastline&styles=&crs=EPSG%3A4326&bbox=6%2C66%2C37%2C98&width=800&height=775&format=image%2Fjpeg&time=2026-11-24T02%3A30%3A00Z",
+        "width": 800,
+        "height": 775,
+        "time": "2026-11-24T02:30:00.000Z",
+        "bbox": [
+          6,
+          66,
+          37,
+          98
+        ],
+        "credit": "© EUMETSAT"
+      }
+    },
+    "markets": {
+      "fetchedAt": "2026-11-24T02:52:14.562Z",
+      "quotes": [
+        {
+          "id": "nifty50",
+          "name": "Nifty 50",
+          "unit": "",
+          "decimals": 2,
+          "source": "NSE",
+          "value": 25349.65,
+          "change": -450.9499999999971,
+          "changePct": -1.7478275699014638,
+          "asOf": "2026-11-23",
+          "history": [
+            {
+              "date": "2026-10-12",
+              "value": 22363.35
+            },
+            {
+              "date": "2026-10-13",
+              "value": 22721.95
+            },
+            {
+              "date": "2026-10-14",
+              "value": 22622.7
+            },
+            {
+              "date": "2026-10-15",
+              "value": 22997.35
+            },
+            {
+              "date": "2026-10-16",
+              "value": 23146.15
+            },
+            {
+              "date": "2026-10-19",
+              "value": 22888.95
+            },
+            {
+              "date": "2026-10-21",
+              "value": 22811.35
+            },
+            {
+              "date": "2026-10-22",
+              "value": 22687.65
+            },
+            {
+              "date": "2026-10-23",
+              "value": 22600
+            },
+            {
+              "date": "2026-10-26",
+              "value": 22753.2
+            },
+            {
+              "date": "2026-10-27",
+              "value": 22749.75
+            },
+            {
+              "date": "2026-10-28",
+              "value": 22698.85
+            },
+            {
+              "date": "2026-10-29",
+              "value": 22936.75
+            },
+            {
+              "date": "2026-10-30",
+              "value": 23053.1
+            },
+            {
+              "date": "2026-11-02",
+              "value": 23440.8
+            },
+            {
+              "date": "2026-11-03",
+              "value": 23810.85
+            },
+            {
+              "date": "2026-11-04",
+              "value": 23960.6
+            },
+            {
+              "date": "2026-11-05",
+              "value": 24536.6
+            },
+            {
+              "date": "2026-11-06",
+              "value": 25030.35
+            },
+            {
+              "date": "2026-11-09",
+              "value": 25044.65
+            },
+            {
+              "date": "2026-11-11",
+              "value": 25255.05
+            },
+            {
+              "date": "2026-11-12",
+              "value": 25299.35
+            },
+            {
+              "date": "2026-11-13",
+              "value": 25144.3
+            },
+            {
+              "date": "2026-11-16",
+              "value": 25291.1
+            },
+            {
+              "date": "2026-11-17",
+              "value": 25387.4
+            },
+            {
+              "date": "2026-11-18",
+              "value": 25227.95
+            },
+            {
+              "date": "2026-11-19",
+              "value": 25514.3
+            },
+            {
+              "date": "2026-11-20",
+              "value": 25800.6
+            },
+            {
+              "date": "2026-11-23",
+              "value": 25349.65
+            }
+          ]
+        },
+        {
+          "id": "niftybank",
+          "name": "Nifty Bank",
+          "unit": "",
+          "decimals": 2,
+          "source": "NSE",
+          "value": 62585.35,
+          "change": -2049.8499999999985,
+          "changePct": -3.1714143376983417,
+          "asOf": "2026-11-23",
+          "history": [
+            {
+              "date": "2026-10-12",
+              "value": 54918
+            },
+            {
+              "date": "2026-10-13",
+              "value": 55481.05
+            },
+            {
+              "date": "2026-10-14",
+              "value": 55316
+            },
+            {
+              "date": "2026-10-15",
+              "value": 55810.5
+            },
+            {
+              "date": "2026-10-16",
+              "value": 55844
+            },
+            {
+              "date": "2026-10-19",
+              "value": 55488.1
+            },
+            {
+              "date": "2026-10-21",
+              "value": 54976.9
+            },
+            {
+              "date": "2026-10-22",
+              "value": 54925.7
+            },
+            {
+              "date": "2026-10-23",
+              "value": 54287.35
+            },
+            {
+              "date": "2026-10-26",
+              "value": 54366.7
+            },
+            {
+              "date": "2026-10-27",
+              "value": 53974.9
+            },
+            {
+              "date": "2026-10-28",
+              "value": 54267.4
+            },
+            {
+              "date": "2026-10-29",
+              "value": 54909.65
+            },
+            {
+              "date": "2026-10-30",
+              "value": 54686.95
+            },
+            {
+              "date": "2026-11-02",
+              "value": 55002.2
+            },
+            {
+              "date": "2026-11-03",
+              "value": 55540.05
+            },
+            {
+              "date": "2026-11-04",
+              "value": 55913.6
+            },
+            {
+              "date": "2026-11-05",
+              "value": 57773.65
+            },
+            {
+              "date": "2026-11-06",
+              "value": 59086
+            },
+            {
+              "date": "2026-11-09",
+              "value": 59741.25
+            },
+            {
+              "date": "2026-11-11",
+              "value": 60792.4
+            },
+            {
+              "date": "2026-11-12",
+              "value": 61518.5
+            },
+            {
+              "date": "2026-11-13",
+              "value": 61034.1
+            },
+            {
+              "date": "2026-11-16",
+              "value": 61575.9
+            },
+            {
+              "date": "2026-11-17",
+              "value": 62273.25
+            },
+            {
+              "date": "2026-11-18",
+              "value": 62038.65
+            },
+            {
+              "date": "2026-11-19",
+              "value": 63063
+            },
+            {
+              "date": "2026-11-20",
+              "value": 64635.2
+            },
+            {
+              "date": "2026-11-23",
+              "value": 62585.35
+            }
+          ]
+        },
+        {
+          "id": "usdinr",
+          "name": "US dollar",
+          "unit": "₹",
+          "decimals": 2,
+          "source": "European Central Bank",
+          "value": 92.92,
+          "change": 0.23999999999999488,
+          "changePct": 0.25895554596460385,
+          "asOf": "2026-11-23",
+          "history": [
+            {
+              "date": "2026-10-13",
+              "value": 95.28
+            },
+            {
+              "date": "2026-10-14",
+              "value": 95.16
+            },
+            {
+              "date": "2026-10-15",
+              "value": 95.06
+            },
+            {
+              "date": "2026-10-16",
+              "value": 94.96
+            },
+            {
+              "date": "2026-10-19",
+              "value": 94.93
+            },
+            {
+              "date": "2026-10-20",
+              "value": 94.93
+            },
+            {
+              "date": "2026-10-21",
+              "value": 94.47
+            },
+            {
+              "date": "2026-10-22",
+              "value": 94.82
+            },
+            {
+              "date": "2026-10-23",
+              "value": 94.94
+            },
+            {
+              "date": "2026-10-26",
+              "value": 95.18
+            },
+            {
+              "date": "2026-10-27",
+              "value": 95.12
+            },
+            {
+              "date": "2026-10-28",
+              "value": 95.22
+            },
+            {
+              "date": "2026-10-29",
+              "value": 95.27
+            },
+            {
+              "date": "2026-10-30",
+              "value": 94.95
+            },
+            {
+              "date": "2026-11-02",
+              "value": 94.91
+            },
+            {
+              "date": "2026-11-03",
+              "value": 94.75
+            },
+            {
+              "date": "2026-11-04",
+              "value": 94.64
+            },
+            {
+              "date": "2026-11-05",
+              "value": 94.48
+            },
+            {
+              "date": "2026-11-06",
+              "value": 93.92
+            },
+            {
+              "date": "2026-11-09",
+              "value": 93.93
+            },
+            {
+              "date": "2026-11-10",
+              "value": 93.93
+            },
+            {
+              "date": "2026-11-11",
+              "value": 93.69
+            },
+            {
+              "date": "2026-11-12",
+              "value": 94.04
+            },
+            {
+              "date": "2026-11-13",
+              "value": 94.25
+            },
+            {
+              "date": "2026-11-16",
+              "value": 93.93
+            },
+            {
+              "date": "2026-11-17",
+              "value": 93.48
+            },
+            {
+              "date": "2026-11-18",
+              "value": 93.44
+            },
+            {
+              "date": "2026-11-19",
+              "value": 93.3
+            },
+            {
+              "date": "2026-11-20",
+              "value": 92.68
+            },
+            {
+              "date": "2026-11-23",
+              "value": 92.92
+            }
+          ]
+        },
+        {
+          "id": "gold",
+          "name": "Gold, 24 carat",
+          "unit": "₹",
+          "per": "per 10 g",
+          "decimals": 0,
+          "source": "IBJA",
+          "value": 124945,
+          "change": 1052,
+          "changePct": 0.8491198049930182,
+          "asOf": "2026-11-23",
+          "history": [
+            {
+              "date": "2026-10-08",
+              "value": 147646
+            },
+            {
+              "date": "2026-10-09",
+              "value": 149430
+            },
+            {
+              "date": "2026-10-12",
+              "value": 148061
+            },
+            {
+              "date": "2026-10-13",
+              "value": 147617
+            },
+            {
+              "date": "2026-10-14",
+              "value": 146064
+            },
+            {
+              "date": "2026-10-15",
+              "value": 145942
+            },
+            {
+              "date": "2026-10-16",
+              "value": 146426
+            },
+            {
+              "date": "2026-10-19",
+              "value": 145944
+            },
+            {
+              "date": "2026-10-21",
+              "value": 144105
+            },
+            {
+              "date": "2026-10-22",
+              "value": 142694
+            },
+            {
+              "date": "2026-10-23",
+              "value": 141630
+            },
+            {
+              "date": "2026-10-26",
+              "value": 141710
+            },
+            {
+              "date": "2026-10-27",
+              "value": 141431
+            },
+            {
+              "date": "2026-10-28",
+              "value": 142707
+            },
+            {
+              "date": "2026-10-29",
+              "value": 142255
+            },
+            {
+              "date": "2026-10-30",
+              "value": 140054
+            },
+            {
+              "date": "2026-11-02",
+              "value": 137524
+            },
+            {
+              "date": "2026-11-03",
+              "value": 137576
+            },
+            {
+              "date": "2026-11-04",
+              "value": 141622
+            },
+            {
+              "date": "2026-11-05",
+              "value": 144129
+            },
+            {
+              "date": "2026-11-06",
+              "value": 141452
+            },
+            {
+              "date": "2026-11-11",
+              "value": 140603
+            },
+            {
+              "date": "2026-11-12",
+              "value": 137692
+            },
+            {
+              "date": "2026-11-13",
+              "value": 135809
+            },
+            {
+              "date": "2026-11-16",
+              "value": 134971
+            },
+            {
+              "date": "2026-11-17",
+              "value": 134201
+            },
+            {
+              "date": "2026-11-18",
+              "value": 131164
+            },
+            {
+              "date": "2026-11-19",
+              "value": 129531
+            },
+            {
+              "date": "2026-11-20",
+              "value": 123893
+            },
+            {
+              "date": "2026-11-23",
+              "value": 124945
+            }
+          ]
+        },
+        {
+          "id": "silver",
+          "name": "Silver",
+          "unit": "₹",
+          "per": "per kg",
+          "decimals": 0,
+          "source": "IBJA",
+          "value": 152625,
+          "change": 97,
+          "changePct": 0.063594880939893,
+          "asOf": "2026-11-23",
+          "history": [
+            {
+              "date": "2026-10-08",
+              "value": 217106
+            },
+            {
+              "date": "2026-10-09",
+              "value": 221109
+            },
+            {
+              "date": "2026-10-12",
+              "value": 220295
+            },
+            {
+              "date": "2026-10-13",
+              "value": 219038
+            },
+            {
+              "date": "2026-10-14",
+              "value": 213822
+            },
+            {
+              "date": "2026-10-15",
+              "value": 208275
+            },
+            {
+              "date": "2026-10-16",
+              "value": 210918
+            },
+            {
+              "date": "2026-10-19",
+              "value": 208750
+            },
+            {
+              "date": "2026-10-21",
+              "value": 206783
+            },
+            {
+              "date": "2026-10-22",
+              "value": 199777
+            },
+            {
+              "date": "2026-10-23",
+              "value": 194415
+            },
+            {
+              "date": "2026-10-26",
+              "value": 194479
+            },
+            {
+              "date": "2026-10-27",
+              "value": 192499
+            },
+            {
+              "date": "2026-10-28",
+              "value": 193442
+            },
+            {
+              "date": "2026-10-29",
+              "value": 190478
+            },
+            {
+              "date": "2026-10-30",
+              "value": 181344
+            },
+            {
+              "date": "2026-11-02",
+              "value": 179972
+            },
+            {
+              "date": "2026-11-03",
+              "value": 176425
+            },
+            {
+              "date": "2026-11-04",
+              "value": 186133
+            },
+            {
+              "date": "2026-11-05",
+              "value": 187300
+            },
+            {
+              "date": "2026-11-06",
+              "value": 182868
+            },
+            {
+              "date": "2026-11-11",
+              "value": 185900
+            },
+            {
+              "date": "2026-11-12",
+              "value": 181040
+            },
+            {
+              "date": "2026-11-13",
+              "value": 178000
+            },
+            {
+              "date": "2026-11-16",
+              "value": 170251
+            },
+            {
+              "date": "2026-11-17",
+              "value": 169171
+            },
+            {
+              "date": "2026-11-18",
+              "value": 163733
+            },
+            {
+              "date": "2026-11-19",
+              "value": 160439
+            },
+            {
+              "date": "2026-11-20",
+              "value": 152528
+            },
+            {
+              "date": "2026-11-23",
+              "value": 152625
+            }
+          ]
+        },
+        {
+          "id": "bitcoin",
+          "name": "Bitcoin",
+          "unit": "$",
+          "decimals": 0,
+          "source": "Coinbase",
+          "value": 60125.05,
+          "change": -1064.9199999999983,
+          "changePct": -1.7403505836005448,
+          "asOf": "2026-11-24",
+          "history": [
+            {
+              "date": "2026-10-26",
+              "value": 80008.79
+            },
+            {
+              "date": "2026-10-27",
+              "value": 80799.51
+            },
+            {
+              "date": "2026-10-28",
+              "value": 81249.31
+            },
+            {
+              "date": "2026-10-29",
+              "value": 77780.33
+            },
+            {
+              "date": "2026-10-30",
+              "value": 77180.42
+            },
+            {
+              "date": "2026-10-31",
+              "value": 77423.98
+            },
+            {
+              "date": "2026-11-01",
+              "value": 78230.55
+            },
+            {
+              "date": "2026-11-02",
+              "value": 76674.13
+            },
+            {
+              "date": "2026-11-03",
+              "value": 77336.75
+            },
+            {
+              "date": "2026-11-04",
+              "value": 80428.31
+            },
+            {
+              "date": "2026-11-05",
+              "value": 75969.06
+            },
+            {
+              "date": "2026-11-06",
+              "value": 75731.04
+            },
+            {
+              "date": "2026-11-07",
+              "value": 75753.96
+            },
+            {
+              "date": "2026-11-08",
+              "value": 74754.08
+            },
+            {
+              "date": "2026-11-09",
+              "value": 75259.28
+            },
+            {
+              "date": "2026-11-10",
+              "value": 73697.87
+            },
+            {
+              "date": "2026-11-11",
+              "value": 73927.63
+            },
+            {
+              "date": "2026-11-12",
+              "value": 71369.9
+            },
+            {
+              "date": "2026-11-13",
+              "value": 68236.54
+            },
+            {
+              "date": "2026-11-14",
+              "value": 64118.79
+            },
+            {
+              "date": "2026-11-15",
+              "value": 65315.35
+            },
+            {
+              "date": "2026-11-16",
+              "value": 64816.79
+            },
+            {
+              "date": "2026-11-17",
+              "value": 64873.18
+            },
+            {
+              "date": "2026-11-18",
+              "value": 62981.71
+            },
+            {
+              "date": "2026-11-19",
+              "value": 61913.23
+            },
+            {
+              "date": "2026-11-20",
+              "value": 58814.99
+            },
+            {
+              "date": "2026-11-21",
+              "value": 60086
+            },
+            {
+              "date": "2026-11-22",
+              "value": 61163.01
+            },
+            {
+              "date": "2026-11-23",
+              "value": 61189.97
+            },
+            {
+              "date": "2026-11-24",
+              "value": 60125.05
+            }
+          ]
+        }
+      ]
+    },
+    "tech": {
+      "fetchedAt": "2026-11-24T02:52:29.089Z",
+      "repos": [
+        {
+          "name": "ivall/xcl",
+          "url": "https://github.com/ivall/xcl",
+          "stars": 3526,
+          "language": "Rust",
+          "createdAt": "2026-11-20T20:03:21Z",
+          "what": "A Windows compatibility layer that runs Xbox Series X|S game files on a PC without emulating the processor, aimed at gamers and tinkerers."
+        },
+        {
+          "name": "EL4CTEO/fast-anything",
+          "url": "https://github.com/EL4CTEO/fast-anything",
+          "stars": 3192,
+          "language": "Rust",
+          "createdAt": "2026-11-21T14:40:27Z",
+          "what": "A command-line tool that finds slow functions in Python, Node or Ruby apps, has an AI coding agent rewrite them in Rust, and checks results match."
+        },
+        {
+          "name": "iamajmeena/neonclipping",
+          "url": "https://github.com/iamajmeena/neonclipping",
+          "stars": 2312,
+          "language": "Python",
+          "createdAt": "2026-11-19T10:00:43Z",
+          "what": "A free program that runs on your own computer and turns long YouTube, Twitch or Kick videos into short vertical captioned clips."
+        },
+        {
+          "name": "AFK-surf/xnulinux",
+          "url": "https://github.com/AFK-surf/xnulinux",
+          "stars": 2225,
+          "language": "Objective-C++",
+          "createdAt": "2026-11-20T10:18:31Z",
+          "what": "An experimental project that loads Apple's macOS kernel inside Linux on ARM chips so macOS programs run alongside Linux ones, without a virtual machine."
+        },
+        {
+          "name": "os6/nospeaker",
+          "url": "https://github.com/os6/nospeaker",
+          "stars": 1479,
+          "language": "Swift",
+          "createdAt": "2026-11-22T12:05:54Z",
+          "what": "A Mac program that drives the trackpad's vibration motor fast enough to produce audible sound, letting a MacBook trackpad talk or play music."
+        },
+        {
+          "name": "leanprover-community/riemann-hypothesis",
+          "url": "https://github.com/leanprover-community/riemann-hypothesis",
+          "stars": 882,
+          "language": "Lean",
+          "createdAt": "2026-11-20T14:47:49Z",
+          "what": "A community project to tidy and maintain a computer-checked Lean formalization of a claimed 2026 proof of the Riemann Hypothesis, for mathematicians."
+        }
+      ],
+      "models": [
+        {
+          "name": "thinkingmachines/Inkling-2-Mini",
+          "url": "https://huggingface.co/thinkingmachines/Inkling-2-Mini",
+          "likes": 5511,
+          "downloads": 41888,
+          "task": "image-text-to-text",
+          "what": "An open-weight model from Thinking Machines Lab that reads text and images and writes text, for developers building chatbots and coding assistants."
+        },
+        {
+          "name": "unsloth/Inkling-2-Mini-GGUF",
+          "url": "https://huggingface.co/unsloth/Inkling-2-Mini-GGUF",
+          "likes": 1121,
+          "downloads": 1292888,
+          "task": "image-text-to-text",
+          "what": "Compressed GGUF versions of Thinking Machines' Inkling 2 Mini, made by Unsloth so the model can run on personal computers."
+        },
+        {
+          "name": "inworld/voice-isolator",
+          "url": "https://huggingface.co/inworld/voice-isolator",
+          "likes": 740,
+          "downloads": 0,
+          "task": "audio-to-audio",
+          "what": "An open-licence model from Inworld that removes background noise from speech recordings and live audio, for people cleaning up voice audio."
+        },
+        {
+          "name": "harness-hub/Qwen3.8-27B-pi-adapted",
+          "url": "https://huggingface.co/harness-hub/Qwen3.8-27B-pi-adapted",
+          "likes": 1039,
+          "downloads": 3132,
+          "task": "image-text-to-text",
+          "what": "A small add-on for Alibaba's Qwen3.8-27B model, trained to make it better at software and terminal tasks inside the pi coding agent."
+        },
+        {
+          "name": "higurashi-ai/Haru-4B",
+          "url": "https://huggingface.co/higurashi-ai/Haru-4B",
+          "likes": 940,
+          "downloads": 9087,
+          "task": "audio-to-audio",
+          "what": "A research speech model that listens and talks at the same time, like a phone call, in nine languages including English and Japanese."
+        },
+        {
+          "name": "tencent/Hy4-flash",
+          "url": "https://huggingface.co/tencent/Hy4-flash",
+          "likes": 651,
+          "downloads": 7696,
+          "task": "image-text-to-text",
+          "what": "An open model from Tencent that reads text and images, with 220 billion parameters but only 12 billion used per word, for developers."
+        }
+      ],
+      "tools": [
+        {
+          "name": "I built a game where you are an LLM's subagent",
+          "url": "https://github.com/gulivan/worker755",
+          "discussionUrl": "https://news.ycombinator.com/item?id=50599762",
+          "points": 357,
+          "comments": 89,
+          "what": "A game where you play as the subagent of an AI language model, shared on Hacker News."
+        },
+        {
+          "name": "Zero C#",
+          "url": "https://onurgumus.github.io/zero-csharp/index.html",
+          "discussionUrl": "https://news.ycombinator.com/item?id=50590279",
+          "points": 178,
+          "comments": 136,
+          "what": "A way to write C# programs that run without the usual .NET runtime or garbage collector, shared on Hacker News."
+        },
+        {
+          "name": "The Riemann Proof Handbook",
+          "url": "https://github.com/tamnd/riemann-handbook",
+          "discussionUrl": "https://news.ycombinator.com/item?id=50596664",
+          "points": 89,
+          "comments": 60,
+          "what": "A handbook explaining a claimed proof of the Riemann Hypothesis, shared on Hacker News."
+        },
+        {
+          "name": "I made a PS1 style racing game",
+          "url": "https://outpostracer.com",
+          "discussionUrl": "https://news.ycombinator.com/item?id=50589184",
+          "points": 48,
+          "comments": 38,
+          "what": "A racing game made in the blocky look of the original PlayStation, shared on Hacker News."
+        },
+        {
+          "name": "Hermit CRM",
+          "url": "https://hermitcrm.io/",
+          "discussionUrl": "https://news.ycombinator.com/item?id=50609708",
+          "points": 42,
+          "comments": 3,
+          "what": "A free open-source customer relationship manager, a tool for tracking contacts and clients, aimed at solo business owners."
+        }
+      ]
+    },
+    "culture": {
+      "fetchedAt": "2026-11-24T02:52:47.872Z",
+      "charts": [
+        {
+          "id": "in",
+          "name": "India",
+          "songs": [
+            {
+              "rank": 1,
+              "title": "Ashke",
+              "artist": "Karan Aujla & MXRCI",
+              "url": "https://music.apple.com/in/album/ashke/6814002539?i=6814002647",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/f7/6d/78/f76d78c5-cc9c-f2d6-8603-ba690eaa5c7d/5064089826918_cover.jpg/160x160bb.jpg"
+            },
+            {
+              "rank": 2,
+              "title": "Veezha Veera (From \"OM Chapter 1: Udhiram  - The Blood Wood\") [Tamil]",
+              "artist": "Sai Abhyankkar, Tippu & Arun Srinivasan",
+              "url": "https://music.apple.com/in/album/veezha-veera-from-om-chapter-1-udhiram-the-blood-wood-tamil/6824473544?i=6824473553",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/f1/16/40/f11640a5-a80c-d676-17f3-15930c99d44a/1200220338696.jpg/160x160bb.jpg"
+            },
+            {
+              "rank": 3,
+              "title": "Dilruba Dilnasheen",
+              "artist": "Rito Riba & Siddhant Kaushal",
+              "url": "https://music.apple.com/in/album/dilruba-dilnasheen/6819312748?i=6819312875",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a5/61/9c/a5619ce1-804e-f099-26d0-43df477ff378/823375513346_Cover.jpg/160x160bb.jpg"
+            },
+            {
+              "rank": 4,
+              "title": "FA FA FA (From \"O.M: Operation Mole\")",
+              "artist": "Sai Abhyankkar & Thamizh Aadhavan",
+              "url": "https://music.apple.com/in/album/fa-fa-fa-from-o-m-operation-mole/6832237869?i=6832237877",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f0/d3/90/f0d390bf-d444-902c-90c0-2d4c3c8aa391/1200220458684.jpg/160x160bb.jpg"
+            },
+            {
+              "rank": 5,
+              "title": "Straight Up",
+              "artist": "Karan Aujla & MXRCI",
+              "url": "https://music.apple.com/in/album/straight-up/6814002539?i=6814002652",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/f7/6d/78/f76d78c5-cc9c-f2d6-8603-ba690eaa5c7d/5064089826918_cover.jpg/160x160bb.jpg"
+            },
+            {
+              "rank": 6,
+              "title": "Gehra Hua",
+              "artist": "Shashwat Sachdev, Arijit Singh, Irshad Kamil & Armaan Khan",
+              "url": "https://music.apple.com/in/album/gehra-hua/1858961207?i=1858961217",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/10/4d/4e/104d4e1d-49f1-b96d-2bb1-c7c9f94845fa/ticket.tgbrrfvz.jpg/160x160bb.jpg"
+            },
+            {
+              "rank": 7,
+              "title": "Antidote",
+              "artist": "Karan Aujla",
+              "url": "https://music.apple.com/in/album/antidote/1753101056?i=1753101077",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c2/ce/a0/c2cea088-dbde-43db-346f-e536058fdcfb/5063483978438_cover.jpg/160x160bb.jpg"
+            },
+            {
+              "rank": 8,
+              "title": "Alaakaa Loova (From \"OM Chapter 1: Udhiram  - The Blood Wood\") [Tamil]",
+              "artist": "Sai Abhyankkar & Rokesh",
+              "url": "https://music.apple.com/in/album/alaakaa-loova-from-om-chapter-1-udhiram-the-blood-wood-tamil/6795543541?i=6795543551",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/3d/08/1d/3d081d2f-e61a-49a6-3677-40f508f5856a/1200214714024.jpg/160x160bb.jpg"
+            },
+            {
+              "rank": 9,
+              "title": "One Name",
+              "artist": "Anirudh Ravichander & Super Subu",
+              "url": "https://music.apple.com/in/album/one-name/6817733404?i=6817733637",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/47/61/88/476188e2-5cd5-2320-8f0b-f9cd978560fd/885288695823.jpg/160x160bb.jpg"
+            },
+            {
+              "rank": 10,
+              "title": "Tu Mil Jaaye (From \"KING\")",
+              "artist": "Sachin-Jigar, Arijit Singh, Ed Sheeran, Madhubanti Bagchi & Kumaar",
+              "url": "https://music.apple.com/in/album/tu-mil-jaaye-from-king/6829145292?i=6829145293",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/cc/bf/37/ccbf3767-04e6-4a7f-ba93-f7377df30506/8903431225320_cover.jpg/160x160bb.jpg"
+            }
+          ]
+        },
+        {
+          "id": "us",
+          "name": "US",
+          "songs": [
+            {
+              "rank": 1,
+              "title": "Choosin' Texas",
+              "artist": "Ella Langley",
+              "url": "https://music.apple.com/us/album/choosin-texas/1844932149?i=1844932150",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e2/91/4d/e2914d0a-7f1d-f04c-fbf4-c50b38548838/196873638690.jpg/160x160bb.jpg"
+            },
+            {
+              "rank": 2,
+              "title": "Last Thing You Need",
+              "artist": "Morgan Wallen",
+              "url": "https://music.apple.com/us/album/last-thing-you-need/6812476961?i=6812477290",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5d/d3/1c/5dd31c9c-1e1c-0bbc-104f-4a42e2bb4c59/075679556424.jpg/160x160bb.jpg"
+            },
+            {
+              "rank": 3,
+              "title": "Flower In A Hurricane [From GTAVI: Original Score]",
+              "artist": "Justice, Tame Impala, SZA & King Gizzard & The Lizard Wizard",
+              "url": "https://music.apple.com/us/album/flower-in-a-hurricane-from-gtavi-original-score/6819802963?i=6819802968",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/af/23/54/af235448-23b3-a3bf-0738-87f6c44a4bbc/5056556187486_cover.jpg/160x160bb.jpg"
+            },
+            {
+              "rank": 4,
+              "title": "All I Want for Christmas Is You",
+              "artist": "Mariah Carey",
+              "url": "https://music.apple.com/us/album/all-i-want-for-christmas-is-you/585972750?i=585972803",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/c6/b7/27/c6b727f7-3a32-6b43-cee2-05bb71daf1cf/dj.itfmdeif.jpg/160x160bb.jpg"
+            },
+            {
+              "rank": 5,
+              "title": "Been By Now",
+              "artist": "Morgan Wallen",
+              "url": "https://music.apple.com/us/album/been-by-now/6792676858?i=6792676860",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9f/8d/52/9f8d52a0-b6d9-d038-327b-4fe58bedce67/26UMGIM94572.rgb.jpg/160x160bb.jpg"
+            },
+            {
+              "rank": 6,
+              "title": "BbY WOW",
+              "artist": "KAROL G, Judeline & rusowsky",
+              "url": "https://music.apple.com/us/album/bby-wow/6796864741?i=6796864754",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2b/66/b2/2b66b26c-ab23-faa1-c4ee-06fa2cce8f76/26UM1IM00558.rgb.jpg/160x160bb.jpg"
+            },
+            {
+              "rank": 7,
+              "title": "Housewife",
+              "artist": "Tate McRae",
+              "url": "https://music.apple.com/us/album/housewife/6822497770?i=6822497774",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/69/64/e4/6964e483-c02c-e389-14f4-c426e8c65f2c/196874840146.jpg/160x160bb.jpg"
+            },
+            {
+              "rank": 8,
+              "title": "Underneath the Tree",
+              "artist": "Kelly Clarkson",
+              "url": "https://music.apple.com/us/album/underneath-the-tree/720861443?i=720861445",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music/v4/ee/40/2d/ee402d50-4a55-bcbe-b71c-6690784d4d37/886444201209.jpg/160x160bb.jpg"
+            },
+            {
+              "rank": 9,
+              "title": "Jingle Bell Rock",
+              "artist": "Bobby Helms",
+              "url": "https://music.apple.com/us/album/jingle-bell-rock/1358462130?i=1358462132",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/e8/18/6b/e8186bf9-5696-e721-b273-a5f173caf8c1/18UMGIM07062.rgb.jpg/160x160bb.jpg"
+            },
+            {
+              "rank": 10,
+              "title": "Stop The Wedding!",
+              "artist": "Ashe",
+              "url": "https://music.apple.com/us/album/stop-the-wedding/6795697684?i=6795697687",
+              "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b7/55/7a/b7557aef-bb0a-cc57-25bf-979eee194f16/075679571403.jpg/160x160bb.jpg"
+            }
+          ]
+        }
+      ]
+    }
   }
 }

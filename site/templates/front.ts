@@ -3,13 +3,18 @@
 import type { Edition, Story } from "../types.ts";
 import type { SiteCtx } from "./layout.ts";
 import { frontMasthead, page } from "./layout.ts";
+import { culturePanel, marketsPanel, techPanel, weatherPanel } from "./panels.ts";
 import {
   byId,
   cardMeta,
   editionName,
   editionPath,
   esc,
+  istClock,
   longDate,
+  PANEL_SECTION,
+  SECTION_ORDER,
+  sectionName,
   num,
   pic,
   plural,
@@ -52,8 +57,31 @@ export function frontLayout(ed: Edition): { lead: Story[]; sections: RenderSecti
     (home ? home.stories : more).push(s);
     shown.add(s.id);
   }
+  // Data panels get their section even when no story was filed there.
+  for (const key of Object.keys(PANEL_SECTION) as (keyof typeof PANEL_SECTION)[]) {
+    const sid = PANEL_SECTION[key];
+    if (ed.panels?.[key] && !sections.some((s) => s.id === sid)) sections.push({ id: sid, name: sectionName(ed, sid), stories: [] });
+  }
+  const order = (id: string) => {
+    const i = (SECTION_ORDER as readonly string[]).indexOf(id);
+    return i < 0 ? SECTION_ORDER.length : i;
+  };
+  sections.sort((a, b) => order(a.id) - order(b.id));
   if (more.length) sections.push({ id: "more", name: "More stories", stories: more });
-  return { lead, sections: sections.filter((s) => s.stories.length > 0) };
+  return { lead, sections: sections.filter((s) => s.stories.length > 0 || panelOf(ed, s.id)) };
+}
+
+/** The data panel that belongs in a section, with the time its data was fetched. */
+function panelOf(ed: Edition, sectionId: string): { html: () => string; fetchedAt: string; first: boolean } | undefined {
+  const p = ed.panels;
+  if (!p) return undefined;
+  if (sectionId === "weather" && p.weather?.cities.length) return { html: () => weatherPanel(p.weather!), fetchedAt: p.weather.fetchedAt, first: true };
+  if (sectionId === "markets" && p.markets?.quotes.length) return { html: () => marketsPanel(p.markets!), fetchedAt: p.markets.fetchedAt, first: true };
+  if (sectionId === "ai-software" && p.tech && (p.tech.repos.length || p.tech.models.length || p.tech.tools.length))
+    return { html: () => techPanel(p.tech!), fetchedAt: p.tech.fetchedAt, first: false };
+  if (sectionId === "entertainment" && p.culture && (p.culture.charts.length || p.culture.nowShowing?.length || p.culture.comingSoon?.length))
+    return { html: () => culturePanel(p.culture!), fetchedAt: p.culture.fetchedAt, first: false };
+  return undefined;
 }
 
 function storyAttrs(ed: Edition, s: Story): string {
@@ -109,6 +137,20 @@ ${cardMeta(s, opts.withSection ? sectionNameOf(ed, s) : undefined)}
 }
 
 function sectionBlock(ed: Edition, sec: RenderSection): string {
+  const panel = panelOf(ed, sec.id);
+  const stories = sec.stories.length ? storiesBlock(ed, sec) : "";
+  const count = sec.stories.length ? plural(sec.stories.length, "story", "stories") : panel ? `Updated ${istClock(panel.fetchedAt)}` : "";
+  const panelHtml = panel ? panel.html() : "";
+  return `<section class="section" id="${esc(sec.id)}" aria-labelledby="h-${esc(sec.id)}">
+<header class="section-head">
+<h2 class="section-title" id="h-${esc(sec.id)}">${esc(sec.name)}</h2>
+<p class="section-count">${count}</p>
+</header>
+${panel?.first ? panelHtml + stories : stories + panelHtml}
+</section>`;
+}
+
+function storiesBlock(ed: Edition, sec: RenderSection): string {
   // The feature slot carries the section's biggest picture, so it goes to the highest-ranked
   // story whose picture can load; the rest keep editorial order.
   const fi = Math.max(0, sec.stories.findIndex((s) => usableImageUrl(s) !== null));
@@ -122,17 +164,11 @@ function sectionBlock(ed: Edition, sec: RenderSection): string {
   const side = rest.slice(0, sideCount);
   const more = rest.slice(sideCount);
   const moreCols = more.length % 3 !== 0 && more.length % 2 === 0 ? " cols-2" : "";
-  return `<section class="section" id="${esc(sec.id)}" aria-labelledby="h-${esc(sec.id)}">
-<header class="section-head">
-<h2 class="section-title" id="h-${esc(sec.id)}">${esc(sec.name)}</h2>
-<p class="section-count">${plural(sec.stories.length, "story", "stories")}</p>
-</header>
-<div class="section-body${side.length ? "" : " is-solo"}">
+  return `<div class="section-body${side.length ? "" : " is-solo"}">
 ${featureStory(ed, first)}
 ${side.length ? `<div class="rows">${side.map((s) => rowStory(ed, s)).join("\n")}</div>` : ""}
 </div>
-${more.length ? `<div class="rows rows--more${moreCols}">${more.map((s) => rowStory(ed, s)).join("\n")}</div>` : ""}
-</section>`;
+${more.length ? `<div class="rows rows--more${moreCols}">${more.map((s) => rowStory(ed, s)).join("\n")}</div>` : ""}`;
 }
 
 const CHEVRON = (d: "l" | "r") =>
@@ -162,7 +198,7 @@ function colophon(ed: Edition, ctx: SiteCtx): string {
   links.push(`<a class="btn" href="/archive/">All editions</a>`);
   const due = next
     ? ""
-    : `<p class="colo-due">The ${ed.slot === "morning" ? "evening edition is due at 5 pm" : "next morning edition is due at 5 am"} IST.</p>`;
+    : `<p class="colo-due">The next edition is due tomorrow at 5 am IST.</p>`;
   const st = ed.stats;
   const stats =
     st && st.itemsSeen > 0

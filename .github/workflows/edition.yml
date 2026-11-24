@@ -7,8 +7,8 @@ name: Edition
 on:
   schedule:
     # GitHub runs scheduled jobs a few minutes late at busy times; off-the-hour minutes help.
-    - cron: "7 22 * * *"   # 03:37 IST → morning edition
-    - cron: "7 10 * * *"   # 15:37 IST → evening edition
+    # One edition a day (owner's choice, 2026-11-24, to keep costs down).
+    - cron: "7 22 * * *"   # 03:37 IST → the 05:00 edition
   workflow_dispatch:
     inputs:
       slot:
@@ -40,6 +40,10 @@ jobs:
       - name: Produce edition
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Optional: film listings in Entertainment (free key from themoviedb.org).
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+          # Lifts GitHub's API rate limit for the "New on GitHub" list.
+          GITHUB_TOKEN: ${{ github.token }}
           TZ: Asia/Kolkata
         run: node pipeline/run.ts --fresh --batch --no-deploy ${{ inputs.slot && format('--slot {0}', inputs.slot) || '' }}
       - name: Deploy
@@ -50,7 +54,7 @@ jobs:
         run: |
           git config user.name "meridian-bot"
           git config user.email "meridian-bot@users.noreply.github.com"
-          git add data/editions
+          git add data/editions data/markets
           git commit -m "Edition $(TZ=Asia/Kolkata date +%F-%H%M)" || exit 0
           git pull --rebase --autostash origin main
           git push

@@ -45,7 +45,7 @@ export function renderArchive(ctx: SiteCtx): string {
   const main = `<div class="wrap archive">
 <header class="page-head">
 <h1 class="page-title">All editions</h1>
-<p class="page-lede">Two editions a day, at 5 am and 5 pm IST. ${plural(ctx.editions.length, "edition")} so far.</p>
+<p class="page-lede">One edition a day, at 5 am IST. ${plural(ctx.editions.length, "edition")} so far.</p>
 </header>
 <ol class="days">
 ${days}

@@ -82,6 +82,16 @@ ${summary ? `SUMMARY: ${summary}\n` : ""}${text ? `TEXT:\n${text}` : "(full text
   return docs.join("\n\n");
 }
 
+/** Extra guidance for sections whose tone or reader differs from hard news. */
+const SECTION_NOTES: Partial<Record<SlatePick["section"], string>> = {
+  entertainment:
+    "This is the entertainment page: a lighter, livelier tone is welcome, but stay factual and stick to the sources. Attribute rumours and claims to whoever made them. No snark about people's looks, bodies or private lives.",
+  "ai-software":
+    "Readers want to keep up with AI and software but are not all programmers: explain any technical term in a few plain words the first time it appears. Report what was released or announced and what it does; don't repeat marketing claims as fact.",
+  weather:
+    "Give the practical picture first: where, when, how much (rain in mm, temperatures, wind speeds), and what officials (IMD or the local weather service) have warned or advised.",
+};
+
 /** Batch custom_ids must match ^[a-zA-Z0-9_-]{1,64}$. */
 export function storyCustomId(key: string): string {
   return `story_${key}`.slice(0, 64);
@@ -93,7 +103,7 @@ Edition: ${editionLabel} (India Standard Time)
 Section: ${SECTION_NAMES[pick.section]}
 Working headline: ${pick.workingHeadline}
 Angle: ${pick.angle}
-contested=${pick.contested}
+contested=${pick.contested}${SECTION_NOTES[pick.section] ? `\nSection note: ${SECTION_NOTES[pick.section]}` : ""}
 
 SOURCE MATERIAL
 ${docs}

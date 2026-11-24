@@ -15,7 +15,10 @@ export type SectionHint =
   | "sports"
   | "health"
   | "environment"
-  | "bengaluru";
+  | "bengaluru"
+  | "ai"
+  | "weather"
+  | "entertainment";
 
 export interface Source {
   id: string;
@@ -120,6 +123,41 @@ export const SOURCES: Source[] = [
   { id: "space", outlet: "Space.com", url: "https://www.space.com/feeds/all", region: "world", section: "science", leaning: "centre" },
   { id: "statnews", outlet: "STAT", url: "https://www.statnews.com/feed/", region: "world", section: "health", leaning: "centre" },
   { id: "mongabay-india", outlet: "Mongabay India", url: "https://india.mongabay.com/feed/", region: "india", section: "environment", leaning: "centre" },
+
+  // ───────────── AI & software ─────────────
+  { id: "verge-ai", outlet: "The Verge", url: "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml", region: "world", section: "ai", leaning: "centre-left" },
+  { id: "techcrunch-ai", outlet: "TechCrunch", url: "https://techcrunch.com/category/artificial-intelligence/feed/", region: "world", section: "ai", leaning: "centre" },
+  { id: "ars-ai", outlet: "Ars Technica", url: "https://arstechnica.com/ai/feed/", region: "world", section: "ai", leaning: "centre-left" },
+  { id: "mittr-ai", outlet: "MIT Technology Review", url: "https://www.technologyreview.com/topic/artificial-intelligence/feed", region: "world", section: "ai", leaning: "centre" },
+  { id: "register-ai", outlet: "The Register", url: "https://www.theregister.com/software/ai_ml/headlines.atom", region: "world", section: "ai", leaning: "centre" },
+  { id: "willison", outlet: "Simon Willison’s Weblog", url: "https://simonwillison.net/atom/everything/", region: "world", section: "ai", leaning: "centre" },
+  { id: "hf-blog", outlet: "Hugging Face", url: "https://huggingface.co/blog/feed.xml", region: "world", section: "ai", leaning: "centre" },
+  { id: "openai-news", outlet: "OpenAI", url: "https://openai.com/news/rss.xml", region: "world", section: "ai", leaning: "centre" },
+  { id: "google-ai", outlet: "Google", url: "https://blog.google/technology/ai/rss/", region: "world", section: "ai", leaning: "centre" },
+  { id: "github-blog", outlet: "GitHub", url: "https://github.blog/feed/", region: "world", section: "ai", leaning: "centre" },
+  { id: "gn-ai", outlet: "Google News — AI", url: gnews('(AI OR "artificial intelligence" OR OpenAI OR Anthropic OR Gemini OR LLM) when:1d'), region: "world", section: "ai", leaning: "centre", kind: "gnews" },
+  { id: "gn-ai-india", outlet: "Google News — AI in India", url: gnews('(AI OR "artificial intelligence" OR IndiaAI) India when:1d'), region: "india", section: "ai", leaning: "centre", kind: "gnews" },
+
+  // ───────────── Weather ─────────────
+  { id: "gn-weather-india", outlet: "Google News — Weather (India)", url: gnews('(IMD OR monsoon OR cyclone OR heatwave OR "cold wave" OR fog OR "heavy rain") India when:1d'), region: "india", section: "weather", leaning: "centre", kind: "gnews" },
+  { id: "gn-weather-world", outlet: "Google News — Weather (world)", url: gnews('(hurricane OR typhoon OR cyclone OR "extreme weather" OR blizzard OR floods OR heatwave) when:1d'), region: "world", section: "weather", leaning: "centre", kind: "gnews" },
+
+  // ───────────── Entertainment, music, fashion ─────────────
+  { id: "variety", outlet: "Variety", url: "https://variety.com/feed/", region: "world", section: "entertainment", leaning: "centre" },
+  { id: "thr", outlet: "The Hollywood Reporter", url: "https://www.hollywoodreporter.com/feed/", region: "world", section: "entertainment", leaning: "centre" },
+  { id: "billboard", outlet: "Billboard", url: "https://www.billboard.com/feed/", region: "world", section: "entertainment", leaning: "centre" },
+  { id: "rollingstone", outlet: "Rolling Stone", url: "https://www.rollingstone.com/feed/", region: "world", section: "entertainment", leaning: "centre-left" },
+  { id: "pitchfork", outlet: "Pitchfork", url: "https://pitchfork.com/feed/feed-news/rss", region: "world", section: "entertainment", leaning: "centre" },
+  { id: "vogue", outlet: "Vogue", url: "https://www.vogue.com/feed/rss", region: "world", section: "entertainment", leaning: "centre" },
+  { id: "wwd", outlet: "WWD", url: "https://wwd.com/feed/", region: "world", section: "entertainment", leaning: "centre" },
+  { id: "bh-news", outlet: "Bollywood Hungama", url: "https://www.bollywoodhungama.com/rss/news.xml", region: "india", section: "entertainment", leaning: "centre" },
+  { id: "ht-ent", outlet: "Hindustan Times", url: "https://www.hindustantimes.com/feeds/rss/entertainment/rssfeed.xml", region: "india", section: "entertainment", leaning: "centre" },
+  { id: "ie-ent", outlet: "The Indian Express", url: "https://indianexpress.com/section/entertainment/feed/", region: "india", section: "entertainment", leaning: "centre-left" },
+  { id: "hindu-ent", outlet: "The Hindu", url: "https://www.thehindu.com/entertainment/feeder/default.rss", region: "india", section: "entertainment", leaning: "centre-left" },
+  { id: "ndtv-ent", outlet: "NDTV", url: "https://feeds.feedburner.com/ndtvmovies-latest", region: "india", section: "entertainment", leaning: "centre" },
+  { id: "pinkvilla", outlet: "Pinkvilla", url: "https://www.pinkvilla.com/rss.xml", region: "india", section: "entertainment", leaning: "centre" },
+  { id: "filmfare", outlet: "Filmfare", url: "https://www.filmfare.com/feeds/feeds.xml", region: "india", section: "entertainment", leaning: "centre" },
+  { id: "ht-fashion", outlet: "Hindustan Times", url: "https://www.hindustantimes.com/feeds/rss/lifestyle/fashion/rssfeed.xml", region: "india", section: "entertainment", leaning: "centre" },
 
   // ───────────── Sports ─────────────
   { id: "bbc-sport", outlet: "BBC Sport", url: "https://feeds.bbci.co.uk/sport/rss.xml", region: "world", section: "sports", leaning: "centre" },

@@ -17,7 +17,7 @@
 
 ## How it works
 
-Twice a day (cron on this computer: **03:30 → 05:00 edition**, **15:30 → 17:00 edition**):
+Once a day (owner's choice from 2026-11-24; cron on this computer **03:30 → 05:00 edition**, standing down once GitHub Actions runs it):
 1. Reads 78 feeds: Indian outlets from left to right (The Hindu, Indian Express, HT, TOI, NDTV,
    Scroll, The Wire, ThePrint, News18, Swarajya, Organiser, Firstpost…), international (BBC, Al Jazeera,
    Guardian, NYT, WSJ, Fox, NPR, DW, France 24, CNA, SCMP, Reuters/AP headlines…), science, tech,

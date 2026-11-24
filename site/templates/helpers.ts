@@ -126,15 +126,21 @@ export function storyPath(editionId: string, storyId: string): string {
 
 // ---------- sections ----------
 
-const KNOWN_SECTIONS = new Set([
+/** Front-page order of every section the site knows. */
+export const SECTION_ORDER = [
   "india",
   "world",
-  "business",
-  "science-tech",
-  "sports",
-  "health-environment",
   "bengaluru",
-]);
+  "weather",
+  "business",
+  "markets",
+  "ai-software",
+  "science-tech",
+  "health-environment",
+  "entertainment",
+  "sports",
+] as const;
+const KNOWN_SECTIONS = new Set<string>(SECTION_ORDER);
 
 /** A safe CSS class naming the section (for hooks and tests; sections are not colour-coded). */
 export function tint(sectionId: string): string {
@@ -149,7 +155,14 @@ const FALLBACK_NAMES: Record<string, string> = {
   sports: "Sports",
   "health-environment": "Health & Environment",
   bengaluru: "Bengaluru",
+  weather: "Weather",
+  markets: "Markets",
+  "ai-software": "AI & Software",
+  entertainment: "Entertainment",
 };
+
+/** The section each data panel lives in. */
+export const PANEL_SECTION = { weather: "weather", markets: "markets", tech: "ai-software", culture: "entertainment" } as const;
 
 export function sectionName(ed: Edition, sectionId: string): string {
   return ed.sections.find((s) => s.id === sectionId)?.name ?? FALLBACK_NAMES[sectionId] ?? "News";

@@ -67,6 +67,90 @@ export const StorySchema = z.looseObject({
   readingMinutes: z.number().nonnegative().default(1),
 });
 
+// ───────────── data panels ─────────────
+// Each list item is validated on its own: a bad row is dropped, a bad panel is dropped, and
+// the edition still renders. Links and pictures must be http(s).
+
+const num = z.number().refine(Number.isFinite);
+const rows = <T extends z.ZodType>(item: T) =>
+  z.array(z.unknown()).transform((xs) => xs.flatMap((x) => {
+    const r = item.safeParse(x);
+    return r.success ? [r.data as z.infer<T>] : [];
+  }));
+
+const Day = z.looseObject({ date: z.string(), max: num, min: num, code: z.number().int(), rainChance: num });
+const WeatherPanelSchema = z.looseObject({
+  fetchedAt: z.string(),
+  cities: rows(
+    z.looseObject({
+      name: z.string().min(1),
+      lat: num,
+      lon: num,
+      today: Day,
+      tomorrow: Day.optional().catch(undefined),
+      aqi: z.looseObject({ value: num, category: z.string(), pm25: num, pm10: num }).optional().catch(undefined),
+    }),
+  ),
+  satellite: z
+    .looseObject({
+      url: httpUrl,
+      width: z.number().positive(),
+      height: z.number().positive(),
+      time: z.string(),
+      bbox: z.tuple([num, num, num, num]),
+      credit: z.string(),
+    })
+    .optional()
+    .catch(undefined),
+});
+
+const MarketsPanelSchema = z.looseObject({
+  fetchedAt: z.string(),
+  quotes: rows(
+    z.looseObject({
+      id: z.string().regex(/^[a-z0-9-]{1,40}$/),
+      name: z.string().min(1),
+      unit: z.string().max(3),
+      per: z.string().optional(),
+      decimals: z.number().int().min(0).max(4),
+      value: num,
+      change: num,
+      changePct: num,
+      asOf: z.string(),
+      history: rows(z.looseObject({ date: z.string(), value: num })),
+      source: z.string(),
+    }),
+  ),
+});
+
+const TechPanelSchema = z.looseObject({
+  fetchedAt: z.string(),
+  repos: rows(z.looseObject({ name: z.string().min(1), url: httpUrl, stars: num, language: z.string().optional().catch(undefined), createdAt: z.string(), what: z.string().min(1) })),
+  models: rows(z.looseObject({ name: z.string().min(1), url: httpUrl, likes: num, downloads: num, task: z.string().optional().catch(undefined), what: z.string().min(1) })),
+  tools: rows(z.looseObject({ name: z.string().min(1), url: httpUrl, discussionUrl: httpUrl, points: num, comments: num, what: z.string().min(1) })),
+});
+
+const Movie = z.looseObject({ title: z.string().min(1), date: z.string(), url: httpUrl, poster: httpUrl.optional().catch(undefined), language: z.string().optional() });
+const CulturePanelSchema = z.looseObject({
+  fetchedAt: z.string(),
+  charts: rows(
+    z.looseObject({
+      id: z.string(),
+      name: z.string().min(1),
+      songs: rows(z.looseObject({ rank: z.number().int(), title: z.string().min(1), artist: z.string(), url: httpUrl, artwork: httpUrl.optional().catch(undefined) })),
+    }),
+  ),
+  nowShowing: rows(Movie).optional().catch(undefined),
+  comingSoon: rows(Movie).optional().catch(undefined),
+});
+
+export const PanelsSchema = z.looseObject({
+  weather: WeatherPanelSchema.optional().catch(undefined),
+  markets: MarketsPanelSchema.optional().catch(undefined),
+  tech: TechPanelSchema.optional().catch(undefined),
+  culture: CulturePanelSchema.optional().catch(undefined),
+});
+
 export const EditionSchema = z.looseObject({
   id: z.string().regex(SLUG, "edition id must be a lowercase slug"),
   date: z
@@ -92,6 +176,7 @@ export const EditionSchema = z.looseObject({
     })
     .default({ feedsScanned: 0, itemsSeen: 0, pagesRead: 0, costUsd: 0 }),
   fixture: z.boolean().optional().catch(undefined),
+  panels: PanelsSchema.optional().catch(undefined),
 });
 
 export interface ParseResult {
