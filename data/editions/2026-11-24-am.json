@@ -5335,7 +5335,7 @@
       ]
     },
     "culture": {
-      "fetchedAt": "2026-11-24T03:44:34.639Z",
+      "fetchedAt": "2026-11-24T03:58:45.356Z",
       "charts": [
         {
           "id": "in",
@@ -5512,28 +5512,32 @@
           "date": "2026-11-20",
           "url": "https://en.wikipedia.org/wiki/O.M:_Operation_Mole",
           "language": "Tamil",
-          "poster": "https://upload.wikimedia.org/wikipedia/en/3/3a/O.M_Operation_Mole.jpg"
+          "poster": "https://upload.wikimedia.org/wikipedia/en/3/3a/O.M_Operation_Mole.jpg",
+          "trailer": "aGSOpb_6kv8"
         },
         {
           "title": "Steps",
           "date": "2026-11-20",
           "url": "https://en.wikipedia.org/wiki/Steps_(film)",
           "language": "Hollywood",
-          "poster": "https://thumb.wikimedia.org/wikipedia/en/thumb/1/18/Steps_2026_poster.jpeg/250px-Steps_2026_poster.jpeg"
+          "poster": "https://thumb.wikimedia.org/wikipedia/en/thumb/1/18/Steps_2026_poster.jpeg/250px-Steps_2026_poster.jpeg",
+          "trailer": "RmNEMoQz6og"
         },
         {
           "title": "Guarding Stars",
           "date": "2026-11-18",
           "url": "https://en.wikipedia.org/wiki/Guarding_Stars",
           "language": "Hollywood",
-          "poster": "https://thumb.wikimedia.org/wikipedia/en/thumb/8/89/Guarding_Stars_film_poster.png/250px-Guarding_Stars_film_poster.png"
+          "poster": "https://thumb.wikimedia.org/wikipedia/en/thumb/8/89/Guarding_Stars_film_poster.png/250px-Guarding_Stars_film_poster.png",
+          "trailer": "mFvtVPMa5ak"
         },
         {
           "title": "Scene",
           "date": "2026-11-06",
           "url": "https://en.wikipedia.org/wiki/Scene_(2026_film)",
           "language": "Tamil",
-          "poster": "https://upload.wikimedia.org/wikipedia/en/3/3b/Scene_%282026_film%29.jpg"
+          "poster": "https://upload.wikimedia.org/wikipedia/en/3/3b/Scene_%282026_film%29.jpg",
+          "trailer": "_nuRAflabx8"
         },
         {
           "title": "Madden",
@@ -5582,7 +5586,8 @@
           "date": "2026-11-27",
           "url": "https://en.wikipedia.org/wiki/Yeh_Prem_Mol_Liya",
           "language": "Hindi",
-          "poster": "https://thumb.wikimedia.org/wikipedia/en/thumb/c/cf/Yeh_Prem_Mol_Liya_film_poster.jpg/250px-Yeh_Prem_Mol_Liya_film_poster.jpg"
+          "poster": "https://thumb.wikimedia.org/wikipedia/en/thumb/c/cf/Yeh_Prem_Mol_Liya_film_poster.jpg/250px-Yeh_Prem_Mol_Liya_film_poster.jpg",
+          "trailer": "vdhNar4uxm4"
         },
         {
           "title": "Avengers: Doomsday",
@@ -5605,7 +5610,8 @@
           "date": "2026-12-25",
           "url": "https://en.wikipedia.org/wiki/Mr._Irrelevant_(film)",
           "language": "Hollywood",
-          "poster": "https://thumb.wikimedia.org/wikipedia/en/thumb/0/08/Mr._Irrelevant_poster.jpeg/250px-Mr._Irrelevant_poster.jpeg"
+          "poster": "https://thumb.wikimedia.org/wikipedia/en/thumb/0/08/Mr._Irrelevant_poster.jpeg/250px-Mr._Irrelevant_poster.jpeg",
+          "trailer": "cwVE1qf6Ixs"
         },
         {
           "title": "Artificial",
