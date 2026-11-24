@@ -125,12 +125,12 @@ const MarketsPanelSchema = z.looseObject({
 
 const TechPanelSchema = z.looseObject({
   fetchedAt: z.string(),
-  repos: rows(z.looseObject({ name: z.string().min(1), url: httpUrl, stars: num, language: z.string().optional().catch(undefined), createdAt: z.string(), what: z.string().min(1) })),
+  repos: rows(z.looseObject({ name: z.string().min(1), url: httpUrl, stars: num, perDay: num.optional().catch(undefined), language: z.string().optional().catch(undefined), createdAt: z.string(), what: z.string().min(1) })),
   models: rows(z.looseObject({ name: z.string().min(1), url: httpUrl, likes: num, downloads: num, task: z.string().optional().catch(undefined), what: z.string().min(1) })),
   tools: rows(z.looseObject({ name: z.string().min(1), url: httpUrl, discussionUrl: httpUrl, points: num, comments: num, what: z.string().min(1) })),
 });
 
-const Movie = z.looseObject({ title: z.string().min(1), date: z.string(), url: httpUrl, poster: httpUrl.optional().catch(undefined), language: z.string().optional() });
+const Movie = z.looseObject({ title: z.string().min(1), date: z.string(), url: httpUrl, poster: httpUrl.optional().catch(undefined), language: z.string().optional(), trailer: z.string().regex(/^[A-Za-z0-9_-]{11}$/).optional().catch(undefined) });
 const CulturePanelSchema = z.looseObject({
   fetchedAt: z.string(),
   charts: rows(

@@ -21,7 +21,7 @@ Once a day (owner's choice from 2026-11-24; cron on this computer **03:30 → 05
 1. Reads 78 feeds: Indian outlets from left to right (The Hindu, Indian Express, HT, TOI, NDTV,
    Scroll, The Wire, ThePrint, News18, Swarajya, Organiser, Firstpost…), international (BBC, Al Jazeera,
    Guardian, NYT, WSJ, Fox, NPR, DW, France 24, CNA, SCMP, Reuters/AP headlines…), science, tech,
-   sport, and Bengaluru city feeds. Also 18 YouTube news channels for video.
+   sport, and Bengaluru city feeds. Also 18 YouTube news channels for video, read through the YouTube Data API only when YOUTUBE_API_KEY is set (YouTube's robots.txt disallows its channel feeds).
 2. **Claude Opus 5.5** (editor) groups reports of the same event, picks a balanced slate with
    section quotas, and assigns each story 2–6 sources from different outlets and leanings.
 3. **Claude Sonnet 5.5** (writer) writes each story in its own words from those sources, under a

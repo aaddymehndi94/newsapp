@@ -54,13 +54,38 @@ interface GhRepo {
   created_at: string;
   fork: boolean;
   archived: boolean;
+  forks_count: number;
+}
+
+const MIN_STARS = 300;
+const MIN_PER_DAY = 50;
+
+/**
+ * The mechanical checks before the model reads each README: at least 300 stars, gaining at least
+ * 50 a day on average since it was created, not a fork or archived, has a description, and has
+ * been forked by at least 1 in 100 of the people who starred it. Bought stars rarely come with
+ * forks, so a big star count with almost none is a warning sign. Fastest-rising first.
+ */
+export function vetRepos(items: GhRepo[], now: number): (GhRepo & { perDay: number })[] {
+  const seen = new Set<string>();
+  return items
+    .filter((r) => !seen.has(r.full_name) && seen.add(r.full_name))
+    .filter((r) => !r.fork && !r.archived && r.description?.trim() && r.stargazers_count >= MIN_STARS && r.forks_count >= r.stargazers_count / 100)
+    .map((r) => ({ ...r, perDay: Math.round(r.stargazers_count / Math.max(1, (now - Date.parse(r.created_at)) / 86400e3)) }))
+    .filter((r) => r.perDay >= MIN_PER_DAY)
+    .sort((a, b) => b.perDay - a.perDay);
 }
 
 async function githubRepos(): Promise<{ repos: Omit<RepoItem, "what">[]; cands: Candidate[] }> {
-  const since = new Date(Date.now() - 7 * 86400e3).toISOString().slice(0, 10);
-  const q = encodeURIComponent(`created:>${since} stars:>30`);
-  const j = await getJson<{ items: GhRepo[] }>(`https://api.github.com/search/repositories?q=${q}&sort=stars&order=desc&per_page=25`, githubHeaders());
-  const picked = j.items.filter((r) => !r.fork && !r.archived && r.description?.trim()).slice(0, 12);
+  // Two searches so a repo a few days old with a fast start isn't crowded out by month-old ones
+  // with bigger totals.
+  const search = (days: number, n: number) => {
+    const since = new Date(Date.now() - days * 86400e3).toISOString().slice(0, 10);
+    const q = encodeURIComponent(`created:>${since} stars:>=${MIN_STARS}`);
+    return getJson<{ items: GhRepo[] }>(`https://api.github.com/search/repositories?q=${q}&sort=stars&order=desc&per_page=${n}`, githubHeaders());
+  };
+  const [month, week] = await Promise.all([search(30, 100), search(7, 50)]);
+  const picked = vetRepos([...month.items, ...week.items], Date.now()).slice(0, 16);
   const cands: Candidate[] = [];
   await mapLimit(picked, 4, async (r, i) => {
     let excerpt = "";
@@ -76,7 +101,7 @@ async function githubRepos(): Promise<{ repos: Omit<RepoItem, "what">[]; cands: 
     cands[i] = { id: `r${i}`, kind: "repo", name: r.full_name, blurb: r.description ?? "", excerpt };
   });
   return {
-    repos: picked.map((r) => ({ name: r.full_name, url: r.html_url, stars: r.stargazers_count, language: r.language ?? undefined, createdAt: r.created_at })),
+    repos: picked.map((r) => ({ name: r.full_name, url: r.html_url, stars: r.stargazers_count, perDay: r.perDay, language: r.language ?? undefined, createdAt: r.created_at })),
     cands: cands.filter(Boolean),
   };
 }
@@ -129,7 +154,12 @@ const NOTES_SYSTEM = `You write the one-line notes in the "AI & software" panel 
 
 For each item write "what": one plain sentence of at most 20 words saying what it is or does and who would use it. Use only the material given; do not guess at features. No hype or marketing words (no "powerful", "seamless", "revolutionary", "cutting-edge", "game-changing"). Avoid jargon a curious non-programmer would not know, or explain it in a few words. Start with the thing itself, e.g. "A command-line tool that…", "An open-weight model from …".
 
-Set keep=false for anything spam-like or not worth a reader's time: star-farmed or empty repositories, crypto token promotions, cheat or piracy tools, adult content, homework dumps, lists of links, or anything where the material doesn't show what it does.`;
+Set keep=false for anything spam-like, risky or not worth a reader's time:
+- star-farmed, empty or placeholder repositories, and anything where the material doesn't show what it does;
+- claims that look like malware bait, such as running an unreleased or console-only game on PC, "free" paid software, or download links to executables with no source;
+- piracy, cheats, cracks, account or verification bypasses, and emulators or "ports" of current-generation consoles or games;
+- crypto token promotions, adult content, homework dumps and lists of links;
+- repositories whose README is not in English.`;
 
 const NOTES_SCHEMA = {
   type: "object",

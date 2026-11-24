@@ -115,3 +115,48 @@ test("Wikipedia film tables carry month and day down the rows and skip red links
     { title: "Gunmaaster G9", date: "2026-11-27", url: "https://en.wikipedia.org/wiki/Gunmaaster_G9", language: "Hindi" },
   ]);
 });
+
+test("films: only ones people are reading about, biggest first; upcoming in date order", async () => {
+  const { rankFilms } = await import("../pipeline/panels/culture.ts");
+  const f = (title: string, date: string) => ({ title, date, url: `https://en.wikipedia.org/wiki/${encodeURIComponent(title.replace(/ /g, "_"))}`, language: "Hollywood" });
+  const films = [f("Small Film", "2026-11-20"), f("Big Film", "2026-11-13"), f("Bigger Film", "2026-11-20"), f("Old Film", "2026-09-01"), f("Later Film", "2026-12-18"), f("Sooner Film", "2026-11-27"), f("Far Film", "2027-03-01"), f("Café Film", "2026-12-04")];
+  const views = new Map([["Big_Film", 50_000], ["Bigger_Film", 200_000], ["Old_Film", 90_000], ["Later_Film", 120_000], ["Sooner_Film", 20_000], ["Far_Film", 300_000], ["Café_Film", 10_000]]);
+  const { now, soon } = rankFilms(films, views, "2026-11-24");
+  assert.deepEqual(now.map((m) => m.title), ["Bigger Film", "Big Film"]);
+  assert.deepEqual(soon.map((m) => m.title), ["Sooner Film", "Café Film", "Later Film"]);
+});
+
+test("film posters come from the infobox and trailers from Wikidata's YouTube IDs", async () => {
+  const { parseInfoboxPoster, parseWikidataTrailer } = await import("../pipeline/panels/culture.ts");
+  const page = `<style>.infobox-image{}</style><table class="infobox vevent"><tr><td colspan="2" class="infobox-image"><span><a href="/wiki/File:X.jpg"><img src="//thumb.wikimedia.org/wikipedia/en/thumb/4/48/X_%28poster%29.jpg/250px-X_%28poster%29.jpg?utm_source=en.wikipedia.org" width="250"></a></span></td></tr></table>`;
+  assert.equal(parseInfoboxPoster(page), "https://thumb.wikimedia.org/wikipedia/en/thumb/4/48/X_%28poster%29.jpg/250px-X_%28poster%29.jpg");
+  assert.equal(parseInfoboxPoster("<p>no infobox</p>"), undefined);
+  const st = (id: string, text: string) => `<div id="Q1$x" class="wikibase-statementview wb-normal"><a href="https://www.youtube.com/watch?v=${id}">${id}</a> ${text}</div>`;
+  const item = `<div class="wikibase-statementgroupview" id="P1651" data-property-id="P1651">` +
+    st("aZXBFirj6b4", "subject named as Now in Production language of work or name English") +
+    st("3_9vCamtuPY", "object of statement has role teaser trailer language of work or name English number of viewers/listeners 9,000,000") +
+    st("NdvqHc56lE0", "object of statement has role trailer language of work or name English number of viewers/listeners 14,393,259") +
+    st("5jEeTPYVBsY", "object of statement has role trailer language of work or name English number of viewers/listeners 700,774") +
+    `</div><div class="wikibase-statementgroupview" id="P2047"><a href="https://www.youtube.com/watch?v=zzzzzzzzzzz">x</a> trailer</div>`;
+  assert.equal(parseWikidataTrailer(item, "English"), "NdvqHc56lE0");
+  assert.equal(parseWikidataTrailer(`<div class="wikibase-statementgroupview" id="P1651">${st("aZXBFirj6b4", "Now in Production")}</div>`), undefined);
+});
+
+test("GitHub repos: fast risers only, with forks, fastest first", async () => {
+  const { vetRepos } = await import("../pipeline/panels/tech.ts");
+  const now = Date.parse("2026-11-24T00:00:00Z");
+  const r = (name: string, stars: number, forks: number, daysOld: number, extra = {}) => ({
+    full_name: name, html_url: `https://github.com/${name}`, description: "d", stargazers_count: stars, forks_count: forks, language: null,
+    created_at: new Date(now - daysOld * 86400e3).toISOString(), fork: false, archived: false, ...extra,
+  });
+  const out = vetRepos([
+    r("a/steady", 3000, 200, 20), // 150 a day
+    r("b/rocket", 1200, 90, 2), // 600 a day
+    r("c/slow", 900, 50, 25), // 36 a day: too slow
+    r("d/small", 250, 30, 1), // under 300 stars
+    r("e/farmed", 8000, 10, 4), // no forks to speak of
+    r("f/fork", 5000, 400, 3, { fork: true }),
+    r("b/rocket", 1200, 90, 2), // listed by both searches
+  ], now);
+  assert.deepEqual(out.map((x) => [x.full_name, x.perDay]), [["b/rocket", 600], ["a/steady", 150]]);
+});

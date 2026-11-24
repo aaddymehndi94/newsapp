@@ -30,10 +30,12 @@ export function quoteFrom(
     change,
     changePct: (change / prev.value) * 100,
     asOf: last.date,
-    history: h.slice(-CHART_POINTS),
+    // The same calendar month for every quote, so the charts and "since" figures line up.
+    history: h.filter((p) => p.date >= monthBefore(last.date)).slice(-CHART_POINTS),
   };
 }
 
+const monthBefore = (iso: string) => new Date(Date.parse(iso) - 30 * 86400e3).toISOString().slice(0, 10);
 const pad = (n: number) => String(n).padStart(2, "0");
 const ymd = (d: Date) => `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`;
 
@@ -218,7 +220,23 @@ async function bitcoin(): Promise<MarketQuote | undefined> {
   // [time, low, high, open, close, volume], newest first; the newest is today's, still open.
   const rows = JSON.parse(r.text) as number[][];
   const hist = rows.map((c) => ({ date: ymd(new Date(c[0] * 1000)), value: c[4] }));
-  return quoteFrom({ id: "bitcoin", name: "Bitcoin", unit: "$", decimals: 0, source: "Coinbase" }, hist);
+  const q = quoteFrom({ id: "bitcoin", name: "Bitcoin", unit: "$", decimals: 0, source: "Coinbase" }, hist);
+  if (!q) return q;
+  // Bitcoin never closes, so its change is over the last 24 hours, from hourly candles.
+  const hr = await fetchText("https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=3600", { accept: "application/json", timeoutMs: 20_000 });
+  if (hr.ok) {
+    const hrs = JSON.parse(hr.text) as number[][];
+    const latest = hrs[0];
+    const dayAgo = latest && hrs.find((c) => c[0] <= latest[0] - 86400);
+    if (latest && dayAgo) {
+      const change = latest[4] - dayAgo[4];
+      q.value = latest[4];
+      q.change = change;
+      q.changePct = (change / dayAgo[4]) * 100;
+      q.history[q.history.length - 1] = { ...q.history[q.history.length - 1], value: latest[4] };
+    }
+  }
+  return q;
 }
 
 export async function marketsPanel(dataDir: string): Promise<MarketsPanel | undefined> {

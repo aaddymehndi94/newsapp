@@ -159,6 +159,8 @@ export interface RepoItem {
   name: string;
   url: string;
   stars: number;
+  /** Average stars a day since it was created. */
+  perDay?: number;
   language?: string;
   createdAt: string;
   what: string;
@@ -198,6 +200,8 @@ export interface ChartSong {
 }
 
 export interface Movie {
+  /** YouTube video ID of the trailer. */
+  trailer?: string;
   title: string;
   date: string;
   url: string;

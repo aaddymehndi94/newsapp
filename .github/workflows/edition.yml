@@ -2,6 +2,8 @@
 # Needs two repo secrets (Settings → Secrets and variables → Actions):
 #   ANTHROPIC_API_KEY     — Anthropic API key
 #   CLOUDFLARE_API_TOKEN  — Cloudflare token from the "Edit Cloudflare Workers" template
+# Free test: Actions → Edition → Run workflow with "test only" ticked checks both secrets and
+# redeploys the site from the editions already in the repo, without writing a new edition.
 name: Edition
 
 on:
@@ -11,6 +13,10 @@ on:
     - cron: "7 22 * * *"   # 03:37 IST → the 05:00 edition
   workflow_dispatch:
     inputs:
+      test_only:
+        description: "Test only: check the secrets and redeploy the current site (no new edition, no API cost)"
+        type: boolean
+        default: false
       slot:
         description: "am or pm (blank = by current IST time)"
         required: false
@@ -31,6 +37,9 @@ jobs:
         run: |
           [ -n "$A" ] || { echo "::error::Add the ANTHROPIC_API_KEY repo secret"; exit 1; }
           [ -n "$C" ] || { echo "::error::Add the CLOUDFLARE_API_TOKEN repo secret"; exit 1; }
+          # Listing models is free and proves the Anthropic key works.
+          code=$(curl -s -o /dev/null -w '%{http_code}' https://api.anthropic.com/v1/models -H "x-api-key: $A" -H "anthropic-version: 2023-06-01")
+          [ "$code" = "200" ] || { echo "::error::ANTHROPIC_API_KEY was refused (HTTP $code)"; exit 1; }
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -38,19 +47,27 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Produce edition
+        if: ${{ !inputs.test_only }}
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          # Optional: film listings in Entertainment (free key from themoviedb.org).
+          # Optional: YouTube Data API key (free, Google Cloud). Turns on story videos and finds
+          # trailers Wikidata doesn't list. Without it there are no story videos.
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          # Optional: TMDB key for film listings with TMDB's popularity instead of Wikipedia's.
           TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
           # Lifts GitHub's API rate limit for the "New on GitHub" list.
           GITHUB_TOKEN: ${{ github.token }}
           TZ: Asia/Kolkata
         run: node pipeline/run.ts --fresh --batch --no-deploy ${{ inputs.slot && format('--slot {0}', inputs.slot) || '' }}
+      - name: Build the site from the editions in the repo
+        if: ${{ inputs.test_only }}
+        run: node site/build.ts --data data/editions --out dist
       - name: Deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: npx wrangler deploy
       - name: Save edition to the repo
+        if: ${{ !inputs.test_only }}
         run: |
           git config user.name "meridian-bot"
           git config user.email "meridian-bot@users.noreply.github.com"

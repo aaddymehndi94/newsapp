@@ -120,7 +120,12 @@ function signed(v: number, decimals: number): string {
   return `${v < 0 ? MINUS : "+"}${fmt(Math.abs(v), decimals)}`;
 }
 
-/** A real (if small) line chart: 30 closes, scaled to their own range, labelled underneath. */
+/**
+ * A labelled line chart of the closes. The line is neutral on purpose: colour belongs to the
+ * labelled changes above it, so the chart can never seem to contradict them. A dashed line marks
+ * where the period started, so above it is up and below it is down; the right edge gives the
+ * period's high and low and the bottom edge its first and last dates.
+ */
 function chart(q: MarketQuote): string {
   const h = q.history;
   if (h.length < 3) return "";
@@ -128,25 +133,49 @@ function chart(q: MarketQuote): string {
   const lo = Math.min(...vals);
   const hi = Math.max(...vals);
   const span = hi - lo || 1;
-  const W = 300;
-  const H = 64;
-  const pts = h.map((p, i) => `${((i / (h.length - 1)) * W).toFixed(1)},${(H - 4 - ((p.value - lo) / span) * (H - 8)).toFixed(1)}`).join(" ");
-  const trend = vals[vals.length - 1] >= vals[0] ? "up" : "down";
+  const W = 600;
+  const H = 120;
+  const x = (i: number) => (i / (h.length - 1)) * W;
+  const y = (v: number) => 6 + (1 - (v - lo) / span) * (H - 12);
+  const line = h.map((p, i) => `${x(i).toFixed(1)},${y(p.value).toFixed(1)}`).join(" ");
+  const area = `M0,${H} L${line.replace(/ /g, " L")} L${W},${H} Z`;
+  const y0 = y(vals[0]).toFixed(1);
+  const lastX = x(h.length - 1).toFixed(1);
+  const lastY = y(vals[vals.length - 1]).toFixed(1);
   const first = h[0];
   const last = h[h.length - 1];
   const label = `${q.name} from ${dayMonth(first.date)} to ${dayMonth(last.date)}: ${fmt(first.value, q.decimals)} to ${fmt(last.value, q.decimals)}, low ${fmt(lo, q.decimals)}, high ${fmt(hi, q.decimals)}`;
   const axis = (v: number) => fmt(v, v >= 1000 ? 0 : q.decimals);
-  return `<div class="mk-plot"><svg class="mk-chart is-${trend}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${esc(label)}" focusable="false"><polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"/></svg><span class="mk-axis" aria-hidden="true"><span>${axis(hi)}</span><span>${axis(lo)}</span></span></div>`;
+  return `<figure class="mk-fig">
+<div class="mk-plot"><svg class="mk-chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${esc(label)}" focusable="false">
+<path class="mk-area" d="${area}"/>
+<line class="mk-base" x1="0" y1="${y0}" x2="${W}" y2="${y0}" vector-effect="non-scaling-stroke"/>
+<polyline class="mk-line" points="${line}" vector-effect="non-scaling-stroke"/>
+<line class="mk-dot" x1="${lastX}" y1="${lastY}" x2="${lastX}" y2="${lastY}" vector-effect="non-scaling-stroke"/>
+</svg><span class="mk-axis" aria-hidden="true"><span>${axis(hi)}</span><span>${axis(lo)}</span></span></div>
+<figcaption class="mk-dates" aria-hidden="true"><span>${esc(dayMonth(first.date))}</span><span>${esc(dayMonth(last.date))}</span></figcaption>
+</figure>`;
+}
+
+function move(label: string, change: number, pct: number, decimals: number): string {
+  const dir = change > 0 ? "up" : change < 0 ? "down" : "flat";
+  return `<div class="mk-move"><dt>${esc(label)}</dt><dd class="is-${dir}">${signed(change, decimals)} <span class="mk-pct">(${signed(pct, 2)}%)</span></dd></div>`;
 }
 
 function quoteTile(q: MarketQuote): string {
-  const dir = q.change > 0 ? "up" : q.change < 0 ? "down" : "flat";
+  const h = q.history;
+  const start = h.length > 2 ? h[0] : undefined;
+  const sinceChange = start ? q.value - start.value : 0;
+  const when = q.id === "bitcoin" ? "Latest price" : `${dayMonth(q.asOf)} close`;
   return `<li class="mk">
-<h4 class="mk-name">${esc(q.name)}${q.per ? ` <span class="mk-per">${esc(q.per)}</span>` : ""}</h4>
+<div class="mk-top"><h4 class="mk-name">${esc(q.name)}${q.per ? ` <span class="mk-per">${esc(q.per)}</span>` : ""}</h4><span class="mk-when">${esc(when)}</span></div>
 <p class="mk-value">${esc(q.unit)}${fmt(q.value, q.decimals)}</p>
-<p class="mk-change is-${dir}">${signed(q.change, q.decimals)} (${signed(q.changePct, 2)}%)</p>
+<dl class="mk-moves">
+${move(q.id === "bitcoin" ? "24 hours" : "On the day", q.change, q.changePct, q.decimals)}
+${start ? move(`Since ${dayMonth(start.date)}`, sinceChange, (sinceChange / start.value) * 100, q.decimals) : ""}
+</dl>
 ${chart(q)}
-<p class="mk-src">${q.history.length > 2 ? `${esc(dayMonth(q.history[0].date))} to ` : ""}${esc(dayMonth(q.asOf))} · ${esc(q.source)}</p>
+<p class="mk-src">${esc(q.source)}</p>
 </li>`;
 }
 
@@ -154,7 +183,7 @@ export function marketsPanel(p: MarketsPanel): string {
   if (p.quotes.length === 0) return "";
   return `<div class="panel panel--markets">
 <ul class="mk-grid">${p.quotes.map(quoteTile).join("\n")}</ul>
-<p class="panel-note">Closing prices, with the change from the previous close; bitcoin is the latest price. Charts cover about a month.</p>
+<p class="panel-note">“On the day” compares the latest close with the one before; bitcoin compares the latest price with 24 hours earlier. The chart and the “since” figure cover the period shown under each chart. Green is up, red is down.</p>
 </div>`;
 }
 
@@ -183,8 +212,8 @@ function techItem(name: string, url: string, what: string, meta: string[]): stri
 export function techPanel(p: TechPanel): string {
   const lists: string[] = [];
   if (p.repos.length)
-    lists.push(`<section class="tl" aria-labelledby="tl-gh"><h3 class="panel-title" id="tl-gh">New on GitHub this week</h3>
-<ul>${p.repos.map((r) => techItem(r.name, r.url, r.what, [`${compact(r.stars)} stars`, ...(r.language ? [esc(r.language)] : []), ageDays(r.createdAt, p.fetchedAt)])).join("\n")}</ul></section>`);
+    lists.push(`<section class="tl" aria-labelledby="tl-gh"><h3 class="panel-title" id="tl-gh">Rising fast on GitHub</h3>
+<ul>${p.repos.map((r) => techItem(r.name, r.url, r.what, [`${compact(r.stars)} stars`, ...(r.perDay ? [`about ${compact(r.perDay)} a day`] : []), ...(r.language ? [esc(r.language)] : []), ageDays(r.createdAt, p.fetchedAt)])).join("\n")}</ul></section>`);
   if (p.models.length)
     lists.push(`<section class="tl" aria-labelledby="tl-hf"><h3 class="panel-title" id="tl-hf">Trending on Hugging Face</h3>
 <ul>${p.models.map((m) => techItem(m.name, m.url, m.what, [`${compact(m.likes)} likes`, ...(m.downloads > 0 ? [`${compact(m.downloads)} downloads`] : [])])).join("\n")}</ul></section>`);
@@ -194,7 +223,7 @@ export function techPanel(p: TechPanel): string {
   if (!lists.length) return "";
   return `<div class="panel panel--tech">
 <div class="tl-grid">${lists.join("\n")}</div>
-<p class="panel-note">From GitHub (new repositories with the most stars), Hugging Face’s trending list and Hacker News “Show HN” posts. The one-line descriptions are Meridian’s.</p>
+<p class="panel-note">From GitHub (repositories under a month old gaining the most stars a day, with spam and piracy screened out), Hugging Face’s trending list and Hacker News “Show HN” posts. The one-line descriptions are Meridian’s.</p>
 </div>`;
 }
 
@@ -211,16 +240,29 @@ function songRow(s: ChartSong, i: number): string {
 </li>`;
 }
 
+const PLAY = `<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>`;
+
 function filmRow(m: Movie, upcoming: boolean): string {
-  const poster = m.poster ? `<img src="${esc(m.poster)}" alt="" width="185" height="278" loading="lazy" decoding="async" referrerpolicy="no-referrer">` : "";
+  const img = m.poster
+    ? `<img src="${esc(m.poster)}" alt="" width="185" height="278" loading="lazy" decoding="async" referrerpolicy="no-referrer">`
+    : `<span class="film-noposter">${esc(m.title)}</span>`;
+  const trailer = m.trailer && /^[A-Za-z0-9_-]{11}$/.test(m.trailer) ? m.trailer : "";
+  const yt = (cls: string, extra: string) =>
+    `<a class="${cls}" href="https://www.youtube.com/watch?v=${trailer}" data-yt="${trailer}" data-yt-modal data-title="${esc(`${m.title}: trailer`)}" ${EXT}${extra}>`;
+  // With a trailer the poster also plays it (a pointer shortcut; the "Trailer" link is the one
+  // keyboards and screen readers get).
+  const poster = trailer
+    ? `${yt("film-poster film-poster--play", ' tabindex="-1" aria-hidden="true"')}${img}<span class="film-play">${PLAY}</span></a>`
+    : `<span class="film-poster">${img}</span>`;
   return `<li class="film">
-<span class="film-poster">${poster}</span>
-<a href="${esc(m.url)}" ${EXT}>${esc(m.title)}</a>
-<span class="film-meta">${upcoming ? `Out ${esc(dayMonth(m.date))}` : `Since ${esc(dayMonth(m.date))}`}${m.language ? ` · ${esc(m.language)}` : ""}</span>
+${poster}
+<a class="film-name" href="${esc(m.url)}" ${EXT}>${esc(m.title)}</a>
+<span class="film-meta">${upcoming ? "Out" : "Released"} ${esc(dayMonth(m.date))}${m.language ? ` · ${esc(m.language)}` : ""}</span>
+${trailer ? `${yt("film-trailer", "")}${PLAY}<span>Trailer<span class="visually-hidden">: ${esc(m.title)}</span></span></a>` : ""}
 </li>`;
 }
 
-/** Posters when the source has them (TMDB); otherwise a dated list. */
+/** Poster cards when the source has posters; otherwise a dated list. */
 function filmList(ms: Movie[], upcoming: boolean): string {
   if (ms.some((m) => m.poster)) return `<ul class="film-strip">${ms.map((m) => filmRow(m, upcoming)).join("")}</ul>`;
   return `<ul class="film-list">${ms
@@ -246,13 +288,14 @@ ${c.songs.length > 5 ? `<details class="songs-more"><summary>Show ${c.songs.leng
   const films: string[] = [];
   if (p.nowShowing?.length) films.push(`<section class="films" aria-labelledby="fl-now"><h3 class="panel-title" id="fl-now">New releases</h3>${filmList(p.nowShowing, false)}</section>`);
   if (p.comingSoon?.length) films.push(`<section class="films" aria-labelledby="fl-soon"><h3 class="panel-title" id="fl-soon">Coming soon</h3>${filmList(p.comingSoon, true)}</section>`);
-  if (films.length) parts.push(`<div class="film-cols">${films.join("\n")}</div>`);
-  if (!parts.length) return "";
   const anyFilms = [...(p.nowShowing ?? []), ...(p.comingSoon ?? [])];
+  // Poster strips get the full width; plain lists sit side by side on wide screens.
+  if (films.length) parts.push(anyFilms.some((m) => m.poster) ? films.join("\n") : `<div class="film-cols">${films.join("\n")}</div>`);
+  if (!parts.length) return "";
   const tmdb = anyFilms.some((m) => m.url.includes("themoviedb.org"))
     ? " Film listings use the TMDB API but are not endorsed or certified by TMDB."
     : anyFilms.length
-      ? " Film release dates from Wikipedia’s lists of Hindi, Kannada, Tamil, Telugu, Malayalam and American films (cinema and streaming)."
+      ? " Films are the releases, in cinemas or streaming, that most people have been reading about on Wikipedia over the past few days. Posters from Wikipedia; trailers play from YouTube."
       : "";
   return `<div class="panel panel--culture">
 ${parts.join("\n")}

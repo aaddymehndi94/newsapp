@@ -123,19 +123,46 @@
     if (e.persisted) { clearHero(); markCards(); }
   });
 
-  // ---- click-to-load video ----
+  // ---- click-to-load video: in place for story videos, in a dialog for trailers ----
+  const ytFrame = (id, title) => {
+    const f = document.createElement("iframe");
+    f.className = "video-frame";
+    f.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+    f.title = title || "Video";
+    f.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen";
+    f.referrerPolicy = "strict-origin-when-cross-origin";
+    return f;
+  };
+  let ytDialog = null;
+  const openYtDialog = (id, title) => {
+    if (!ytDialog) {
+      ytDialog = document.createElement("dialog");
+      ytDialog.className = "yt-dialog";
+      ytDialog.innerHTML =
+        '<div class="yt-box"><button type="button" class="yt-close"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span class="visually-hidden">Close video</span></button><div class="yt-slot"></div></div>';
+      document.body.append(ytDialog);
+      ytDialog.querySelector(".yt-close").addEventListener("click", () => ytDialog.close());
+      // A click on the dimmed backdrop lands on the dialog itself.
+      ytDialog.addEventListener("click", (ev) => { if (ev.target === ytDialog) ytDialog.close(); });
+      // Stop playback when it closes.
+      ytDialog.addEventListener("close", () => ytDialog.querySelector(".yt-slot").replaceChildren());
+    }
+    ytDialog.setAttribute("aria-label", title || "Video");
+    ytDialog.querySelector(".yt-slot").replaceChildren(ytFrame(id, title));
+    ytDialog.showModal();
+  };
   document.querySelectorAll("a[data-yt]").forEach((a) => {
     a.addEventListener("click", (e) => {
       if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
       const id = a.getAttribute("data-yt") || "";
       if (!/^[A-Za-z0-9_-]{6,20}$/.test(id)) return;
       e.preventDefault();
-      const f = document.createElement("iframe");
-      f.className = "video-frame";
-      f.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
-      f.title = a.getAttribute("data-title") || "Video";
-      f.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen";
-      f.referrerPolicy = "strict-origin-when-cross-origin";
+      const title = a.getAttribute("data-title") || "Video";
+      if (a.hasAttribute("data-yt-modal") && typeof HTMLDialogElement === "function") {
+        openYtDialog(id, title);
+        return;
+      }
+      const f = ytFrame(id, title);
       a.replaceWith(f);
       f.focus();
     });

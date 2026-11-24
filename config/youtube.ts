@@ -1,5 +1,5 @@
 // News channels whose recent uploads are offered to the editor as video candidates.
-// Feeds: https://www.youtube.com/feeds/videos.xml?channel_id=<id> (public, no key).
+// Read through the YouTube Data API (pipeline/videos.ts), only when YOUTUBE_API_KEY is set.
 export const YOUTUBE_CHANNELS: { id: string; name: string }[] = [
   { id: "UC16niRr50-MSBwiO3YDb3RA", name: "BBC News" },
   { id: "UCNye-wNBqNL5ZzHSJj3l8Bg", name: "Al Jazeera English" },

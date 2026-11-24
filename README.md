@@ -31,7 +31,7 @@ Local cron (`crontab -l`) runs `scripts/run-edition.sh am` at 03:30 and `… pm`
 
 ## Layout
 
-- `config/sources.ts` — news feeds with leaning labels · `config/youtube.ts` — news channels
+- `config/sources.ts` — news feeds with leaning labels · `config/youtube.ts` — news channels (read through the YouTube Data API; needs `YOUTUBE_API_KEY`)
 - `pipeline/` — gather (`feeds.ts`), read pages (`enrich.ts`), editor (`editor.ts`), writer
   (`writer.ts`, style rules in `style.ts`), pictures (`images.ts`), video (`videos.ts`), orchestration (`run.ts`)
 - `site/` — static site renderer → `dist/`
