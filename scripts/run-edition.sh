@@ -12,6 +12,12 @@ SLOT="${1:-}"
 LOG="logs/$(date +%F)-${SLOT:-auto}.log"
 {
   echo "=== $(date) run-edition ${SLOT} ==="
+  # Once GitHub Actions has produced an edition successfully, it owns the schedule: stand down.
+  if curl -fsS --max-time 20 "https://api.github.com/repos/aaddymehndi94/newsapp/actions/workflows/edition.yml/runs?status=success&per_page=1" \
+      | grep -q '"total_count": *[1-9]'; then
+    echo "GitHub Actions is producing editions; skipping the laptop run."
+    exit 0
+  fi
   node pipeline/run.ts ${SLOT:+--slot "$SLOT"} --fresh --batch
   echo "=== exit $? at $(date) ==="
   # Keep a week of intermediate work and a month of logs.

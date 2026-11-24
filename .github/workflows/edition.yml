@@ -1,13 +1,14 @@
-# Optional: run editions on GitHub instead of the home computer.
-# To switch: add repo secrets ANTHROPIC_API_KEY, CLOUDFLARE_API_TOKEN (template "Edit Cloudflare Workers"),
-# CLOUDFLARE_ACCOUNT_ID; uncomment the schedule below; and remove the local crontab lines
-# (`crontab -e`) so editions aren't produced twice.
+# Produces, builds and deploys each edition on GitHub's servers (no laptop needed).
+# Needs two repo secrets (Settings → Secrets and variables → Actions):
+#   ANTHROPIC_API_KEY     — Anthropic API key
+#   CLOUDFLARE_API_TOKEN  — Cloudflare token from the "Edit Cloudflare Workers" template
 name: Edition
 
 on:
-  # schedule:
-  #   - cron: "0 22 * * *"   # 03:30 IST → 05:00 edition
-  #   - cron: "0 10 * * *"   # 15:30 IST → 17:00 edition
+  schedule:
+    # GitHub runs scheduled jobs a few minutes late at busy times; off-the-hour minutes help.
+    - cron: "7 22 * * *"   # 03:37 IST → morning edition
+    - cron: "7 10 * * *"   # 15:37 IST → evening edition
   workflow_dispatch:
     inputs:
       slot:
@@ -23,6 +24,13 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Check secrets
+        env:
+          A: ${{ secrets.ANTHROPIC_API_KEY }}
+          C: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          [ -n "$A" ] || { echo "::error::Add the ANTHROPIC_API_KEY repo secret"; exit 1; }
+          [ -n "$C" ] || { echo "::error::Add the CLOUDFLARE_API_TOKEN repo secret"; exit 1; }
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -37,7 +45,6 @@ jobs:
       - name: Deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: npx wrangler deploy
       - name: Save edition to the repo
         run: |
@@ -45,4 +52,5 @@ jobs:
           git config user.email "meridian-bot@users.noreply.github.com"
           git add data/editions
           git commit -m "Edition $(TZ=Asia/Kolkata date +%F-%H%M)" || exit 0
+          git pull --rebase --autostash origin main
           git push

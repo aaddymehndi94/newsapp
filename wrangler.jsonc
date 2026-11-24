@@ -2,6 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "meridian-news",
   "compatibility_date": "2026-11-01",
+  "account_id": "e73d65f54f3eff9b43128f8c7e6e4107",
   // Pure static site: no Worker script, just assets.
   "assets": {
     "directory": "./dist",
