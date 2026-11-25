@@ -166,12 +166,12 @@ export function formatItems(items: FeedItem[], now = Date.now()): { text: string
   for (const g of groups.values()) {
     const f = g[0];
     const info = outletInfo(f.outlet);
-    const text = f.pages === false || NO_PAGES.has(f.sourceId) ? (g.every((x) => !x.summary) ? "; headlines only" : "; feed summaries only") : "";
+    const text = f.pages === false || NO_PAGES.has(f.sourceId) ? (g.every((x) => !x.summary) ? "; headlines only" : "; feed summaries only") + (g.some((x) => x.alt) ? ", except items marked + (full text available)" : "") : "";
     out.push(`## ${f.outlet} (${LEAN[f.leaning]}; ${f.sectionHint}; ${f.tier ?? info?.tier ?? "core"}; owner ${f.owner ?? info?.owner ?? f.outlet}${text})`);
     for (const it of g) {
       const alias = `i${(n++).toString(36)}`;
       aliases.set(alias, it.id);
-      out.push(`${alias} ${age(it.published, now)} ${it.title}`);
+      out.push(`${alias}${it.alt ? "+" : ""} ${age(it.published, now)} ${it.title}`);
     }
   }
   return { text: out.join("\n"), aliases };
@@ -210,7 +210,7 @@ Choose this edition's stories.`;
 
 /** Translate alias item ids (i0, i1…) in a slate back to real item ids. */
 export function unalias(slate: Slate, aliases: Map<string, string>): Slate {
-  return { stories: slate.stories.map((s) => ({ ...s, itemIds: s.itemIds.map((a) => aliases.get(a.trim()) ?? a) })) };
+  return { stories: slate.stories.map((s) => ({ ...s, itemIds: s.itemIds.map((a) => aliases.get(a.trim().replace(/\+$/, "")) ?? a) })) };
 }
 
 const CAN_LEAD = new Set<Tier>(["core", "wire", "primary"]);

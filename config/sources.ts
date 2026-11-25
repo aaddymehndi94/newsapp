@@ -91,7 +91,9 @@ export const SOURCES: Source[] = [
   { id: "hindu-national", outlet: "The Hindu", url: "https://www.thehindu.com/news/national/feeder/default.rss", region: "india", section: "india", leaning: "centre-left" },
   { id: "ie-india", outlet: "The Indian Express", url: "https://indianexpress.com/section/india/feed/", region: "india", section: "india", leaning: "centre-left" },
   { id: "ht-india", outlet: "Hindustan Times", url: "https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml", region: "india", section: "india", leaning: "centre" },
-  { id: "theprint", outlet: "ThePrint", url: "https://theprint.in/googlenews.xml", kind: "sitemap", region: "india", section: "india", leaning: "centre" },
+  // ThePrint also republishes PTI and Reuters copy in full (used to read PTI's text) and paid ANI
+  // press releases (left out).
+  { id: "theprint", outlet: "ThePrint", url: "https://theprint.in/googlenews.xml", kind: "sitemap", path: /^\/(?!ani-press-releases|opinion|talk-point|brandma)/, region: "india", section: "india", leaning: "centre" },
   { id: "thewire", outlet: "The Wire", url: "https://thewire.in/news-sitemap.xml", kind: "sitemap", host: ["thewirenews.in", "thewire.in"], times: "ist-as-utc", region: "india", section: "india", leaning: "left" },
   { id: "quint-today", outlet: "The Quint", url: "https://www.thequint.com/sitemap/today", kind: "sitemap", path: /^\/news\//, region: "india", section: "india", leaning: "centre-left" },
   { id: "quint-yesterday", outlet: "The Quint", url: "https://www.thequint.com/sitemap/yesterday", kind: "sitemap", path: /^\/news\//, region: "india", section: "india", leaning: "centre-left" },
@@ -318,6 +320,10 @@ export const OUTLETS: Record<string, OutletInfo> = {
   "Deccan Chronicle": { owner: "Deccan Chronicle Holdings", tier: "corroborate", leaning: "centre" },
   Pinkvilla: { owner: "Pinkvilla", tier: "corroborate", leaning: "centre" },
   "Bollywood Hungama": { owner: "Bollywood Hungama", tier: "core", leaning: "centre" },
+  // Found through the coverage search only (pipeline/coverage.ts).
+  "India Today": { owner: "Living Media (India Today group)", tier: "core", leaning: "centre" },
+  "The Tribune": { owner: "The Tribune Trust", tier: "core", leaning: "centre" },
+  Outlook: { owner: "Outlook Publishing (Rajan Raheja)", tier: "core", leaning: "centre-left" },
   // World
   "BBC News": { owner: "BBC", tier: "core", leaning: "centre-left" },
   "BBC Sport": { owner: "BBC", tier: "core", leaning: "centre" },
@@ -335,6 +341,13 @@ export const OUTLETS: Record<string, OutletInfo> = {
   "ABC News (Australia)": { owner: "Australian Broadcasting Corporation", tier: "core", leaning: "centre-left" },
   "The Diplomat": { owner: "Diplomat Media", tier: "core", leaning: "centre" },
   CNBC: { owner: "Comcast (NBCUniversal)", tier: "core", leaning: "centre" },
+  CNA: { owner: "Mediacorp (Singapore state)", tier: "core", leaning: "centre" },
+  Dawn: { owner: "Dawn Media Group", tier: "core", leaning: "centre-left" },
+  "The Daily Star (Bangladesh)": { owner: "Mediaworld", tier: "core", leaning: "centre" },
+  "The Kathmandu Post": { owner: "Kantipur Media Group", tier: "core", leaning: "centre" },
+  "The Independent": { owner: "Independent Digital News & Media", tier: "core", leaning: "centre-left" },
+  "The Japan Times": { owner: "The Japan Times", tier: "core", leaning: "centre" },
+  "The Straits Times": { owner: "SPH Media Trust", tier: "core", leaning: "centre" },
   // Science, technology, AI
   "Ars Technica": { owner: CONDE, tier: "core", leaning: "centre-left" },
   "The Verge": { owner: "Vox Media", tier: "core", leaning: "centre-left" },

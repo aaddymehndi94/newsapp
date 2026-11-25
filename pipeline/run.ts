@@ -4,8 +4,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { SOURCES, canonicalOutlet, leaningFor } from "../config/sources.ts";
-import { type FeedItem, gatherAll } from "./feeds.ts";
+import { type FeedItem, gatherAll, linkRepublished } from "./feeds.ts";
 import { budgetItems, windowHours } from "./budget.ts";
+import { findCoverage } from "./coverage.ts";
 import { type PageInfo, readPage } from "./enrich.ts";
 import { type Slate, type SlatePick, CITY_SECTIONS, SECTION_IDS, SECTION_NAMES, buildEditorRequest, cleanSlate, planEdition, unalias } from "./editor.ts";
 import { type WrittenStory, buildRevisionRequest, buildWriterRequest, sourceDocs, storyCustomId, storyText } from "./writer.ts";
@@ -122,7 +123,8 @@ async function main() {
     log(`reading feeds back ${hours} hours (to the last edition's gather)`);
     const { items, stats } = await gatherAll(SOURCES, hours);
     // Each owner gets a budget per section, sampled across the whole window (pipeline/budget.ts).
-    const readable = items.filter((it) => isMostlyLatin(it.title) && it.title.split(/\s+/).length >= 4);
+    const readable = linkRepublished(items.filter((it) => isMostlyLatin(it.title) && it.title.split(/\s+/).length >= 4));
+    log(`${readable.filter((i) => i.alt).length} headline-only items have a full republished copy we may read`);
     gathered = { items: budgetItems(readable), stats: { ...stats, gatheredAt, windowHours: hours } };
     writeJson(path.join(WORK, "items.json"), gathered);
   }
@@ -173,12 +175,51 @@ async function main() {
   const pageCache = new Map<string, PageInfo>(Object.entries(readJson<Record<string, PageInfo>>(pagesFile) ?? {}));
   const toRead = [...new Set(picks.flatMap((p) => p.itemIds))]
     .map((id) => items.get(id)!)
-    .filter((it) => it && it.pages !== false && !NO_PAGES.has(it.sourceId) && !pageCache.has(it.id));
+    .filter((it) => it && (it.alt || (it.pages !== false && !NO_PAGES.has(it.sourceId))) && !pageCache.has(it.id));
   log(`reading ${toRead.length} article pages…`);
   await mapLimit(toRead, 8, async (it) => {
-    pageCache.set(it.id, await readPage(it.link));
+    pageCache.set(it.id, await readPage(it.alt ?? it.link));
   });
   writeJson(pagesFile, Object.fromEntries(pageCache));
+
+  // 3b. Stories with fewer than two full texts to write from: find other outlets' reports of the
+  // same event (pipeline/coverage.ts) and read those we may. Saved, so a re-run doesn't repeat it.
+  let coverage = cached<{ items: FeedItem[]; added: Record<string, string[]> }>("coverage.json");
+  if (!coverage) {
+    coverage = { items: [], added: {} };
+    const fullTexts = (p: SlatePick) => p.itemIds.filter((id) => (pageCache.get(id)?.text?.length ?? 0) >= 800).length;
+    const needMore = picks.filter((p) => fullTexts(p) < 2).slice(0, 45);
+    log(`searching for more coverage of ${needMore.length} stories…`);
+    const stopAt = Date.now() + 12 * 60e3; // never let the search hold up the edition
+    for (const p of needMore) {
+      if (Date.now() > stopAt) {
+        log("coverage search: out of time, stopping");
+        break;
+      }
+      const first = items.get(p.itemIds[0]);
+      if (!first) continue;
+      const have = new Set(p.itemIds.map((id) => canonicalOutlet(items.get(id)?.outlet ?? "")));
+      const pages = new Map<string, PageInfo>();
+      const found = await findCoverage(p.workingHeadline, first, have, async (url) => {
+        const page = await readPage(url);
+        pages.set(url, page);
+        return page.ok ? page.text : undefined;
+      }).catch((e) => {
+        log(`coverage search failed for ${p.key}: ${(e as Error).message}`);
+        return [];
+      });
+      for (const f of found) {
+        coverage.items.push(f.item);
+        pageCache.set(f.item.id, pages.get(f.item.link)!);
+        (coverage.added[p.key] ??= []).push(f.item.id);
+      }
+    }
+    writeJson(path.join(WORK, "coverage.json"), coverage);
+    writeJson(pagesFile, Object.fromEntries(pageCache));
+  }
+  for (const it of coverage.items) items.set(it.id, it);
+  for (const p of picks) for (const id of coverage.added[p.key] ?? []) if (!p.itemIds.includes(id)) p.itemIds.push(id);
+  log(`coverage search added ${coverage.items.length} reports to ${Object.keys(coverage.added).length} stories`);
   const okPages = [...pageCache.values()].filter((p) => p.ok && p.text).length;
   log(`pages with text: ${okPages}/${pageCache.size}`);
 
@@ -252,7 +293,8 @@ async function main() {
       const it = items.get(id);
       if (!it) continue;
       const page = pageCache.get(id);
-      if (page?.ogImage) cands.push({ url: page.ogImage, outlet: it.outlet, sourceUrl: it.link, declaredWidth: page.ogImageWidth, from: "og" });
+      // A republished copy's picture belongs to the republisher, whom the story doesn't credit.
+      if (page?.ogImage && !it.alt) cands.push({ url: page.ogImage, outlet: it.outlet, sourceUrl: it.link, declaredWidth: page.ogImageWidth, from: "og" });
       if (it.image) cands.push({ url: it.image, outlet: it.outlet, sourceUrl: it.link, from: "rss" });
     }
     let img = await chooseOutletImage(cands, w.imageAlt || w.headline);

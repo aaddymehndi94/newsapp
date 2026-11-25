@@ -249,3 +249,26 @@ test("budget: items are sampled across the whole window, per owner and section; 
   assert.equal(windowHours(now - 90 * 3600_000, now), 50);
   assert.equal(windowHours(undefined, now), 26);
 });
+
+test("a headline-only wire item gets the full text of its word-for-word republication, and the copy leaves the menu", async () => {
+  const { linkRepublished } = await import("../pipeline/feeds.ts");
+  const base = { tier: "core", region: "india", sectionHint: "india", summary: "" };
+  const items = [
+    { ...base, id: "p", sourceId: "pti-india", outlet: "Press Trust of India", title: "Allahabad HC adjourns hearing in Saharanpur mosque case till Dec 9", link: "https://www.ptinews.com/story/national/x/1", pages: false },
+    { ...base, id: "t", sourceId: "theprint", outlet: "ThePrint", title: "Allahabad HC adjourns hearing in Saharanpur mosque case till Dec 9", link: "https://theprint.in/india/x/2", pages: true },
+    { ...base, id: "o", sourceId: "theprint", outlet: "ThePrint", title: "ThePrint's own report on the Delhi voter roll", link: "https://theprint.in/india/y/3", pages: true },
+    { ...base, id: "s", sourceId: "pti-india", outlet: "Press Trust of India", title: "Short title", link: "https://www.ptinews.com/story/national/z/4", pages: false },
+  ] as FeedItem[];
+  const out = linkRepublished(items);
+  assert.deepEqual(out.map((i) => [i.id, i.alt ?? ""]), [["p", "https://theprint.in/india/x/2"], ["o", ""], ["s", ""]]);
+});
+
+test("coverage search: a focused GDELT query from a headline, known outlets only, and a page must be about the story", async () => {
+  const { gdeltQuery, outletForUrl, relevant } = await import("../pipeline/coverage.ts");
+  assert.equal(gdeltQuery("Delhi SIR: Nearly 44 lakh voters may remain excluded from final roll as claims phase ends"), '"Delhi" "SIR" "44 lakh" voters excluded final sourcelang:english');
+  assert.equal(outletForUrl("https://www.deccanherald.com/india/x"), "Deccan Herald");
+  assert.equal(outletForUrl("https://economictimes.indiatimes.com/news/x"), "The Economic Times");
+  assert.equal(outletForUrl("https://some-content-farm.example/x"), undefined);
+  assert.ok(relevant("Nearly 44 lakh voters in Delhi may be left off the final roll after the SIR claims phase.", "Delhi SIR: 44 lakh voters may be excluded"));
+  assert.ok(!relevant("The cricket team won by six wickets in Delhi.", "Delhi SIR: 44 lakh voters may be excluded"));
+});

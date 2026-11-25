@@ -17,6 +17,9 @@ export interface FeedItem {
   /** False when we won't read the article page (Source.fetchPages, or robots.txt bars Claude-User):
    *  the writer then has only what the feed carries. */
   pages?: boolean;
+  /** A page we may read that carries this same report word for word (PTI copy republished by
+   *  ThePrint): the writer reads it there, and the story still credits and links this item. */
+  alt?: string;
   title: string;
   link: string;
   summary: string;
@@ -207,6 +210,28 @@ export function parseFeed(xml: string, source: Source): FeedItem[] {
     out.push(itemFor(source, { title, link: kept, summary, published, image: pickImage(it, rawHtml) }));
   }
   return out;
+}
+
+const norm = (t: string) => t.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+
+/**
+ * Headline-only items (PTI's pages need JavaScript) whose exact headline also appears on a page
+ * we may read get that page as `alt`; the republished copy then leaves the list, so it isn't
+ * offered twice and the republisher's budget goes to its own reporting.
+ */
+export function linkRepublished(items: FeedItem[]): FeedItem[] {
+  const readable = new Map<string, FeedItem>();
+  for (const it of items) if (it.pages !== false && norm(it.title).length >= 25 && !readable.has(norm(it.title))) readable.set(norm(it.title), it);
+  const used = new Set<string>();
+  for (const it of items) {
+    if (it.pages !== false) continue;
+    const twin = readable.get(norm(it.title));
+    if (twin && twin.outlet !== it.outlet) {
+      it.alt = twin.link;
+      used.add(twin.id);
+    }
+  }
+  return items.filter((it) => !used.has(it.id));
 }
 
 const TRACKING = /^(utm_|at_|fbclid|gclid|ocid|cmpid|ref$|ref_|src$|from$|itm_|mc_)/i;
