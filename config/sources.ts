@@ -67,26 +67,39 @@ export interface Source {
 // against its site's robots.txt before each fetch (pipeline/robots.ts); CNA (/api/ barred) and
 // The Register (only named search engines allowed) were removed for the same reason.
 
-// PTI routes its national copy to a city when the headline names it (or its state, where the
-// city section also carries state news that touches the city).
+// The two Indian wire agencies route their national copy to a city when the headline names it
+// (or its state, where the city section also carries state news that touches the city).
 const PTI = "https://www.ptinews.com/news-sitemap.xml";
 const PTI_NATIONAL = /\/story\/national\//;
-const pti = (city: City, match: RegExp): Source => ({
-  id: `pti-${city}`, outlet: "Press Trust of India", url: PTI, kind: "sitemap", path: PTI_NATIONAL, match,
+const UNI = "https://www.uniindia.com/news-sitemap.xml";
+const UNI_NATIONAL = /^\/(national|north-india|south-india|east-india|west-india)\//;
+const CITY_MATCH: Record<City, RegExp> = {
+  delhi: /\bDelhi\b/,
+  mumbai: /\bMumbai\b|\bThane\b|\bBMC\b/,
+  kolkata: /\bKolkata\b|\bBengal\b/,
+  bengaluru: /\bBengaluru\b|\bBangalore\b|\bKarnataka\b/,
+  chennai: /\bChennai\b|\bTamil Nadu\b/,
+  hyderabad: /\bHyderabad\b|\bTelangana\b/,
+  kochi: /\bKochi\b|\bKerala\b/,
+};
+const CITIES = Object.keys(CITY_MATCH) as City[];
+const pti = (city: City): Source => ({
+  id: `pti-${city}`, outlet: "Press Trust of India", url: PTI, kind: "sitemap", path: PTI_NATIONAL, match: CITY_MATCH[city],
   region: city, section: city, leaning: "centre", fetchPages: false,
+});
+const uni = (city: City): Source => ({
+  id: `uni-${city}`, outlet: "United News of India", url: UNI, kind: "sitemap", path: UNI_NATIONAL, match: CITY_MATCH[city],
+  region: city, section: city, leaning: "centre",
 });
 
 export const SOURCES: Source[] = [
   // ───────────── India — general / national ─────────────
   // PTI's article pages need JavaScript, so its sitemap gives headlines only (fetchPages false).
   // City routes come first so a Delhi item lands in Delhi, not in the national list.
-  pti("delhi", /\bDelhi\b/),
-  pti("mumbai", /\bMumbai\b|\bThane\b|\bBMC\b/),
-  pti("kolkata", /\bKolkata\b|\bBengal\b/),
-  pti("bengaluru", /\bBengaluru\b|\bBangalore\b|\bKarnataka\b/),
-  pti("chennai", /\bChennai\b|\bTamil Nadu\b/),
-  pti("hyderabad", /\bHyderabad\b|\bTelangana\b/),
-  pti("kochi", /\bKochi\b|\bKerala\b/),
+  ...CITIES.map(pti),
+  ...CITIES.map(uni),
+  // UNI, India's other wire agency: its pages can be read.
+  { id: "uni-india", outlet: "United News of India", url: UNI, kind: "sitemap", path: UNI_NATIONAL, region: "india", section: "india", leaning: "centre" },
   { id: "pti-india", outlet: "Press Trust of India", url: PTI, kind: "sitemap", path: PTI_NATIONAL, region: "india", section: "india", leaning: "centre", fetchPages: false },
   { id: "hindu-national", outlet: "The Hindu", url: "https://www.thehindu.com/news/national/feeder/default.rss", region: "india", section: "india", leaning: "centre-left" },
   { id: "ie-india", outlet: "The Indian Express", url: "https://indianexpress.com/section/india/feed/", region: "india", section: "india", leaning: "centre-left" },
@@ -280,6 +293,7 @@ const HINDU = "THG Publishing (The Hindu group)";
 export const OUTLETS: Record<string, OutletInfo> = {
   // Indian news
   "Press Trust of India": { owner: "Press Trust of India (newspapers' cooperative)", tier: "wire", leaning: "centre" },
+  "United News of India": { owner: "United News of India", tier: "wire", leaning: "centre" },
   "The Hindu": { owner: HINDU, tier: "core", leaning: "centre-left" },
   Frontline: { owner: HINDU, tier: "core", leaning: "centre-left" },
   Sportstar: { owner: HINDU, tier: "core", leaning: "centre" },
@@ -390,7 +404,7 @@ const OTHER_LEANINGS: Record<string, Leaning> = {
 
 const ALIASES: Record<string, string> = {
   "TheWire.in": "The Wire", "Scroll.in": "Scroll", "Moneycontrol.com": "Moneycontrol", Livemint: "Mint", mint: "Mint",
-  "NDTV Sports": "NDTV", "India Today NE": "India Today", "Mongabay-India": "Mongabay India", "PTI": "Press Trust of India",
+  "NDTV Sports": "NDTV", UNI: "United News of India", "India Today NE": "India Today", "Mongabay-India": "Mongabay India", "PTI": "Press Trust of India",
 };
 
 export function canonicalOutlet(name: string): string {

@@ -10,7 +10,7 @@ const isCity = (r: string) => (CITY_SECTIONS as readonly string[]).includes(r);
 /** How many items an owner may show the editor in one section. */
 export function budgetFor(it: Pick<FeedItem, "region" | "tier" | "sectionHint">): number {
   if (isCity(it.region)) return it.tier === "corroborate" ? 4 : 10;
-  if (it.tier === "wire") return it.sectionHint === "india" ? 40 : it.sectionHint === "business" ? 20 : 12;
+  if (it.tier === "wire") return it.sectionHint === "india" ? 30 : it.sectionHint === "business" ? 20 : 12;
   return 16;
 }
 

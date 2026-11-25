@@ -18,7 +18,7 @@ const DOMAINS: Record<string, string> = {
   "barandbench.com": "Bar & Bench", "downtoearth.org.in": "Down To Earth", "onmanorama.com": "Onmanorama",
   "english.mathrubhumi.com": "Mathrubhumi English", "dtnext.in": "DT Next", "mid-day.com": "Mid-Day",
   "freepressjournal.in": "Free Press Journal", "thesouthfirst.com": "South First", "siasat.com": "Siasat",
-  "indiatoday.in": "India Today", "tribuneindia.com": "The Tribune", "outlookindia.com": "Outlook",
+  "uniindia.com": "United News of India", "ptinews.com": "Press Trust of India", "indiatoday.in": "India Today", "tribuneindia.com": "The Tribune", "outlookindia.com": "Outlook",
   "bbc.com": "BBC News", "bbc.co.uk": "BBC News", "aljazeera.com": "Al Jazeera", "dw.com": "DW", "scmp.com": "South China Morning Post",
   "abc.net.au": "ABC News (Australia)", "thediplomat.com": "The Diplomat", "wsj.com": "The Wall Street Journal",
   "theguardian.com": "The Guardian", "nytimes.com": "The New York Times", "france24.com": "France 24",
