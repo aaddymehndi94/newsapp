@@ -1,5 +1,6 @@
 import { XMLParser } from "fast-xml-parser";
 import { type Leaning, type Region, type SectionHint, type Source, canonicalOutlet, leaningFor } from "../config/sources.ts";
+import { allowedByRobots } from "./robots.ts";
 import { decodeEntities, fetchText, hash, log, mapLimit, stripHtml } from "./util.ts";
 
 export interface FeedItem {
@@ -187,6 +188,11 @@ export async function gatherAll(sources: Source[], sinceHours: number): Promise<
   const since = Date.now() - sinceHours * 3600_000;
   const stats: GatherStats = { feedsTried: sources.length, feedsOk: 0, failed: [], itemsSeen: 0 };
   const lists = await mapLimit(sources, 10, async (s) => {
+    // A feed whose site bars readers like us is skipped, never fetched.
+    if (!(await allowedByRobots(s.url))) {
+      stats.failed.push({ id: s.id, status: 0, note: "robots.txt disallows it; not fetched" });
+      return [];
+    }
     const res = await fetchText(s.url, { accept: "application/rss+xml,application/atom+xml,application/xml,text/xml;q=0.9,*/*;q=0.5" });
     if (!res.ok) {
       stats.failed.push({ id: s.id, status: res.status, note: res.status ? "" : res.text.slice(0, 80) });

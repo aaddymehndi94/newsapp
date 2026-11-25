@@ -141,3 +141,20 @@ test("style check: word boundaries and single quotes", () => {
   assert.ok(findAiTells("The ruling comes as farmers protest.").includes("comes as"));
   assert.ok(findAiTells("It was unprecedented.").includes("unprecedented"));
 });
+
+test("robots.txt: Google News bars /rss/ for every reader; an allowed path and our own agent's group work", async () => {
+  const { parseRobots, robotsAllows } = await import("../pipeline/robots.ts");
+  const google = "User-agent: *\nDisallow: /\nAllow: /$\nAllow: /topics/\n\nUser-agent: Googlebot\nDisallow: /\n";
+  const rules = parseRobots(google);
+  assert.equal(robotsAllows(rules, "https://news.google.com/rss/search?q=india"), false);
+  const site = parseRobots("User-agent: *\nDisallow: /search\n\nUser-agent: MeasuredEditionReader\nDisallow: /private/\n");
+  assert.equal(robotsAllows(site, "https://ex.com/feed/"), true);
+  assert.equal(robotsAllows(site, "https://ex.com/search?q=x"), false);
+  assert.equal(robotsAllows(site, "https://ex.com/private/a"), false);
+});
+
+test("no source is fetched from a site whose robots.txt we know bars it", async () => {
+  const { SOURCES } = await import("../config/sources.ts");
+  const barred = SOURCES.filter((s) => /^https:\/\/news\.google\.com\//.test(s.url) || /reddit\.com\//.test(s.url));
+  assert.deepEqual(barred.map((s) => s.id), []);
+});

@@ -34,8 +34,10 @@ export interface Source {
   fetchPages?: boolean;
 }
 
-const gnews = (q: string) =>
-  `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=en-IN&gl=IN&ceid=IN:en`;
+// No Google News feeds: news.google.com/robots.txt bars /rss/ for every reader (found
+// 2026-11-25; the 17 headline-only feeds that used it were removed). Every feed is also checked
+// against its site's robots.txt before each fetch (pipeline/robots.ts); CNA (/api/ barred) and
+// The Register (only named search engines allowed) were removed for the same reason.
 
 export const SOURCES: Source[] = [
   // ───────────── India — general / national ─────────────
@@ -50,14 +52,7 @@ export const SOURCES: Source[] = [
   { id: "firstpost-india", outlet: "Firstpost", url: "https://www.firstpost.com/commonfeeds/v1/mfp/rss/india.xml", region: "india", section: "india", leaning: "centre-right" },
   { id: "organiser", outlet: "Organiser", url: "https://organiser.org/feed/", region: "india", section: "india", leaning: "right" },
   // Outlets whose own feeds are unavailable to us: headlines via Google News only (no page fetch).
-  { id: "gn-theprint", outlet: "ThePrint", url: gnews("site:theprint.in when:1d"), region: "india", section: "india", leaning: "centre", kind: "gnews" },
-  { id: "gn-thewire", outlet: "The Wire", url: gnews("site:thewire.in when:1d"), region: "india", section: "india", leaning: "left", kind: "gnews" },
-  { id: "gn-quint", outlet: "The Quint", url: gnews("site:thequint.com when:1d"), region: "india", section: "india", leaning: "left", kind: "gnews" },
-  { id: "gn-swarajya", outlet: "Swarajya", url: gnews("site:swarajyamag.com when:2d"), region: "india", section: "india", leaning: "right", kind: "gnews" },
   // What Google News India is leading with (importance signal).
-  { id: "gn-india-top", outlet: "Google News India", url: "https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en", region: "india", section: "general", leaning: "centre", kind: "gnews" },
-  { id: "gn-nation", outlet: "Google News India", url: "https://news.google.com/rss/headlines/section/topic/NATION?hl=en-IN&gl=IN&ceid=IN:en", region: "india", section: "india", leaning: "centre", kind: "gnews" },
-  { id: "gnews-pti", outlet: "PTI (via Google News)", url: gnews("PTI when:1d"), region: "india", section: "india", leaning: "centre", kind: "gnews" },
 
   // ───────────── India — business ─────────────
   { id: "mint", outlet: "Mint", url: "https://www.livemint.com/rss/news", region: "india", section: "business", leaning: "centre" },
@@ -73,15 +68,13 @@ export const SOURCES: Source[] = [
   { id: "ht-bengaluru", outlet: "Hindustan Times", url: "https://www.hindustantimes.com/feeds/rss/cities/bengaluru-news/rssfeed.xml", region: "bengaluru", section: "bengaluru", leaning: "centre" },
   { id: "hindu-karnataka", outlet: "The Hindu", url: "https://www.thehindu.com/news/national/karnataka/feeder/default.rss", region: "bengaluru", section: "bengaluru", leaning: "centre-left" },
 
-  { id: "gn-dh-blr", outlet: "Deccan Herald", url: gnews("site:deccanherald.com bengaluru when:1d"), region: "bengaluru", section: "bengaluru", leaning: "centre", kind: "gnews" },
 
   // ───────────── Other cities (readers pick one on the site) ─────────────
   // The Hindu, Indian Express, Hindustan Times and The Times of India city feeds, as for
   // Bengaluru, where each outlet keeps its city feed up to date (Indian Express's Chennai,
-  // Hyderabad and Kolkata feeds post about once a week, so The New Indian Express, The
-  // Hindu's West Bengal feed and The Telegraph's headlines via Google News stand in; The
-  // Telegraph refuses feed readers directly). Kochi: The New Indian Express and The Hindu's
-  // Kerala feed.
+  // Hyderabad and Kolkata feeds post about once a week, so The New Indian Express and The
+  // Hindu's West Bengal feed stand in; The Telegraph refuses feed readers). Kochi: The New
+  // Indian Express and The Hindu's Kerala feed.
   { id: "hindu-del", outlet: "The Hindu", url: "https://www.thehindu.com/news/cities/Delhi/feeder/default.rss", region: "delhi", section: "delhi", leaning: "centre-left" },
   { id: "ie-delhi", outlet: "The Indian Express", url: "https://indianexpress.com/section/cities/delhi/feed/", region: "delhi", section: "delhi", leaning: "centre-left" },
   { id: "ht-delhi", outlet: "Hindustan Times", url: "https://www.hindustantimes.com/feeds/rss/cities/delhi-news/rssfeed.xml", region: "delhi", section: "delhi", leaning: "centre" },
@@ -99,7 +92,6 @@ export const SOURCES: Source[] = [
   { id: "hindu-kol", outlet: "The Hindu", url: "https://www.thehindu.com/news/cities/kolkata/feeder/default.rss", region: "kolkata", section: "kolkata", leaning: "centre-left" },
   { id: "hindu-wb", outlet: "The Hindu", url: "https://www.thehindu.com/news/national/west-bengal/feeder/default.rss", region: "kolkata", section: "kolkata", leaning: "centre-left" },
   { id: "ht-kolkata", outlet: "Hindustan Times", url: "https://www.hindustantimes.com/feeds/rss/cities/kolkata-news/rssfeed.xml", region: "kolkata", section: "kolkata", leaning: "centre" },
-  { id: "gn-telegraph-kol", outlet: "The Telegraph", url: gnews("site:telegraphindia.com kolkata when:1d"), region: "kolkata", section: "kolkata", leaning: "centre-left", kind: "gnews" },
   { id: "toi-kolkata", outlet: "The Times of India", url: "https://timesofindia.indiatimes.com/rssfeeds/-2128830821.cms", region: "kolkata", section: "kolkata", leaning: "centre-right" },
   { id: "hindu-kochi", outlet: "The Hindu", url: "https://www.thehindu.com/news/cities/Kochi/feeder/default.rss", region: "kochi", section: "kochi", leaning: "centre-left" },
   { id: "nie-kochi", outlet: "The New Indian Express", url: "https://www.newindianexpress.com/cities/kochi/rssfeed/", region: "kochi", section: "kochi", leaning: "centre" },
@@ -120,15 +112,10 @@ export const SOURCES: Source[] = [
   { id: "fox-world", outlet: "Fox News", url: "https://moxie.foxnews.com/google-publisher/world.xml", region: "world", section: "world", leaning: "right" },
   { id: "fox-politics", outlet: "Fox News", url: "https://moxie.foxnews.com/google-publisher/politics.xml", region: "world", section: "world", leaning: "right" },
   { id: "nypost", outlet: "New York Post", url: "https://nypost.com/news/feed/", region: "world", section: "world", leaning: "right" },
-  { id: "gn-telegraph", outlet: "The Telegraph", url: gnews("site:telegraph.co.uk world when:1d"), region: "world", section: "world", leaning: "centre-right", kind: "gnews" },
   { id: "wsj-world", outlet: "The Wall Street Journal", url: "https://feeds.content.dowjones.io/public/rss/RSSWorldNews", region: "world", section: "world", leaning: "centre-right" },
   { id: "dailywire", outlet: "The Daily Wire", url: "https://www.dailywire.com/feeds/rss.xml", region: "world", section: "world", leaning: "right" },
-  { id: "cna", outlet: "CNA", url: "https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml", region: "world", section: "world", leaning: "centre" },
   { id: "scmp", outlet: "South China Morning Post", url: "https://www.scmp.com/rss/91/feed", region: "world", section: "world", leaning: "centre" },
   { id: "abc-au", outlet: "ABC News (Australia)", url: "https://www.abc.net.au/news/feed/2942460/rss.xml", region: "world", section: "world", leaning: "centre-left" },
-  { id: "gnews-reuters", outlet: "Reuters (via Google News)", url: gnews("site:reuters.com when:1d"), region: "world", section: "world", leaning: "centre", kind: "gnews" },
-  { id: "gnews-ap", outlet: "AP (via Google News)", url: gnews("site:apnews.com when:1d"), region: "world", section: "world", leaning: "centre", kind: "gnews" },
-  { id: "gnews-world-top", outlet: "Google News — World", url: "https://news.google.com/rss/headlines/section/topic/WORLD?hl=en-IN&gl=IN&ceid=IN:en", region: "world", section: "world", leaning: "centre", kind: "gnews" },
 
   // ───────────── Business (world) ─────────────
   { id: "bbc-business", outlet: "BBC News", url: "https://feeds.bbci.co.uk/news/business/rss.xml", region: "world", section: "business", leaning: "centre-left" },
@@ -160,18 +147,13 @@ export const SOURCES: Source[] = [
   { id: "techcrunch-ai", outlet: "TechCrunch", url: "https://techcrunch.com/category/artificial-intelligence/feed/", region: "world", section: "ai", leaning: "centre" },
   { id: "ars-ai", outlet: "Ars Technica", url: "https://arstechnica.com/ai/feed/", region: "world", section: "ai", leaning: "centre-left" },
   { id: "mittr-ai", outlet: "MIT Technology Review", url: "https://www.technologyreview.com/topic/artificial-intelligence/feed", region: "world", section: "ai", leaning: "centre" },
-  { id: "register-ai", outlet: "The Register", url: "https://www.theregister.com/software/ai_ml/headlines.atom", region: "world", section: "ai", leaning: "centre" },
   { id: "willison", outlet: "Simon Willison’s Weblog", url: "https://simonwillison.net/atom/everything/", region: "world", section: "ai", leaning: "centre" },
   { id: "hf-blog", outlet: "Hugging Face", url: "https://huggingface.co/blog/feed.xml", region: "world", section: "ai", leaning: "centre" },
   { id: "openai-news", outlet: "OpenAI", url: "https://openai.com/news/rss.xml", region: "world", section: "ai", leaning: "centre" },
   { id: "google-ai", outlet: "Google", url: "https://blog.google/technology/ai/rss/", region: "world", section: "ai", leaning: "centre" },
   { id: "github-blog", outlet: "GitHub", url: "https://github.blog/feed/", region: "world", section: "ai", leaning: "centre" },
-  { id: "gn-ai", outlet: "Google News — AI", url: gnews('(AI OR "artificial intelligence" OR OpenAI OR Anthropic OR Gemini OR LLM) when:1d'), region: "world", section: "ai", leaning: "centre", kind: "gnews" },
-  { id: "gn-ai-india", outlet: "Google News — AI in India", url: gnews('(AI OR "artificial intelligence" OR IndiaAI) India when:1d'), region: "india", section: "ai", leaning: "centre", kind: "gnews" },
 
   // ───────────── Weather ─────────────
-  { id: "gn-weather-india", outlet: "Google News — Weather (India)", url: gnews('(IMD OR monsoon OR cyclone OR heatwave OR "cold wave" OR fog OR "heavy rain") India when:1d'), region: "india", section: "weather", leaning: "centre", kind: "gnews" },
-  { id: "gn-weather-world", outlet: "Google News — Weather (world)", url: gnews('(hurricane OR typhoon OR cyclone OR "extreme weather" OR blizzard OR floods OR heatwave) when:1d'), region: "world", section: "weather", leaning: "centre", kind: "gnews" },
 
   // ───────────── Entertainment, music, fashion ─────────────
   { id: "variety", outlet: "Variety", url: "https://variety.com/feed/", region: "world", section: "entertainment", leaning: "centre" },
