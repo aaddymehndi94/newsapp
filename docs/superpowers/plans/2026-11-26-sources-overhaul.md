@@ -158,3 +158,15 @@ tokens with the API's countTokens endpoint is free and allowed). Node 24:
   stories with <3 texts (library → Guardian search → GDELT). Test edition (8 stories, direct, $0.98):
   every step passed; 3–7 outlets per story, 8 different first sources. The 00:33 edition was removed
   from the repo so the 03:37 run makes a fresh one.
+- 04:18 IST — GitHub had not started the 03:37 scheduled run (none of 26 Nov's crons had fired by
+  04:31), so a push to `.github/remake-edition` started run 45716286569. 04:30 IST: success,
+  deployed, saved (d817e0b). 70 stories, $1.23, 162 feeds, 12,400 items seen, 194 pages read.
+  Every story has a picture (13 videos). Cities 3 each. No outlet listed twice in a story. First
+  sources: The Hindu 13 (19%; the 15% cap is 11, so two had no other outlet able to lead), BBC 11,
+  HT 6, TechCrunch 6, South First 5, Deccan Herald 3, PTI 3, Sportstar 3, then 12 others. 45
+  outlets cited; Guardian 8 (from the API), Business Standard 9, Outlook 5. 13 stories have one
+  source (mostly city and niche reports: TechCrunch twice, The Hindu four times). Later scheduled
+  runs will find the edition and stop before any paid step.
+- Open for the owner: GitHub's scheduled starts have now failed two mornings running (6h44m late
+  on 25 Nov; not started 54 min after 03:37 on 26 Nov). Proposal: a Cloudflare Worker cron calls
+  workflow_dispatch at 03:37; needs a fine-grained GitHub token (this repo, Actions: write).
