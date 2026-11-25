@@ -41,13 +41,26 @@ jobs:
           code=$(curl -s -o /dev/null -w '%{http_code}' https://api.anthropic.com/v1/models -H "x-api-key: $A" -H "anthropic-version: 2023-06-01")
           [ "$code" = "200" ] || { echo "::error::ANTHROPIC_API_KEY was refused (HTTP $code)"; exit 1; }
       - uses: actions/checkout@v4
+      # GitHub can start a scheduled job hours late (2026-11-25: 6h44m, at 10:21 IST), after the
+      # laptop fallback has already made and pushed the day's edition. Never pay for a second one.
+      - name: Skip if today's edition already exists
+        id: done
+        if: ${{ github.event_name == 'schedule' }}
+        run: |
+          today="$(TZ=Asia/Kolkata date +%F)"
+          if ls data/editions/"$today"-*.json >/dev/null 2>&1; then
+            echo "::notice::Today's edition ($today) is already in the repo; nothing to do."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/setup-node@v4
+        if: ${{ steps.done.outputs.skip != 'true' }}
         with:
           node-version: 24
           cache: npm
       - run: npm ci
+        if: ${{ steps.done.outputs.skip != 'true' }}
       - name: Produce edition
-        if: ${{ !inputs.test_only }}
+        if: ${{ !inputs.test_only && steps.done.outputs.skip != 'true' }}
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           # Optional: YouTube Data API key (free, Google Cloud). Turns on story videos and finds
@@ -63,11 +76,12 @@ jobs:
         if: ${{ inputs.test_only }}
         run: node site/build.ts --data data/editions --out dist
       - name: Deploy
+        if: ${{ steps.done.outputs.skip != 'true' }}
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: npx wrangler deploy
       - name: Save edition to the repo
-        if: ${{ !inputs.test_only }}
+        if: ${{ !inputs.test_only && steps.done.outputs.skip != 'true' }}
         run: |
           git config user.name "meridian-bot"
           git config user.email "meridian-bot@users.noreply.github.com"
