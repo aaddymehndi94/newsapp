@@ -9,7 +9,7 @@
     "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash"
   },
-  // The public address. workers.dev stays on: the laptop fallback checks it.
+  // The public address. The workers.dev address also stays on, as a spare.
   "routes": [
     { "pattern": "measurededition.com", "custom_domain": true },
     { "pattern": "www.measurededition.com", "custom_domain": true }

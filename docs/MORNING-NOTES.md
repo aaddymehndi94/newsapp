@@ -19,7 +19,7 @@
 
 ## How it works
 
-Once a day (owner's choice from 2026-11-24). **GitHub Actions makes it at 03:37 IST**; this computer only steps in at 05:15 if that edition isn't live:
+Once a day (owner's choice from 2026-11-24). **GitHub Actions makes it, starting at 03:37 IST** (with 04:17 and 04:57 as back-up start times, since GitHub can start late). Nothing runs on your laptop:
 1. Reads 129 feeds: Indian outlets from left to right (The Hindu, Indian Express, HT, TOI, NDTV,
    Scroll, The Wire, ThePrint, News18, Swarajya, Organiser, Firstpost…), international (BBC, Al Jazeera,
    Guardian, NYT, WSJ, Fox, NPR, DW, France 24, CNA, SCMP, Reuters/AP headlines…), science, tech,
@@ -32,9 +32,7 @@ Once a day (owner's choice from 2026-11-24). **GitHub Actions makes it at 03:37 
 4. Picture: the best outlet photo, credited and linked, else a free Wikimedia Commons photo.
 5. Builds the static site and deploys it to your Cloudflare account (Workers, free plan).
 
-The laptop no longer needs to be on: GitHub makes the edition. If it is on at 05:15 and GitHub
-hasn't put the edition live, it makes it instead.
-Logs: `logs/`.
+Your laptop plays no part: GitHub makes, publishes and saves the edition.
 
 ## Cost so far
 

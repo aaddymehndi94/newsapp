@@ -8,9 +8,13 @@ name: Edition
 
 on:
   schedule:
-    # GitHub runs scheduled jobs a few minutes late at busy times; off-the-hour minutes help.
-    # One edition a day (owner's choice, 2026-11-24, to keep costs down).
-    - cron: "7 22 * * *"   # 03:37 IST → the 05:00 edition
+    # One edition a day (owner's choice, 2026-11-24, to keep costs down), made only here: the
+    # owner turned the laptop fallback off on 2026-11-25. GitHub can start scheduled jobs late
+    # (6h44m on 2026-11-25), so there are three start times; the first to run makes the edition
+    # and the others find it in the repo and stop before any paid step.
+    - cron: "7 22 * * *"    # 03:37 IST
+    - cron: "47 22 * * *"   # 04:17 IST
+    - cron: "27 23 * * *"   # 04:57 IST
   workflow_dispatch:
     inputs:
       test_only:
@@ -41,14 +45,15 @@ jobs:
           code=$(curl -s -o /dev/null -w '%{http_code}' https://api.anthropic.com/v1/models -H "x-api-key: $A" -H "anthropic-version: 2023-06-01")
           [ "$code" = "200" ] || { echo "::error::ANTHROPIC_API_KEY was refused (HTTP $code)"; exit 1; }
       - uses: actions/checkout@v4
-      # GitHub can start a scheduled job hours late (2026-11-25: 6h44m, at 10:21 IST), after the
-      # laptop fallback has already made and pushed the day's edition. Never pay for a second one.
+      # Never pay for a second edition in a day. A queued run's checkout can predate the run that
+      # just finished, so look at the branch as it is now, not at the checkout.
       - name: Skip if today's edition already exists
         id: done
         if: ${{ github.event_name == 'schedule' }}
         run: |
           today="$(TZ=Asia/Kolkata date +%F)"
-          if ls data/editions/"$today"-*.json >/dev/null 2>&1; then
+          git fetch -q --depth=1 origin main
+          if git ls-tree --name-only origin/main data/editions/ | grep -q "/$today-"; then
             echo "::notice::Today's edition ($today) is already in the repo; nothing to do."
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi

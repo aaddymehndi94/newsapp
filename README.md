@@ -26,9 +26,10 @@ Secrets live in `.env` (`ANTHROPIC_API_KEY=…`). Cloudflare uses the `wrangler 
 
 ## Schedule
 
-GitHub Actions (`.github/workflows/edition.yml`) produces, deploys and commits the edition at 03:37 IST
-every day. The laptop crontab runs `scripts/run-edition.sh am` at 05:15 IST as a fallback: it does
-nothing if today's edition is already live, and otherwise produces, deploys and pushes it. Logs in `logs/`.
+GitHub Actions (`.github/workflows/edition.yml`) produces, deploys and commits the edition once a
+day; nothing runs on a laptop (owner's choice, 2026-11-25). It has three start times (03:37, 04:17
+and 04:57 IST) because GitHub can start scheduled jobs late; the first to run makes the edition and
+the others see it in the repo and stop before any paid step.
 
 ## Layout
 
