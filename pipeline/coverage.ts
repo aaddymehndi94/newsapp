@@ -1,8 +1,9 @@
 // Finding the same story elsewhere. When the editor's sources for a story give the writer too
 // little to read (headline-only wire copy, outlets that bar AI readers), we look for other
-// outlets' reports of the same event through GDELT's free news search (thousands of outlets,
-// updated every 15 minutes), keep only outlets we know, and read the pages robots.txt allows.
-// GDELT asks for at most one request every five seconds.
+// outlets' reports of the same event: first in our own library (every recent item we gathered,
+// plus search-only news sitemaps), then through GDELT's free news search when it answers (it
+// asks for one request every five seconds and often refuses with 429). Only outlets we know,
+// only pages robots.txt allows, and only pages that are about the story.
 import { type Leaning, outletInfo, leaningFor } from "../config/sources.ts";
 import type { FeedItem } from "./feeds.ts";
 import { fetchText, hash, log } from "./util.ts";
@@ -60,7 +61,11 @@ export function gdeltQuery(headline: string): string {
   return `${terms.join(" ")} sourcelang:english`;
 }
 
-const keyWords = (t: string) => t.toLowerCase().replace(/[^\p{L}\p{N} ]+/gu, " ").split(/\s+/).filter((w) => (w.length >= 4 || /^\d+$/.test(w)) && !STOP.has(w));
+/** Distinctive words of a headline: long words, figures and acronyms ("SIR", "MEA"). */
+const keyWords = (t: string) => [
+  ...t.toLowerCase().replace(/[^\p{L}\p{N} ]+/gu, " ").split(/\s+/).filter((w) => (w.length >= 4 || /^\d+$/.test(w)) && !STOP.has(w)),
+  ...(t.match(/\b[A-Z]{2,3}\b/g) ?? []).map((a) => a.toLowerCase()),
+];
 
 /** Whether a page is about this story: at least half of the headline's key words (and two) appear. */
 export function relevant(text: string, headline: string): boolean {
@@ -70,18 +75,40 @@ export function relevant(text: string, headline: string): boolean {
   return hits >= 2 && hits >= keys.length / 2;
 }
 
+/**
+ * Items in our library that report the same story: other outlets' items (with pages we may
+ * read) whose headline shares most of this headline's key words, closest first.
+ */
+export function matchLibrary(headline: string, library: FeedItem[], have: Set<string>, max = 6): FeedItem[] {
+  const keys = [...new Set(keyWords(headline))];
+  const scored: { it: FeedItem; score: number }[] = [];
+  for (const it of library) {
+    if (it.pages === false || have.has(it.outlet) || outletInfo(it.outlet)?.tier === "perspective") continue;
+    const words = new Set(keyWords(it.title));
+    const shared = keys.filter((k) => words.has(k)).length;
+    if (shared >= 3 && shared >= keys.length * 0.4) scored.push({ it, score: shared / Math.max(keys.length, words.size) });
+  }
+  return scored.sort((a, b) => b.score - a.score).slice(0, max).map((s) => s.it);
+}
+
 let lastCall = 0;
+let failures = 0;
 async function gdelt(query: string): Promise<{ url: string; title: string; seendate: string }[]> {
+  if (failures >= 3) return []; // GDELT is refusing us today: stop asking
   const wait = lastCall + 5500 - Date.now();
   if (wait > 0) await new Promise((r) => setTimeout(r, wait));
   lastCall = Date.now();
   const u = `https://api.gdeltproject.org/api/v2/doc/doc?query=${encodeURIComponent(query)}&mode=artlist&maxrecords=40&format=json&timespan=3d&sort=hybridrel`;
   const r = await fetchText(u, { timeoutMs: 20_000, accept: "application/json" });
-  if (!r.ok) return [];
   try {
-    return (JSON.parse(r.text).articles ?? []) as { url: string; title: string; seendate: string }[];
+    if (!r.ok) throw new Error(String(r.status));
+    const articles = (JSON.parse(r.text).articles ?? []) as { url: string; title: string; seendate: string }[];
+    failures = 0;
+    return articles;
   } catch {
-    return []; // GDELT answers in plain text when a query is malformed or too frequent
+    // Refused (429), timed out, or answered in plain text (a malformed or too-frequent query).
+    if (++failures === 3) log("coverage search: GDELT refused three times in a row; using our own library only");
+    return [];
   }
 }
 
@@ -95,11 +122,21 @@ export async function findCoverage(
   have: Set<string>,
   read: (url: string) => Promise<string | undefined>,
   max = 2,
+  library: FeedItem[] = [],
 ): Promise<{ item: FeedItem; text: string }[]> {
   const out: { item: FeedItem; text: string }[] = [];
   const seenOutlets = new Set(have);
   let reads = 0;
-  for (const a of await gdelt(gdeltQuery(headline))) {
+  for (const it of matchLibrary(headline, library, seenOutlets)) {
+    if (out.length >= max || reads >= 6) break;
+    if (seenOutlets.has(it.outlet)) continue;
+    reads++;
+    const text = await read(it.alt ?? it.link);
+    if (!text || text.length < 800 || !relevant(text, headline)) continue;
+    seenOutlets.add(it.outlet);
+    out.push({ text, item: { ...it, region: like.region, sectionHint: like.sectionHint } });
+  }
+  if (out.length < max) for (const a of await gdelt(gdeltQuery(headline))) {
     if (out.length >= max || reads >= 6) break;
     const outlet = outletForUrl(a.url);
     if (!outlet || seenOutlets.has(outlet)) continue;

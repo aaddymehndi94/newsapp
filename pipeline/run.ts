@@ -109,6 +109,8 @@ function lastGather(): number | undefined {
   return Number.isFinite(t) ? t : undefined;
 }
 
+const SEARCH_ONLY = new Set(SOURCES.filter((s) => s.searchOnly).map((s) => s.id));
+
 /** Feeds read without fetching their pages (see Source.fetchPages). */
 const NO_PAGES = new Set(SOURCES.filter((s) => s.fetchPages === false).map((s) => s.id));
 
@@ -116,7 +118,7 @@ async function main() {
   log(`edition ${editionId} (${editionLabel}) batch=${useBatch} deploy=${deploy}`);
 
   // 1. Gather
-  let gathered = cached<{ items: FeedItem[]; stats: { feedsTried: number; feedsOk: number; itemsSeen: number; gatheredAt?: string; windowHours?: number } }>("items.json");
+  let gathered = cached<{ items: FeedItem[]; library?: FeedItem[]; stats: { feedsTried: number; feedsOk: number; itemsSeen: number; gatheredAt?: string; windowHours?: number } }>("items.json");
   if (!gathered) {
     const gatheredAt = new Date().toISOString();
     const hours = windowHours(lastGather());
@@ -125,7 +127,13 @@ async function main() {
     // Each owner gets a budget per section, sampled across the whole window (pipeline/budget.ts).
     const readable = linkRepublished(items.filter((it) => isMostlyLatin(it.title) && it.title.split(/\s+/).length >= 4));
     log(`${readable.filter((i) => i.alt).length} headline-only items have a full republished copy we may read`);
-    gathered = { items: budgetItems(readable), stats: { ...stats, gatheredAt, windowHours: hours } };
+    // Everything readable stays in a library for finding other reports of picked stories.
+    const library = readable.filter((it) => it.pages !== false || it.alt);
+    gathered = {
+      items: budgetItems(readable.filter((it) => !SEARCH_ONLY.has(it.sourceId))),
+      library,
+      stats: { ...stats, gatheredAt, windowHours: hours },
+    };
     writeJson(path.join(WORK, "items.json"), gathered);
   }
   const items = new Map(gathered.items.map((i) => [i.id, i]));
@@ -204,13 +212,13 @@ async function main() {
         const page = await readPage(url);
         pages.set(url, page);
         return page.ok ? page.text : undefined;
-      }).catch((e) => {
+      }, 2, gathered.library ?? []).catch((e) => {
         log(`coverage search failed for ${p.key}: ${(e as Error).message}`);
         return [];
       });
       for (const f of found) {
         coverage.items.push(f.item);
-        pageCache.set(f.item.id, pages.get(f.item.link)!);
+        pageCache.set(f.item.id, pages.get(f.item.alt ?? f.item.link)!);
         (coverage.added[p.key] ??= []).push(f.item.id);
       }
     }

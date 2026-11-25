@@ -272,3 +272,15 @@ test("coverage search: a focused GDELT query from a headline, known outlets only
   assert.ok(relevant("Nearly 44 lakh voters in Delhi may be left off the final roll after the SIR claims phase.", "Delhi SIR: 44 lakh voters may be excluded"));
   assert.ok(!relevant("The cricket team won by six wickets in Delhi.", "Delhi SIR: 44 lakh voters may be excluded"));
 });
+
+test("coverage from our own library: the closest headlines from other outlets, best first", async () => {
+  const { matchLibrary } = await import("../pipeline/coverage.ts");
+  const lib = [
+    { id: "a", outlet: "Outlook", title: "Delhi: 44 lakh voters may be excluded from final roll after SIR", link: "https://o/a", pages: true },
+    { id: "b", outlet: "Business Standard", title: "SIR in Delhi: claims phase ends, lakh voters could miss final roll", link: "https://b/b", pages: true },
+    { id: "c", outlet: "Deccan Herald", title: "Delhi metro fares to rise from December", link: "https://d/c", pages: true },
+    { id: "d", outlet: "Press Trust of India", title: "Delhi SIR: 44 lakh voters may remain excluded from final roll", link: "https://p/d", pages: false },
+  ] as FeedItem[];
+  const got = matchLibrary("Delhi SIR: Nearly 44 lakh voters may remain excluded from final roll as claims phase ends", lib, new Set(["Press Trust of India"]));
+  assert.deepEqual(got.map((i) => i.id).sort(), ["a", "b"]);
+});

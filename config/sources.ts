@@ -60,6 +60,9 @@ export interface Source {
   times?: "ist" | "ist-as-utc";
   /** Rewrite links' host (an outlet whose sitemap points at a host that doesn't resolve). */
   host?: [from: string, to: string];
+  /** Read only to find other reports of a story the editor picked (pipeline/coverage.ts); never
+   *  shown to the editor. */
+  searchOnly?: boolean;
 }
 
 // No Google News feeds: news.google.com/robots.txt bars /rss/ for every reader (found
@@ -275,6 +278,12 @@ export const SOURCES: Source[] = [
   { id: "hindu-sport", outlet: "The Hindu", url: "https://www.thehindu.com/sport/feeder/default.rss", region: "india", section: "sports", leaning: "centre" },
   { id: "pti-sports", outlet: "Press Trust of India", url: PTI, kind: "sitemap", path: /\/story\/sports\//, region: "india", section: "sports", leaning: "centre", fetchPages: false },
   { id: "ie-sports", outlet: "The Indian Express", url: "https://indianexpress.com/section/sports/feed/", region: "india", section: "sports", leaning: "centre" },
+
+  // ───────────── Search only: a library for finding other reports of a picked story ─────────────
+  // Never shown to the editor (pipeline/coverage.ts). Paid press releases are filtered out.
+  { id: "lib-bs", outlet: "Business Standard", url: "https://www.business-standard.com/sitemap/news-sitemap.xml", kind: "sitemap", path: /^\/(?!content\/press-releases)/, searchOnly: true, region: "india", section: "india", leaning: "centre" },
+  { id: "lib-outlook", outlet: "Outlook", url: "https://www.outlookindia.com/oisitemap-news.xml", kind: "sitemap", path: /^\/(?!.*spotlight)/, searchOnly: true, region: "india", section: "india", leaning: "centre-left" },
+  { id: "lib-dh", outlet: "Deccan Herald", url: "https://www.deccanherald.com/news_sitemap.xml", kind: "sitemap", searchOnly: true, region: "india", section: "india", leaning: "centre" },
   { id: "guardian-sport", outlet: "The Guardian", url: "https://www.theguardian.com/sport/rss", region: "world", section: "sports", leaning: "centre" },
 
 ];
