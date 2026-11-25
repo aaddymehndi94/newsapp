@@ -1,4 +1,5 @@
 import type { FeedItem } from "./feeds.ts";
+import { SOURCES, type Tier, outletInfo } from "../config/sources.ts";
 import type { VideoItem } from "./videos.ts";
 import { EDITOR_MODEL, type CostMeter, type JsonRequest, type JsonResult, callJson, runBatch } from "./llm.ts";
 
@@ -123,9 +124,12 @@ How to choose
 - Freshness: the previous edition's headlines are listed. Do not repeat a story unless there is a material new development; if you do, make the angle about what is new.
 
 Assigning sources (itemIds)
-- Give each story 2–6 item ids reporting that same event, from different outlets where possible. Put the most informative first: items from outlets' own feeds before Google News headline-only items.
-- For political or disputed stories, include outlets from different leanings (each feed shows its leaning code) so the writer sees how each side reports it. For every contested story, assign at least one left-of-centre (L/CL) and one right-of-centre (CR/R) item whenever any feed carries the event; check the right- and left-leaning feeds (including the Google News headline feeds) for it before settling on a one-sided set.
-- A single-source story is acceptable only for significant news from a reliable outlet (e.g. a science paper, a local city report).
+- Each feed shows its tier. core: an outlet with its own reporting, which can lead a story. wire: the Press Trust of India, whose headlines show an event happened (its text is not available, so it is never a story's only source). primary: the body itself (the Reserve Bank, NASA, a company announcing its own news). corroborate: may confirm a story but is never its first or only source (The Times of India and The Economic Times, NDTV, News18, Fox News, the New York Post and others whose owners' interests, paid-content business or record of trial balloons call for a second outlet). perspective: only to show what one side is saying. A story carried only by corroborate outlets is not ready to publish: leave it out.
+- Give each story 2–6 item ids reporting that same event, from different outlets where possible. Put the most informative core, wire or primary item first. Items from the same owner (shown in the feed header) count as one outlet, and two items from one outlet are not corroboration.
+- How widely a story is covered is a clue to its importance, not proof of it: a court ruling, an official document or a regional report carried by one or two careful outlets can matter more than a celebrity story every outlet repeats.
+- For political or disputed stories, include outlets from different leanings (each feed shows its leaning code) so the writer sees how each side reports it. For every contested story, assign at least one left-of-centre (L/CL) and one right-of-centre (CR/R) item whenever a core or corroborate feed carries the event; check those feeds before settling on a one-sided set.
+- A single-source story is acceptable only for significant news from a core or primary outlet (e.g. a science paper, a court ruling reported by LiveLaw, a city report from that city's paper), never from a corroborate outlet.
+- Fact-checkers (Alt News, BOOM, Factly): at most two stories, and only when the false claim and who spread it are themselves news.
 - Only use ids that appear in the list (like i3f).
 
 Other fields
@@ -139,6 +143,9 @@ function age(published: string | undefined, now: number): string {
   const h = (now - Date.parse(published)) / 3600_000;
   return h < 1 ? `${Math.max(1, Math.round(h * 60))}m` : `${Math.round(h)}h`;
 }
+
+/** Feeds we read without fetching their pages: the writer gets only what the feed carries. */
+const NO_PAGES = new Set(SOURCES.filter((s) => s.fetchPages === false).map((s) => s.id));
 
 const LEAN: Record<string, string> = { left: "L", "centre-left": "CL", centre: "C", "centre-right": "CR", right: "R" };
 
@@ -158,13 +165,13 @@ export function formatItems(items: FeedItem[], now = Date.now()): { text: string
   let n = 0;
   for (const g of groups.values()) {
     const f = g[0];
-    const kind = f.kind === "gnews" ? ", headline-only" : "";
-    out.push(`## ${f.kind === "gnews" ? "Google News: " + f.sourceId.replace(/^gn(ews)?-/, "") : f.outlet} (${LEAN[f.leaning]}; ${f.sectionHint}${kind})`);
+    const info = outletInfo(f.outlet);
+    const text = f.pages === false || NO_PAGES.has(f.sourceId) ? (g.every((x) => !x.summary) ? "; headlines only" : "; feed summaries only") : "";
+    out.push(`## ${f.outlet} (${LEAN[f.leaning]}; ${f.sectionHint}; ${f.tier ?? info?.tier ?? "core"}; owner ${f.owner ?? info?.owner ?? f.outlet}${text})`);
     for (const it of g) {
       const alias = `i${(n++).toString(36)}`;
       aliases.set(alias, it.id);
-      const outlet = f.kind === "gnews" ? ` [${it.outlet}]` : "";
-      out.push(`${alias} ${age(it.published, now)}${outlet} ${it.title}`);
+      out.push(`${alias} ${age(it.published, now)} ${it.title}`);
     }
   }
   return { text: out.join("\n"), aliases };
@@ -206,6 +213,10 @@ export function unalias(slate: Slate, aliases: Map<string, string>): Slate {
   return { stories: slate.stories.map((s) => ({ ...s, itemIds: s.itemIds.map((a) => aliases.get(a.trim()) ?? a) })) };
 }
 
+const CAN_LEAD = new Set<Tier>(["core", "wire", "primary"]);
+const tierOf = (it: FeedItem): Tier => it.tier ?? (it.outlet ? outletInfo(it.outlet)?.tier : undefined) ?? "core";
+const ownerOf = (it: FeedItem): string => it.owner ?? (it.outlet ? outletInfo(it.outlet)?.owner : undefined) ?? it.outlet ?? "";
+
 /** Validate the editor's slate against the items we actually have. */
 export function cleanSlate(slate: Slate, items: Map<string, FeedItem>, videoIds: Set<string>): Slate {
   const usedItems = new Set<string>();
@@ -213,8 +224,18 @@ export function cleanSlate(slate: Slate, items: Map<string, FeedItem>, videoIds:
   const keys = new Set<string>();
   for (const s of [...slate.stories].sort((a, b) => a.rank - b.rank)) {
     if (!SECTION_IDS.includes(s.section)) continue;
-    const ids = s.itemIds.filter((id) => items.has(id) && !usedItems.has(id));
-    if (ids.length === 0) continue;
+    let ids = s.itemIds.filter((id) => items.has(id) && !usedItems.has(id));
+    // One owner gives at most two items; a corroborate or perspective outlet never comes first,
+    // and a story with no core, wire or primary item is dropped (enforced here, not just asked).
+    const perOwner = new Map<string, number>();
+    ids = ids.filter((id) => {
+      const o = ownerOf(items.get(id)!);
+      perOwner.set(o, (perOwner.get(o) ?? 0) + 1);
+      return perOwner.get(o)! <= 2;
+    });
+    const first = ids.findIndex((id) => CAN_LEAD.has(tierOf(items.get(id)!)));
+    if (first < 0) continue;
+    ids = [ids[first], ...ids.filter((_, i) => i !== first)];
     ids.forEach((id) => usedItems.add(id));
     let key = s.key.replace(/[^a-z0-9-]/gi, "-").toLowerCase().slice(0, 50) || "story";
     while (keys.has(key)) key += "-2";

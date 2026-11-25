@@ -5,6 +5,7 @@ import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { SOURCES, canonicalOutlet, leaningFor } from "../config/sources.ts";
 import { type FeedItem, gatherAll } from "./feeds.ts";
+import { budgetItems, windowHours } from "./budget.ts";
 import { type PageInfo, readPage } from "./enrich.ts";
 import { type Slate, type SlatePick, CITY_SECTIONS, SECTION_IDS, SECTION_NAMES, buildEditorRequest, cleanSlate, planEdition, unalias } from "./editor.ts";
 import { type WrittenStory, buildRevisionRequest, buildWriterRequest, sourceDocs, storyCustomId, storyText } from "./writer.ts";
@@ -84,37 +85,45 @@ function isMostlyLatin(s: string): boolean {
   return (letters.match(/[A-Za-z]/g)?.length ?? 0) / letters.length > 0.8;
 }
 
-function previousHeadlines(): string[] {
+interface PastEdition {
+  publishedAt?: string;
+  stories: { headline: string }[];
+  stats?: { gatheredAt?: string };
+}
+
+function previousEdition(): PastEdition | undefined {
   const files = fs.readdirSync(EDITIONS).filter((f) => f.endsWith(".json") && !f.startsWith(editionId)).sort();
   const last = files.at(-1);
-  if (!last) return [];
-  const ed = readJson<{ stories: { headline: string }[] }>(path.join(EDITIONS, last));
-  return ed?.stories.map((s) => s.headline) ?? [];
+  return last ? readJson<PastEdition>(path.join(EDITIONS, last)) : undefined;
 }
+
+function previousHeadlines(): string[] {
+  return previousEdition()?.stories.map((s) => s.headline) ?? [];
+}
+
+/** When the last edition read its feeds (older editions only record when they were published). */
+function lastGather(): number | undefined {
+  const ed = previousEdition();
+  const t = Date.parse(ed?.stats?.gatheredAt ?? ed?.publishedAt ?? "");
+  return Number.isFinite(t) ? t : undefined;
+}
+
+/** Feeds read without fetching their pages (see Source.fetchPages). */
+const NO_PAGES = new Set(SOURCES.filter((s) => s.fetchPages === false).map((s) => s.id));
 
 async function main() {
   log(`edition ${editionId} (${editionLabel}) batch=${useBatch} deploy=${deploy}`);
 
   // 1. Gather
-  let gathered = cached<{ items: FeedItem[]; stats: { feedsTried: number; feedsOk: number; itemsSeen: number } }>("items.json");
+  let gathered = cached<{ items: FeedItem[]; stats: { feedsTried: number; feedsOk: number; itemsSeen: number; gatheredAt?: string; windowHours?: number } }>("items.json");
   if (!gathered) {
-    const { items, stats } = await gatherAll(SOURCES, slot === "am" ? 16 : 14);
-    // Keep the 16 most recent items per feed (10 for a city feed: a city gets three stories)
-    // so one prolific feed can't flood the editor.
-    const bySource = new Map<string, FeedItem[]>();
-    for (const it of items) {
-      if (!isMostlyLatin(it.title)) continue;
-      if (it.title.split(/\s+/).length < 4) continue;
-      const arr = bySource.get(it.sourceId) ?? [];
-      arr.push(it);
-      bySource.set(it.sourceId, arr);
-    }
-    const trimmed = [...bySource.values()].flatMap((arr) =>
-      arr
-        .sort((a, b) => Date.parse(b.published ?? "0") - Date.parse(a.published ?? "0"))
-        .slice(0, (CITY_SECTIONS as readonly string[]).includes(arr[0].region) ? 10 : 16),
-    );
-    gathered = { items: trimmed, stats };
+    const gatheredAt = new Date().toISOString();
+    const hours = windowHours(lastGather());
+    log(`reading feeds back ${hours} hours (to the last edition's gather)`);
+    const { items, stats } = await gatherAll(SOURCES, hours);
+    // Each owner gets a budget per section, sampled across the whole window (pipeline/budget.ts).
+    const readable = items.filter((it) => isMostlyLatin(it.title) && it.title.split(/\s+/).length >= 4);
+    gathered = { items: budgetItems(readable), stats: { ...stats, gatheredAt, windowHours: hours } };
     writeJson(path.join(WORK, "items.json"), gathered);
   }
   const items = new Map(gathered.items.map((i) => [i.id, i]));
@@ -164,7 +173,7 @@ async function main() {
   const pageCache = new Map<string, PageInfo>(Object.entries(readJson<Record<string, PageInfo>>(pagesFile) ?? {}));
   const toRead = [...new Set(picks.flatMap((p) => p.itemIds))]
     .map((id) => items.get(id)!)
-    .filter((it) => it && it.kind === "rss" && !pageCache.has(it.id));
+    .filter((it) => it && it.pages !== false && !NO_PAGES.has(it.sourceId) && !pageCache.has(it.id));
   log(`reading ${toRead.length} article pages…`);
   await mapLimit(toRead, 8, async (it) => {
     pageCache.set(it.id, await readPage(it.link));
@@ -319,6 +328,7 @@ async function main() {
     panels,
     stats: {
       feedsScanned: gathered.stats.feedsOk,
+      gatheredAt: gathered.stats.gatheredAt,
       itemsSeen: gathered.stats.itemsSeen,
       pagesRead: okPages,
       costUsd: Math.round(meter.total * 1000) / 1000,

@@ -24,7 +24,7 @@ function meta(doc: Document, ...names: string[]): string | undefined {
 }
 
 export async function readPage(url: string): Promise<PageInfo> {
-  if (!(await allowedByRobots(url))) return { ok: false, status: 0, blockedByRobots: true };
+  if (!(await allowedByRobots(url, { ai: true }))) return { ok: false, status: 0, blockedByRobots: true };
   const r = await fetchText(url, { timeoutMs: 15_000 });
   if (!r.ok || !/html/i.test(r.contentType)) return { ok: false, status: r.status };
   try {

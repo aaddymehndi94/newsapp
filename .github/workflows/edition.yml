@@ -15,6 +15,12 @@ on:
     - cron: "7 22 * * *"    # 03:37 IST
     - cron: "47 22 * * *"   # 04:17 IST
     - cron: "27 23 * * *"   # 04:57 IST
+  # Re-make today's edition by pushing a change to this file (used when a fix must reach today's
+  # edition after the scheduled run; it costs a second edition). Pushes by the edition bot itself
+  # never trigger workflows, and only a change to this exact file does.
+  push:
+    branches: [main]
+    paths: [".github/remake-edition"]
   workflow_dispatch:
     inputs:
       test_only:

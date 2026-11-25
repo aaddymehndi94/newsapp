@@ -6,6 +6,7 @@ import { isJunkImage, rankCandidates } from "../pipeline/images.ts";
 import { imageSize } from "../pipeline/enrich.ts";
 import { cleanSlate } from "../pipeline/editor.ts";
 import type { Source } from "../config/sources.ts";
+import type { FeedItem } from "../pipeline/feeds.ts";
 
 const src: Source = { id: "t", outlet: "Test Times", url: "x", region: "india", section: "india", leaning: "centre" };
 
@@ -29,17 +30,6 @@ test("parseFeed: Atom and RDF", () => {
   const rdf = `<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/"><item><title>RDF story</title><link>https://ex.com/rdf</link></item></rdf:RDF>`;
   assert.equal(parseFeed(rdf, src)[0].link, "https://ex.com/rdf");
   assert.deepEqual(parseFeed("not xml at all <<<", src), []);
-});
-
-test("parseFeed: Google News strips outlet suffix and summary", () => {
-  const xml = `<rss><channel><item><title>Rupee rises on inflows - Reuters</title><link>https://news.google.com/rss/articles/x</link><description>&lt;a&gt;junk&lt;/a&gt;</description><source url="https://reuters.com">Reuters</source></item></channel></rss>`;
-  const [it] = parseFeed(xml, { ...src, outlet: "Google News — World", kind: "gnews" });
-  assert.equal(it.leaning, "centre");
-  const [site] = parseFeed(xml.replace(/Reuters/g, "TheWire.in"), { ...src, outlet: "The Wire", leaning: "left", kind: "gnews" });
-  assert.equal(site.outlet, "The Wire");
-  assert.equal(it.title, "Rupee rises on inflows");
-  assert.equal(it.outlet, "Reuters");
-  assert.equal(it.summary, "");
 });
 
 test("findAiTells flags machine-ish phrasing, passes wire copy, ignores quotes", () => {
@@ -157,4 +147,105 @@ test("no source is fetched from a site whose robots.txt we know bars it", async 
   const { SOURCES } = await import("../config/sources.ts");
   const barred = SOURCES.filter((s) => /^https:\/\/news\.google\.com\//.test(s.url) || /reddit\.com\//.test(s.url));
   assert.deepEqual(barred.map((s) => s.id), []);
+});
+
+test("every feed's outlet has an owner and a tier; the Times group, Adani's NDTV and Reliance's News18 only corroborate", async () => {
+  const { SOURCES, outletInfo } = await import("../config/sources.ts");
+  const missing = [...new Set(SOURCES.map((s) => s.outlet))].filter((o) => !outletInfo(o));
+  assert.deepEqual(missing, []);
+  for (const o of ["The Times of India", "The Economic Times", "Filmfare", "NDTV", "News18"]) assert.equal(outletInfo(o)?.tier, "corroborate", o);
+  assert.equal(outletInfo("The Times of India")?.owner, outletInfo("The Economic Times")?.owner);
+  assert.equal(outletInfo("Press Trust of India")?.tier, "wire");
+  const ids = SOURCES.map((s) => s.id);
+  assert.equal(new Set(ids).size, ids.length, "feed ids are unique");
+  for (const gone of ["toi-india", "ndtv-top", "firstpost-india", "organiser"]) assert.ok(!ids.includes(gone), gone);
+});
+
+test("the Kolkata Telegraph is not given the UK Telegraph's label", async () => {
+  const { leaningFor } = await import("../config/sources.ts");
+  assert.equal(leaningFor("The Telegraph"), "centre-left");
+  assert.equal(leaningFor("The Telegraph (UK)"), "centre-right");
+  assert.equal(leaningFor("Scroll"), "centre-left");
+});
+
+test("robots.txt: article pages also obey rules aimed at Anthropic's agents; feeds don't", async () => {
+  const { parseRobots, robotsAllows } = await import("../pipeline/robots.ts");
+  const txt = "User-agent: *\nDisallow: /search\n\nUser-agent: Claude-User\nUser-agent: anthropic-ai\nDisallow: /\n\nUser-agent: ClaudeBot\nDisallow: /\n";
+  assert.equal(robotsAllows(parseRobots(txt), "https://ex.com/news/a"), true);
+  assert.equal(robotsAllows(parseRobots(txt, { ai: true }), "https://ex.com/news/a"), false);
+  // A ban on the training crawler (and its older names) is not a ban on reading a page for a reader.
+  assert.equal(robotsAllows(parseRobots("User-agent: ClaudeBot\nUser-agent: anthropic-ai\nUser-agent: Claude-Web\nDisallow: /\n", { ai: true }), "https://ex.com/news/a"), true);
+});
+
+test("news sitemaps: titles, Indian times mislabelled as UTC, host rewrite, path and headline filters", async () => {
+  const { parseSitemap } = await import("../pipeline/feeds.ts");
+  const xml = `<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+  <url><loc>https://thewirenews.in/politics/delhi-vote-roll</loc><news:news><news:publication_date>2026-11-25T23:13:33+00:00</news:publication_date><news:title><![CDATA[Delhi Voter Roll: 44 Lakh May Be Left Out]]></news:title></news:news></url>
+  <url><loc>https://thewirenews.in/sport/cricket-score</loc><news:news><news:publication_date>2026-11-25T20:00:00+00:00</news:publication_date><news:title>Cricket score today</news:title></news:news></url>
+  <url><loc>https://thewirenews.in/politics/bihar-cabinet-expansion-today</loc><lastmod>2026-11-25T10:00:00+05:30</lastmod></url>
+  </urlset>`;
+  const base = { ...src, kind: "sitemap" as const, outlet: "The Wire", host: ["thewirenews.in", "thewire.in"] as [string, string], times: "ist-as-utc" as const, path: /^\/politics\// };
+  const { items, children } = parseSitemap(xml, base);
+  assert.deepEqual(children, []);
+  assert.deepEqual(items.map((i) => [i.title, i.link, i.published]), [
+    ["Delhi Voter Roll: 44 Lakh May Be Left Out", "https://thewire.in/politics/delhi-vote-roll", "2026-11-25T17:43:33.000Z"],
+    // No news:title: the headline comes from the link's last part.
+    ["Bihar cabinet expansion today", "https://thewire.in/politics/bihar-cabinet-expansion-today", "2026-11-25T04:30:00.000Z"],
+  ]);
+  assert.equal(items[0].summary, "");
+  const delhiOnly = parseSitemap(xml, { ...base, match: /\bDelhi\b/ }).items;
+  assert.deepEqual(delhiOnly.map((i) => i.title), ["Delhi Voter Roll: 44 Lakh May Be Left Out"]);
+  const index = `<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc><![CDATA[https://www.ptinews.com/sitemaps/pti-sitemap-2026-11-25.xml]]></loc></sitemap><sitemap><loc>https://www.ptinews.com/sitemaps/pti-sitemap-2026-11-24.xml</loc></sitemap></sitemapindex>`;
+  assert.deepEqual(parseSitemap(index, base).children, ["https://www.ptinews.com/sitemaps/pti-sitemap-2026-11-25.xml", "https://www.ptinews.com/sitemaps/pti-sitemap-2026-11-24.xml"]);
+});
+
+test("feeds whose times carry no offset are read as Indian time; items carry the outlet's tier and owner", () => {
+  const xml = `<rss><channel><item><title>RBI to conduct repo auction on Friday</title><link>https://www.rbi.org.in/a</link><pubDate>Wed, 25 Nov 2026 19:20:00</pubDate></item></channel></rss>`;
+  const [it] = parseFeed(xml, { ...src, outlet: "Reserve Bank of India", times: "ist" });
+  assert.equal(it.published, "2026-11-25T13:50:00.000Z");
+  assert.equal(it.tier, "primary");
+  assert.equal(it.owner, "Reserve Bank of India");
+  const [toi] = parseFeed(xml, { ...src, outlet: "The Times of India", path: /^\/a$/ });
+  assert.equal(toi.tier, "corroborate");
+  assert.deepEqual(parseFeed(xml, { ...src, path: /^\/mumbai\// }), []);
+});
+
+test("cleanSlate: a story never leads with a corroborate-only outlet, one owner gives at most two items, all-corroborate stories go", () => {
+  const it = (outlet: string, tier: string, owner: string) => ({ outlet, tier, owner }) as never;
+  const items = new Map([
+    ["toi1", it("The Times of India", "corroborate", "Times")],
+    ["toi2", it("The Times of India", "corroborate", "Times")],
+    ["et1", it("The Economic Times", "corroborate", "Times")],
+    ["hindu", it("The Hindu", "core", "Hindu")],
+    ["ndtv", it("NDTV", "corroborate", "Adani")],
+    ["pti", it("Press Trust of India", "wire", "PTI")],
+  ]);
+  const pick = (key: string, rank: number, itemIds: string[]) =>
+    ({ key, section: "india", rank, lead: false, workingHeadline: "", angle: "", itemIds, contested: false, videoId: "" }) as never;
+  const s = cleanSlate({ stories: [pick("a", 1, ["toi1", "toi2", "et1", "hindu"]), pick("b", 2, ["ndtv"]), pick("c", 3, ["pti"])] }, items, new Set());
+  assert.deepEqual(s.stories.map((x) => [x.key, x.itemIds.join()]), [["a", "hindu,toi1,toi2"], ["c", "pti"]]);
+});
+
+test("budget: items are sampled across the whole window, per owner and section; a corroborate outlet gets 4 per city", async () => {
+  const { budgetItems, windowHours } = await import("../pipeline/budget.ts");
+  const now = Date.parse("2026-11-26T00:00:00Z");
+  const mk = (n: number, o: Partial<FeedItem>) =>
+    Array.from({ length: n }, (_, i) => ({ id: `${o.owner}-${o.sectionHint}-${i}`, published: new Date(now - i * 3600_000).toISOString(), tier: "core", region: "india", sectionHint: "india", ...o }) as FeedItem);
+  const items = [
+    ...mk(40, { owner: "Hindu" }),
+    ...mk(20, { owner: "Times", tier: "corroborate", region: "delhi", sectionHint: "delhi" }),
+    ...mk(20, { owner: "HT", region: "delhi", sectionHint: "delhi" }),
+  ];
+  const kept = budgetItems(items);
+  const hindu = kept.filter((i) => i.owner === "Hindu");
+  assert.equal(hindu.length, 16);
+  // Not just the newest 16: the oldest hours of the window are represented too.
+  assert.ok(hindu.some((i) => Date.parse(i.published!) <= now - 30 * 3600_000));
+  assert.equal(kept.filter((i) => i.owner === "Times").length, 4);
+  assert.equal(kept.filter((i) => i.owner === "HT").length, 10);
+  // The window reaches back to the last gather (less an hour's overlap), within 26 to 50 hours.
+  assert.equal(windowHours(now - 24 * 3600_000, now), 26);
+  assert.equal(windowHours(now - 30 * 3600_000, now), 31);
+  assert.equal(windowHours(now - 90 * 3600_000, now), 50);
+  assert.equal(windowHours(undefined, now), 26);
 });
