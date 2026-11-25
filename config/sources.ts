@@ -299,6 +299,10 @@ export const SOURCES: Source[] = [
   { id: "dh-world", outlet: "Deccan Herald", url: "https://www.deccanherald.com/news_sitemap.xml", kind: "sitemap", path: /^\/world\//, region: "world", section: "world", leaning: "centre" },
   { id: "dh-business", outlet: "Deccan Herald", url: "https://www.deccanherald.com/news_sitemap.xml", kind: "sitemap", path: /^\/business\//, region: "india", section: "business", leaning: "centre" },
   { id: "dh-sports", outlet: "Deccan Herald", url: "https://www.deccanherald.com/news_sitemap.xml", kind: "sitemap", path: /^\/sports\//, region: "india", section: "sports", leaning: "centre" },
+  { id: "mp-kolkata", outlet: "Millennium Post", url: "https://www.millenniumpost.in/news-sitemap-daily.xml", kind: "sitemap", path: /^\/bengal\//, region: "kolkata", section: "kolkata", leaning: "centre-left" },
+  { id: "mp-delhi", outlet: "Millennium Post", url: "https://www.millenniumpost.in/news-sitemap-daily.xml", kind: "sitemap", path: /^\/delhi\//, region: "delhi", section: "delhi", leaning: "centre-left" },
+  { id: "mp-india", outlet: "Millennium Post", url: "https://www.millenniumpost.in/news-sitemap-daily.xml", kind: "sitemap", path: /^\/(nation|big-stories)\//, region: "india", section: "india", leaning: "centre-left" },
+  { id: "cna-asia", outlet: "CNA", url: "https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=6511", region: "world", section: "world", leaning: "centre" },
   { id: "dh-entertainment", outlet: "Deccan Herald", url: "https://www.deccanherald.com/news_sitemap.xml", kind: "sitemap", path: /^\/entertainment\//, region: "india", section: "entertainment", leaning: "centre" },
 
   // ───────────── Search only: a library for finding other reports of a picked story ─────────────
@@ -387,6 +391,8 @@ export const OUTLETS: Record<string, OutletInfo> = {
   "ABC News (Australia)": { owner: "Australian Broadcasting Corporation", tier: "core", leaning: "centre-left" },
   "The Diplomat": { owner: "Diplomat Media", tier: "core", leaning: "centre" },
   CNBC: { owner: "Comcast (NBCUniversal)", tier: "core", leaning: "centre" },
+  // Kolkata and Delhi daily; seen as close to the Trinamool Congress in its years in power.
+  "Millennium Post": { owner: "Millennium Post (Kolkata)", tier: "core", leaning: "centre-left" },
   CNA: { owner: "Mediacorp (Singapore state)", tier: "core", leaning: "centre" },
   Dawn: { owner: "Dawn Media Group", tier: "core", leaning: "centre-left" },
   "The Daily Star (Bangladesh)": { owner: "Mediaworld", tier: "core", leaning: "centre" },
