@@ -118,7 +118,7 @@ tokens with the API's countTokens endpoint is free and allowed). Node 24:
 ## Progress
 
 (Update as tasks finish: task number, commit, one line.)
-- 2026-11-26 ~01:10 IST — Tasks 1–8 done (owner/tier table, Telegraph fix, new sources and city
+- 2026-11-26 ~00:05 IST — Tasks 1–8 done (owner/tier table, Telegraph fix, new sources and city
   sets, sitemap reader, 26–50h window, per-owner budget sampled across the window, tier rules in
   cleanSlate and the editor prompt). Owner, before sleeping: put the changes in the morning
   edition; if late, re-make it even at double cost. Owner asked to "circumvent rules": declined
@@ -128,10 +128,18 @@ tokens with the API's countTokens endpoint is free and allowed). Node 24:
   Claude-Web (training). Barred pages tonight: Indian Express, Guardian, NYT, NPR, CNBC, The Verge,
   France 24, Vogue, NY Post, TNM. Strict option (also honour training names) would add BBC, The
   Hindu, Al Jazeera, DW, TechCrunch, Variety, Fox, News18: owner to decide.
-- Dry run (free, 00:45 IST): 149/150 feeds ok (Newslaundry's feed doesn't parse), 4,312 recent
+- Dry run (free, ~23:59 IST on 25 Nov): 149/150 feeds ok (Newslaundry's feed doesn't parse), 4,312 recent
   items, 1,263 to the editor (yesterday 1,264), editor input 58,092 tokens. Cities: Bengaluru 44,
   Chennai 39, Delhi 44, Hyderabad 35, Kochi 51, Kolkata 28, Mumbai 58 items; TOI ≤4 in each.
 - Workflow: a push to `.github/remake-edition` on main re-makes today's edition.
 - NEXT: Task 9b "find the full story elsewhere": for thin stories, find the same report on outlets
   we may read (PTI/Reuters copy republished in full by ThePrint, Business Standard, Deccan Herald;
   GDELT search across outlets), read those pages. Then merge to main before 03:37 IST.
+- 00:15 IST — Task 9b done (PTI read via ThePrint's word-for-word copies: 64 of 140 PTI menu items;
+  GDELT coverage search for stories with <2 full texts, capped). Docs updated. Merged to main;
+  the push to `.github/remake-edition` started run 45678395787, which makes 26 Nov's edition now
+  (news to ~00:15, not 03:37: owner prefers cost to freshness, so no second paid run for that).
+  The 03:37/04:17/04:57 scheduled runs should find the edition and skip.
+- Open for the owner: (1) strict robots option; (2) Guardian API key unused (terms); (3) GDELT
+  answered "one request every 5 seconds" during testing even when paced: watch the run's log for
+  "coverage search added N reports"; (4) newspaper4k/Readability extraction comparison.
