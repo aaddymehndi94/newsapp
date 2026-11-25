@@ -155,6 +155,9 @@ describe("buildSite", () => {
     const page = await readFile(path.join(outDir, "index.html"), "utf8");
     assert.match(page, /<meta name="robots" content="noindex, nofollow">/);
     await assert.rejects(readFile(path.join(outDir, "sitemap.xml")));
+    // Test builds are never counted as readers.
+    assert.doesNotMatch(page, /cloudflareinsights/);
+    assert.doesNotMatch(await readFile(path.join(outDir, "_headers"), "utf8"), /cloudflareinsights/);
   });
 
   it("opens a real edition build to search, with canonical links and a sitemap", async () => {
@@ -184,6 +187,11 @@ describe("buildSite", () => {
     assert.ok(front.includes(`<link rel="canonical" href="${ORIGIN}/">`), "front page names / as canonical");
     const article = await readFile(path.join(realOut, "e", latest!.id, story.id, "index.html"), "utf8");
     assert.ok(article.includes(`<link rel="canonical" href="${ORIGIN}/e/${latest!.id}/${story.id}/">`));
+    // Real readers are counted with Cloudflare Web Analytics, and the policy lets it load and report.
+    assert.match(front, /<script defer src="https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js" data-cf-beacon='\{"token": "[0-9a-f]{32}"\}'><\/script>/);
+    const csp = headers.split("\n").find((l) => l.includes("Content-Security-Policy")) ?? "";
+    assert.match(csp, /script-src [^;]*https:\/\/static\.cloudflareinsights\.com/);
+    assert.match(csp, /connect-src [^;]*https:\/\/cloudflareinsights\.com/);
     const notFound = await readFile(path.join(realOut, "404.html"), "utf8");
     assert.match(notFound, /<meta name="robots" content="noindex">/);
     assert.doesNotMatch(notFound, /rel="canonical"/);

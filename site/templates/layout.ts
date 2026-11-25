@@ -31,6 +31,15 @@ export const THEME_COLORS = { light: "#ffffff", dark: "#111111" } as const;
  * workers.dev copies of the site don't compete with it in search results. */
 export const SITE_ORIGIN = "https://measurededition.com";
 
+/**
+ * Cloudflare Web Analytics site token (public: it sits in every page). Counts real readers
+ * without cookies; bots that don't run pages are left out. Cloudflare's automatic setup
+ * doesn't reach pages served by a Worker, so the beacon is added here. Never on test builds.
+ */
+export const ANALYTICS_TOKEN = "b7cd87fdc9ae46a691609df95e64994c";
+export const ANALYTICS_SCRIPT = "https://static.cloudflareinsights.com/beacon.min.js";
+export const ANALYTICS_REPORT = "https://cloudflareinsights.com";
+
 export interface PageOpts {
   title: string;
   /** Site path of this page ("/e/<id>/<story>/"), given as its canonical URL. */
@@ -69,6 +78,7 @@ ${o.canonicalPath && !o.ctx.sample ? `<link rel="canonical" href="${SITE_ORIGIN}
 ${preloads}
 <link rel="stylesheet" href="${o.ctx.css}">
 <script src="${o.ctx.js}" defer></script>
+${o.ctx.sample ? "" : `<script defer src="${ANALYTICS_SCRIPT}" data-cf-beacon='{"token": "${ANALYTICS_TOKEN}"}'></script>`}
 </head>
 <body class="${esc(o.bodyClass)}"${attrs}>
 <a class="skip" href="#main">Skip to main content</a>
@@ -131,7 +141,7 @@ function footer(ctx: SiteCtx): string {
 <p class="foot-mark">Measured Edition</p>
 <div class="foot-note">
 <p>Stories on Measured Edition are written by AI from the reporting of the outlets credited on each story, and edited for balance across outlets of different leanings. Pictures belong to their credited owners and link to where they were published.</p>
-<p>No ads, no tracking. Which stories you have read is remembered only in this browser.</p>
+<p>No ads and no cookies. We count visits with Cloudflare Web Analytics, which doesn’t identify you. Which stories you have read is remembered only in this browser.</p>
 </div>
 <nav class="foot-nav" aria-label="Site">
 <a href="/">Latest edition</a>

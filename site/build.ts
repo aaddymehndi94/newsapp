@@ -16,7 +16,7 @@ import { renderArchive, renderNotFound } from "./templates/archive.ts";
 import { renderFront } from "./templates/front.ts";
 import type { SiteCtx } from "./templates/layout.ts";
 import { editionPath, esc, storyPath } from "./templates/helpers.ts";
-import { HEAD_SCRIPT, SITE_ORIGIN } from "./templates/layout.ts";
+import { ANALYTICS_REPORT, ANALYTICS_SCRIPT, HEAD_SCRIPT, SITE_ORIGIN } from "./templates/layout.ts";
 import type { Edition } from "./types.ts";
 
 const SITE_DIR = path.dirname(fileURLToPath(import.meta.url));
@@ -106,12 +106,12 @@ function headersFile(sample: boolean): string {
   const scriptHash = createHash("sha256").update(HEAD_SCRIPT).digest("base64");
   const csp = [
     "default-src 'self'",
-    `script-src 'self' 'sha256-${scriptHash}'`,
+    `script-src 'self' 'sha256-${scriptHash}'${sample ? "" : ` ${ANALYTICS_SCRIPT}`}`,
     "style-src 'self'",
     "img-src 'self' https: data:",
     "font-src 'self'",
     "frame-src https://www.youtube-nocookie.com",
-    "connect-src 'self'",
+    `connect-src 'self'${sample ? "" : ` ${ANALYTICS_REPORT}`}`,
     "object-src 'none'",
     "base-uri 'none'",
     "form-action 'none'",
