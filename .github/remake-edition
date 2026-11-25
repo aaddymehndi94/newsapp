@@ -1,2 +1,2 @@
 # Changing this file on main re-makes today's edition on GitHub (see .github/workflows/edition.yml).
-# Each re-make costs a full edition (about $1). Last request: 2026-11-26 02:05 IST (first edition with the source overhaul; the owner asked for it in this morning's edition).
+# Each re-make costs a full edition (about $1). Last request: 2026-11-26 04:20 IST (GitHub had not started the 03:37 scheduled run 40 minutes late; this makes the morning edition with the Guardian API and the new sources, and later scheduled runs find it and stop).
