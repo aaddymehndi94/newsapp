@@ -32,12 +32,13 @@ export const THEME_COLORS = { light: "#ffffff", dark: "#111111" } as const;
 export const SITE_ORIGIN = "https://measurededition.com";
 
 /**
- * Cloudflare Web Analytics site token (public: it sits in every page). Counts real readers
- * without cookies; bots that don't run pages are left out. Cloudflare's automatic setup
- * doesn't reach pages served by a Worker, so the beacon is added here. Never on test builds.
+ * Cloudflare Web Analytics counts real readers without cookies (bots that don't run pages are
+ * left out). Cloudflare injects its beacon into pages it serves to browsers ("automatic setup"),
+ * so our pages carry no tag of their own (two tags would count every visit twice); the
+ * Content-Security-Policy only has to let the beacon load and report. Checked in headless Chrome
+ * on 2026-11-25.
  */
-export const ANALYTICS_TOKEN = "b7cd87fdc9ae46a691609df95e64994c";
-export const ANALYTICS_SCRIPT = "https://static.cloudflareinsights.com/beacon.min.js";
+export const ANALYTICS_SCRIPT = "https://static.cloudflareinsights.com";
 export const ANALYTICS_REPORT = "https://cloudflareinsights.com";
 
 export interface PageOpts {
@@ -78,7 +79,6 @@ ${o.canonicalPath && !o.ctx.sample ? `<link rel="canonical" href="${SITE_ORIGIN}
 ${preloads}
 <link rel="stylesheet" href="${o.ctx.css}">
 <script src="${o.ctx.js}" defer></script>
-${o.ctx.sample ? "" : `<script defer src="${ANALYTICS_SCRIPT}" data-cf-beacon='{"token": "${ANALYTICS_TOKEN}"}'></script>`}
 </head>
 <body class="${esc(o.bodyClass)}"${attrs}>
 <a class="skip" href="#main">Skip to main content</a>

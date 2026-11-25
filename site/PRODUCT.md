@@ -66,8 +66,9 @@ edition, which is the point.
   with leaning labels, next-in-section and other top stories.
 - Read stories are dimmed on the front page (per-browser localStorage, nothing sent anywhere).
 - Visits are counted with Cloudflare Web Analytics (no cookies, doesn't identify readers; most bots
-  don't run pages, so it shows real readers). The owner reads it in the Cloudflare dashboard; no
-  count is shown on the site. Test builds never load it.
+  don't run pages, so it shows real readers). Cloudflare injects its beacon at the edge; our pages
+  carry no tag of their own, and the CSP allows it. The owner reads it in the Cloudflare dashboard;
+  no count is shown on the site.
 - Your city: the reader picks a city once in the city section and it's remembered in the browser
   (nothing sent anywhere). The section and its tab then show only that city, and Weather lists it
   first. With no pick, or no JavaScript, every city shows. City stories never lead the edition.
