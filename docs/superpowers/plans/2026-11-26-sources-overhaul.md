@@ -151,3 +151,10 @@ tokens with the API's countTokens endpoint is free and allowed). Node 24:
 - After the run, for 27 Nov: UNI wire, library search (+ Business Standard, Outlook, Deccan Herald
   sitemaps), GDELT circuit breaker, TNM/Newslaundry sitemaps. Part 2 design drafted:
   docs/superpowers/specs/2026-11-26-selection-design.md (needs approval).
+- 00:40–01:00 IST — owner's calls: robots.txt not consulted until 3 Dec (IGNORE_ROBOTS_UNTIL),
+  Guardian API in use, no paywall bypass (declined). Added Guardian API (full text), Business
+  Standard / Outlook / Deccan Herald / Millennium Post sitemaps split by section, CNA Asia, owner
+  first-source cap (spreadFirstSources), one entry per outlet in source lists, coverage search for
+  stories with <3 texts (library → Guardian search → GDELT). Test edition (8 stories, direct, $0.98):
+  every step passed; 3–7 outlets per story, 8 different first sources. The 00:33 edition was removed
+  from the repo so the 03:37 run makes a fresh one.
