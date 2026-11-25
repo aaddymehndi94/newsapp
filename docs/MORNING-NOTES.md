@@ -20,10 +20,15 @@
 ## How it works
 
 Once a day (owner's choice from 2026-11-24). **GitHub Actions makes it, starting at 03:37 IST** (with 04:17 and 04:57 as back-up start times, since GitHub can start late). Nothing runs on your laptop:
-1. Reads 129 feeds: Indian outlets from left to right (The Hindu, Indian Express, HT, TOI, NDTV,
-   Scroll, The Wire, ThePrint, News18, Swarajya, Organiser, Firstpost…), international (BBC, Al Jazeera,
-   Guardian, NYT, WSJ, Fox, NPR, DW, France 24, CNA, SCMP, Reuters/AP headlines…), science, tech,
-   sport, and city feeds for the seven cities. Also 18 YouTube news channels for video, read through the YouTube Data API only when YOUTUBE_API_KEY is set (YouTube's robots.txt disallows its channel feeds).
+1. Reads ~150 feeds and news sitemaps back to the previous edition (26–50 hours): PTI's wire,
+   The Hindu, Indian Express, HT, Mint, Business Standard, ThePrint, The Wire, The Quint, Scroll,
+   The News Minute, Frontline, BBC India, courts (LiveLaw, Bar & Bench), fact-checkers (Alt News,
+   BOOM, Factly), the RBI, Down To Earth; international (BBC, Al Jazeera, Guardian, NYT, WSJ, Fox,
+   NPR, DW, France 24, SCMP, The Diplomat…), science, tech, sport; and each city's own papers
+   (Deccan Herald, South First, Citizen Matters, DT Next, Onmanorama, Mathrubhumi, Mid-Day, Free
+   Press Journal, NIE…). Each outlet has an owner and a tier: the Times group, NDTV (Adani), News18
+   (Reliance), Fox and the NY Post only corroborate, never lead a story; TOI shows at most 4 items
+   per city. Each owner gets a budget per section, sampled across the whole window. Also 18 YouTube news channels for video, read through the YouTube Data API only when YOUTUBE_API_KEY is set (YouTube's robots.txt disallows its channel feeds).
 2. **Claude Opus 5.5** (editor) groups reports of the same event, picks a balanced slate with
    section quotas, and assigns each story 2–6 sources from different outlets and leanings.
 3. **Claude Sonnet 5.5** (writer) writes each story in its own words from those sources, under a
@@ -46,10 +51,13 @@ Your laptop plays no part: GitHub makes, publishes and saves the edition.
 ## Things to know
 
 - **Not included:** X and Instagram (no free access). Reddit refused our requests, so it isn't used either.
-- **Headlines only, via Google News:** ThePrint, The Wire, The Quint, Swarajya, The Telegraph and
-  Deccan Herald block automated readers or have broken feeds, so we only see their headlines.
-  The facts come from outlets we can read.
+- **No Google News, Reuters, AP, Kolkata Telegraph or Statesman:** their robots.txt or bot checks
+  bar us. PTI's pages need JavaScript, so its text is read where ThePrint republishes it word for
+  word; stories with fewer than two readable reports get a GDELT search for other outlets' coverage.
 - **No paywall bypassing**, and the reader respects each site's robots.txt and identifies itself honestly.
+  Article pages are also skipped where robots.txt bars Claude-User (Anthropic's agent for reading a
+  page for a person): Indian Express, Guardian, NYT, NPR, CNBC, The Verge, France 24, TNM. Their
+  headlines and feed summaries are still used.
 - **NDTV photos** can't be embedded on other sites, so we always use another outlet's photo for those stories.
 - **Possible refusals:** if Claude declines to write a story (very rare for news), that story is skipped.
 - **Thin stories are dropped:** if none of a story's sources can be read (e.g. headline-only), it's
