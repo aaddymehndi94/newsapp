@@ -114,8 +114,10 @@ export const SOURCES: Source[] = [
   { id: "quint-today", outlet: "The Quint", url: "https://www.thequint.com/sitemap/today", kind: "sitemap", path: /^\/news\//, region: "india", section: "india", leaning: "centre-left" },
   { id: "quint-yesterday", outlet: "The Quint", url: "https://www.thequint.com/sitemap/yesterday", kind: "sitemap", path: /^\/news\//, region: "india", section: "india", leaning: "centre-left" },
   { id: "scroll", outlet: "Scroll", url: "https://feeds.feedburner.com/ScrollinArticles.rss", region: "india", section: "india", leaning: "centre-left" },
-  { id: "tnm", outlet: "The News Minute", url: "https://www.thenewsminute.com/stories.rss", region: "india", section: "india", leaning: "centre-left" },
-  { id: "newslaundry", outlet: "Newslaundry", url: "https://www.newslaundry.com/stories.rss", region: "india", section: "india", leaning: "centre-left" },
+  // The News Minute and Newslaundry: their RSS carries a handful of items (Newslaundry's none,
+  // mid-migration), their daily sitemaps all of them (headlines from the link).
+  { id: "tnm", outlet: "The News Minute", url: "https://www.thenewsminute.com/sitemap.xml", kind: "sitemap", region: "india", section: "india", leaning: "centre-left" },
+  { id: "newslaundry", outlet: "Newslaundry", url: "https://www.newslaundry.com/sitemap.xml", kind: "sitemap", region: "india", section: "india", leaning: "centre-left" },
   { id: "frontline", outlet: "Frontline", url: "https://frontline.thehindu.com/feeder/default.rss", region: "india", section: "india", leaning: "centre-left" },
   { id: "bbc-india", outlet: "BBC News", url: "https://feeds.bbci.co.uk/news/world/asia/india/rss.xml", region: "india", section: "india", leaning: "centre-left" },
   // Courts.
