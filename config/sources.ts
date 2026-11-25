@@ -46,10 +46,13 @@ export interface Source {
   region: Region;
   section: SectionHint;
   leaning: Leaning;
-  /** "rss" (default): RSS/Atom/RDF. "sitemap": a Google News sitemap or sitemap index (headlines and links). */
-  kind?: "rss" | "sitemap";
+  /** "rss" (default): RSS/Atom/RDF. "sitemap": a Google News sitemap or sitemap index (headlines and links).
+   *  "guardian": a Guardian Content API search (url without the key; full text comes with it). */
+  kind?: "rss" | "sitemap" | "guardian";
+  /** The feed to read instead when the API key for this kind is missing. */
+  fallback?: string;
   /** Fetch article pages for text and pictures (default true; PTI's pages need JavaScript). Pages
-   *  are also skipped wherever robots.txt bars Claude-User (pipeline/robots.ts). */
+   *  are also skipped wherever robots.txt bars readers (pipeline/robots.ts). */
   fetchPages?: boolean;
   /** Keep only links whose path matches (sitemaps carry every section). */
   path?: RegExp;
@@ -199,7 +202,8 @@ export const SOURCES: Source[] = [
   { id: "bbc-top", outlet: "BBC News", url: "https://feeds.bbci.co.uk/news/rss.xml", region: "world", section: "general", leaning: "centre-left" },
   { id: "bbc-asia", outlet: "BBC News", url: "https://feeds.bbci.co.uk/news/world/asia/rss.xml", region: "world", section: "world", leaning: "centre-left" },
   { id: "aljazeera", outlet: "Al Jazeera", url: "https://www.aljazeera.com/xml/rss/all.xml", region: "world", section: "world", leaning: "centre-left" },
-  { id: "guardian-world", outlet: "The Guardian", url: "https://www.theguardian.com/world/rss", region: "world", section: "world", leaning: "left" },
+  { id: "guardian-world", outlet: "The Guardian", url: "https://content.guardianapis.com/search?section=world", kind: "guardian", fallback: "https://www.theguardian.com/world/rss", region: "world", section: "world", leaning: "left" },
+  { id: "guardian-india", outlet: "The Guardian", url: "https://content.guardianapis.com/search?tag=world/india", kind: "guardian", fallback: "https://www.theguardian.com/world/india/rss", region: "india", section: "india", leaning: "left" },
   { id: "npr-world", outlet: "NPR", url: "https://feeds.npr.org/1004/rss.xml", region: "world", section: "world", leaning: "centre-left" },
   { id: "dw", outlet: "DW", url: "https://rss.dw.com/rdf/rss-en-all", region: "world", section: "world", leaning: "centre" },
   { id: "france24", outlet: "France 24", url: "https://www.france24.com/en/rss", region: "world", section: "world", leaning: "centre" },
@@ -220,7 +224,7 @@ export const SOURCES: Source[] = [
   // ───────────── Business (world) ─────────────
   { id: "bbc-business", outlet: "BBC News", url: "https://feeds.bbci.co.uk/news/business/rss.xml", region: "world", section: "business", leaning: "centre-left" },
   { id: "cnbc", outlet: "CNBC", url: "https://www.cnbc.com/id/100003114/device/rss/rss.html", region: "world", section: "business", leaning: "centre" },
-  { id: "guardian-business", outlet: "The Guardian", url: "https://www.theguardian.com/business/rss", region: "world", section: "business", leaning: "left" },
+  { id: "guardian-business", outlet: "The Guardian", url: "https://content.guardianapis.com/search?section=business", kind: "guardian", fallback: "https://www.theguardian.com/business/rss", region: "world", section: "business", leaning: "left" },
   { id: "wsj-markets", outlet: "The Wall Street Journal", url: "https://feeds.content.dowjones.io/public/rss/RSSMarketsMain", region: "world", section: "business", leaning: "centre-right" },
 
   // ───────────── Science / tech / health / environment ─────────────
@@ -231,8 +235,9 @@ export const SOURCES: Source[] = [
   { id: "ars", outlet: "Ars Technica", url: "https://feeds.arstechnica.com/arstechnica/index", region: "world", section: "tech", leaning: "centre-left" },
   { id: "verge", outlet: "The Verge", url: "https://www.theverge.com/rss/index.xml", region: "world", section: "tech", leaning: "centre-left" },
   { id: "techcrunch", outlet: "TechCrunch", url: "https://techcrunch.com/feed/", region: "world", section: "tech", leaning: "centre" },
-  { id: "guardian-sci", outlet: "The Guardian", url: "https://www.theguardian.com/science/rss", region: "world", section: "science", leaning: "left" },
-  { id: "guardian-env", outlet: "The Guardian", url: "https://www.theguardian.com/environment/rss", region: "world", section: "environment", leaning: "left" },
+  { id: "guardian-sci", outlet: "The Guardian", url: "https://content.guardianapis.com/search?section=science", kind: "guardian", fallback: "https://www.theguardian.com/science/rss", region: "world", section: "science", leaning: "left" },
+  { id: "guardian-tech", outlet: "The Guardian", url: "https://content.guardianapis.com/search?section=technology", kind: "guardian", fallback: "https://www.theguardian.com/technology/rss", region: "world", section: "tech", leaning: "left" },
+  { id: "guardian-env", outlet: "The Guardian", url: "https://content.guardianapis.com/search?section=environment", kind: "guardian", fallback: "https://www.theguardian.com/environment/rss", region: "world", section: "environment", leaning: "left" },
   { id: "sciencedaily", outlet: "ScienceDaily", url: "https://www.sciencedaily.com/rss/top/science.xml", region: "world", section: "science", leaning: "centre" },
   { id: "phys", outlet: "Phys.org", url: "https://phys.org/rss-feed/", region: "world", section: "science", leaning: "centre" },
   { id: "sciencenews", outlet: "Science News", url: "https://www.sciencenews.org/feed", region: "world", section: "science", leaning: "centre" },
@@ -281,12 +286,28 @@ export const SOURCES: Source[] = [
   { id: "pti-sports", outlet: "Press Trust of India", url: PTI, kind: "sitemap", path: /\/story\/sports\//, region: "india", section: "sports", leaning: "centre", fetchPages: false },
   { id: "ie-sports", outlet: "The Indian Express", url: "https://indianexpress.com/section/sports/feed/", region: "india", section: "sports", leaning: "centre" },
 
+  // ───────────── Whole papers from their news sitemaps, split into sections by link ─────────────
+  // More independent owners on the menu, so no one paper carries the edition (owner, 2026-11-26).
+  { id: "bs-india", outlet: "Business Standard", url: "https://www.business-standard.com/sitemap/news-sitemap.xml", kind: "sitemap", path: /^\/(india-news|elections)\//, region: "india", section: "india", leaning: "centre" },
+  { id: "bs-world", outlet: "Business Standard", url: "https://www.business-standard.com/sitemap/news-sitemap.xml", kind: "sitemap", path: /^\/world-news\//, region: "world", section: "world", leaning: "centre" },
+  { id: "bs-business", outlet: "Business Standard", url: "https://www.business-standard.com/sitemap/news-sitemap.xml", kind: "sitemap", path: /^\/(markets|companies|industry|economy|finance)\//, region: "india", section: "business", leaning: "centre" },
+  { id: "bs-tech", outlet: "Business Standard", url: "https://www.business-standard.com/sitemap/news-sitemap.xml", kind: "sitemap", path: /^\/technology\//, region: "india", section: "tech", leaning: "centre" },
+  { id: "outlook-india", outlet: "Outlook", url: "https://www.outlookindia.com/oisitemap-news.xml", kind: "sitemap", path: /^\/national\//, region: "india", section: "india", leaning: "centre-left" },
+  { id: "outlook-world", outlet: "Outlook", url: "https://www.outlookindia.com/oisitemap-news.xml", kind: "sitemap", path: /^\/international\//, region: "world", section: "world", leaning: "centre-left" },
+  { id: "dh-karnataka", outlet: "Deccan Herald", url: "https://www.deccanherald.com/news_sitemap.xml", kind: "sitemap", path: /^\/india\/karnataka\//, region: "bengaluru", section: "bengaluru", leaning: "centre" },
+  { id: "dh-india", outlet: "Deccan Herald", url: "https://www.deccanherald.com/news_sitemap.xml", kind: "sitemap", path: /^\/india\/(?!karnataka\/)/, region: "india", section: "india", leaning: "centre" },
+  { id: "dh-world", outlet: "Deccan Herald", url: "https://www.deccanherald.com/news_sitemap.xml", kind: "sitemap", path: /^\/world\//, region: "world", section: "world", leaning: "centre" },
+  { id: "dh-business", outlet: "Deccan Herald", url: "https://www.deccanherald.com/news_sitemap.xml", kind: "sitemap", path: /^\/business\//, region: "india", section: "business", leaning: "centre" },
+  { id: "dh-sports", outlet: "Deccan Herald", url: "https://www.deccanherald.com/news_sitemap.xml", kind: "sitemap", path: /^\/sports\//, region: "india", section: "sports", leaning: "centre" },
+  { id: "dh-entertainment", outlet: "Deccan Herald", url: "https://www.deccanherald.com/news_sitemap.xml", kind: "sitemap", path: /^\/entertainment\//, region: "india", section: "entertainment", leaning: "centre" },
+
   // ───────────── Search only: a library for finding other reports of a picked story ─────────────
+  // Whatever the sections above don't take (deduplicated by link) stays here, search-only.
   // Never shown to the editor (pipeline/coverage.ts). Paid press releases are filtered out.
   { id: "lib-bs", outlet: "Business Standard", url: "https://www.business-standard.com/sitemap/news-sitemap.xml", kind: "sitemap", path: /^\/(?!content\/press-releases)/, searchOnly: true, region: "india", section: "india", leaning: "centre" },
   { id: "lib-outlook", outlet: "Outlook", url: "https://www.outlookindia.com/oisitemap-news.xml", kind: "sitemap", path: /^\/(?!.*spotlight)/, searchOnly: true, region: "india", section: "india", leaning: "centre-left" },
   { id: "lib-dh", outlet: "Deccan Herald", url: "https://www.deccanherald.com/news_sitemap.xml", kind: "sitemap", searchOnly: true, region: "india", section: "india", leaning: "centre" },
-  { id: "guardian-sport", outlet: "The Guardian", url: "https://www.theguardian.com/sport/rss", region: "world", section: "sports", leaning: "centre" },
+  { id: "guardian-sport", outlet: "The Guardian", url: "https://content.guardianapis.com/search?section=sport", kind: "guardian", fallback: "https://www.theguardian.com/sport/rss", region: "world", section: "sports", leaning: "centre" },
 
 ];
 

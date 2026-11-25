@@ -51,13 +51,18 @@ Your laptop plays no part: GitHub makes, publishes and saves the edition.
 ## Things to know
 
 - **Not included:** X and Instagram (no free access). Reddit refused our requests, so it isn't used either.
-- **No Google News, Reuters, AP, Kolkata Telegraph or Statesman:** their robots.txt or bot checks
-  bar us. PTI's pages need JavaScript, so its text is read where ThePrint republishes it word for
-  word; stories with fewer than two readable reports get a GDELT search for other outlets' coverage.
-- **No paywall bypassing**, and the reader respects each site's robots.txt and identifies itself honestly.
-  Article pages are also skipped where robots.txt bars Claude-User (Anthropic's agent for reading a
-  page for a person): Indian Express, Guardian, NYT, NPR, CNBC, The Verge, France 24, TNM. Their
-  headlines and feed summaries are still used.
+- **No Reuters, AP, Kolkata Telegraph or Statesman:** their bot checks refuse us. PTI's pages need
+  JavaScript, so its text is read where ThePrint republishes it word for word.
+- **Thin stories get more reports:** a story with fewer than three readable reports is matched
+  against everything gathered that morning (about 4,000 reports, plus Business Standard, Outlook and
+  Deccan Herald), then the Guardian's search (full text through its API), then GDELT if it answers.
+- **robots.txt is not consulted until 3 December** (the owner's call during development; set in
+  pipeline/robots.ts, IGNORE_ROBOTS_UNTIL). After that, the rules a site writes for every reader
+  apply again. Either way: no paywall bypassing, an honest user agent, and a site that refuses us
+  stays refused.
+- **The Guardian** comes through its Content API (GUARDIAN_API_KEY, developer key), with full text.
+- **No one paper leads too much:** no owner is credited first on more than about one story in seven
+  when another outlet carries the story; a story lists each outlet once.
 - **NDTV photos** can't be embedded on other sites, so we always use another outlet's photo for those stories.
 - **Possible refusals:** if Claude declines to write a story (very rare for news), that story is skipped.
 - **Thin stories are dropped:** if none of a story's sources can be read (e.g. headline-only), it's

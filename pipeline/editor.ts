@@ -126,6 +126,7 @@ How to choose
 Assigning sources (itemIds)
 - Each feed shows its tier. core: an outlet with its own reporting, which can lead a story. wire: the Press Trust of India, whose headlines show an event happened (its text is not available, so it is never a story's only source). primary: the body itself (the Reserve Bank, NASA, a company announcing its own news). corroborate: may confirm a story but is never its first or only source (The Times of India and The Economic Times, NDTV, News18, Fox News, the New York Post and others whose owners' interests, paid-content business or record of trial balloons call for a second outlet). perspective: only to show what one side is saying. A story carried only by corroborate outlets is not ready to publish: leave it out.
 - Give each story 2–6 item ids reporting that same event, from different outlets where possible. Put the most informative core, wire or primary item first. Items from the same owner (shown in the feed header) count as one outlet, and two items from one outlet are not corroboration.
+- No single outlet should carry the edition: over-reliance on one paper makes the news worse, however good the paper. When one outlet's item would lead many stories, look for the same event from other owners and give their items too; a story only one outlet reports needs a reason to be in (an exclusive, a court ruling, official data, a regional report nobody else has).
 - How widely a story is covered is a clue to its importance, not proof of it: a court ruling, an official document or a regional report carried by one or two careful outlets can matter more than a celebrity story every outlet repeats.
 - For political or disputed stories, include outlets from different leanings (each feed shows its leaning code) so the writer sees how each side reports it. For every contested story, assign at least one left-of-centre (L/CL) and one right-of-centre (CR/R) item whenever a core or corroborate feed carries the event; check those feeds before settling on a one-sided set.
 - A single-source story is acceptable only for significant news from a core or primary outlet (e.g. a science paper, a court ruling reported by LiveLaw, a city report from that city's paper), never from a corroborate outlet.
@@ -166,7 +167,7 @@ export function formatItems(items: FeedItem[], now = Date.now()): { text: string
   for (const g of groups.values()) {
     const f = g[0];
     const info = outletInfo(f.outlet);
-    const text = f.pages === false || NO_PAGES.has(f.sourceId) ? (g.every((x) => !x.summary) ? "; headlines only" : "; feed summaries only") + (g.some((x) => x.alt) ? ", except items marked + (full text available)" : "") : "";
+    const text = !f.body && (f.pages === false || NO_PAGES.has(f.sourceId)) ? (g.every((x) => !x.summary) ? "; headlines only" : "; feed summaries only") + (g.some((x) => x.alt) ? ", except items marked + (full text available)" : "") : "";
     out.push(`## ${f.outlet} (${LEAN[f.leaning]}; ${f.sectionHint}; ${f.tier ?? info?.tier ?? "core"}; owner ${f.owner ?? info?.owner ?? f.outlet}${text})`);
     for (const it of g) {
       const alias = `i${(n++).toString(36)}`;
@@ -243,6 +244,7 @@ export function cleanSlate(slate: Slate, items: Map<string, FeedItem>, videoIds:
     stories.push({ ...s, key, itemIds: ids, videoId: videoIds.has(s.videoId) ? s.videoId : "" });
   }
   stories.forEach((s, i) => (s.rank = i + 1));
+  spreadFirstSources(stories, items);
   // Exactly up to 4 leads, falling back to top-ranked stories. City stories are shown only to
   // that city's readers, so they never lead the edition.
   const canLead = (s: SlatePick) => !(CITY_SECTIONS as readonly string[]).includes(s.section);
@@ -250,6 +252,31 @@ export function cleanSlate(slate: Slate, items: Map<string, FeedItem>, videoIds:
   if (leads.length < 4) for (const s of stories) if (!leads.includes(s) && canLead(s) && leads.length < 4) leads.push(s);
   for (const s of stories) s.lead = leads.includes(s);
   return { stories };
+}
+
+/**
+ * No owner leads (is the first source of) more than about one story in seven: past that, a
+ * story's next lead-eligible item from an owner still under the cap goes first. Stories keep all
+ * their items; only who is credited first, and read first by the writer, changes.
+ */
+export function spreadFirstSources(stories: SlatePick[], items: Map<string, FeedItem>): void {
+  const cap = Math.max(3, Math.ceil(stories.length * 0.15));
+  const led = new Map<string, number>();
+  const count = (o: string) => led.get(o) ?? 0;
+  for (const s of stories) {
+    let owner = ownerOf(items.get(s.itemIds[0])!);
+    if (count(owner) >= cap) {
+      const alt = s.itemIds.findIndex((id, i) => {
+        const it = items.get(id)!;
+        return i > 0 && CAN_LEAD.has(tierOf(it)) && ownerOf(it) !== owner && count(ownerOf(it)) < cap;
+      });
+      if (alt > 0) {
+        s.itemIds = [s.itemIds[alt], ...s.itemIds.filter((_, i) => i !== alt)];
+        owner = ownerOf(items.get(s.itemIds[0])!);
+      }
+    }
+    led.set(owner, count(owner) + 1);
+  }
 }
 
 export async function planEdition(

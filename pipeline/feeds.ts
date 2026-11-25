@@ -10,11 +10,11 @@ export interface FeedItem {
   leaning: Leaning;
   region: Region;
   sectionHint: SectionHint;
-  kind: "rss" | "sitemap";
+  kind: "rss" | "sitemap" | "api";
   /** From the outlet table: how far a story may lean on this outlet, and who owns it. */
   tier: Tier;
   owner: string;
-  /** False when we won't read the article page (Source.fetchPages, or robots.txt bars Claude-User):
+  /** False when we won't read the article page (Source.fetchPages, or robots.txt bars readers):
    *  the writer then has only what the feed carries. */
   pages?: boolean;
   /** A page we may read that carries this same report word for word (PTI copy republished by
@@ -25,6 +25,8 @@ export interface FeedItem {
   summary: string;
   published?: string; // ISO
   image?: string;
+  /** The article's full text when the source gives it (the Guardian's API): no page read needed. */
+  body?: string;
 }
 
 const parser = new XMLParser({
@@ -101,7 +103,7 @@ function itemFor(source: Source, f: { title: string; link: string; summary: stri
     leaning: source.leaning,
     region: source.region,
     sectionHint: source.section,
-    kind: source.kind ?? "rss",
+    kind: source.kind === "sitemap" ? "sitemap" : "rss",
     tier: info?.tier ?? "core",
     owner: info?.owner ?? source.outlet,
     ...f,
@@ -255,6 +257,38 @@ export interface GatherStats {
   itemsSeen: number;
 }
 
+/** Results of a Guardian Content API search (with show-fields=trailText,bodyText,thumbnail). */
+export function parseGuardian(json: string, source: Source): FeedItem[] {
+  type Result = { webTitle?: string; webUrl?: string; webPublicationDate?: string; fields?: { trailText?: string; bodyText?: string; thumbnail?: string } };
+  let results: Result[];
+  try {
+    results = JSON.parse(json).response?.results ?? [];
+  } catch {
+    return [];
+  }
+  const out: FeedItem[] = [];
+  for (const r of results) {
+    const title = stripHtml(r.webTitle ?? "").replace(/\s+/g, " ").trim();
+    if (!title || !/^https?:\/\//.test(r.webUrl ?? "")) continue;
+    const t = Date.parse(r.webPublicationDate ?? "");
+    const summary = stripHtml(r.fields?.trailText ?? "").replace(/\s+/g, " ").replace(/\s+([.,;:!?])/g, "$1").trim();
+    out.push({
+      ...itemFor(source, { title, link: r.webUrl!, summary, published: Number.isNaN(t) ? undefined : new Date(t).toISOString(), image: r.fields?.thumbnail || undefined }),
+      kind: "api",
+      body: r.fields?.bodyText?.trim() || undefined,
+    });
+  }
+  return out;
+}
+
+/** The Guardian allows a developer key one request a second. */
+let guardianNext = 0;
+export async function guardianTurn(): Promise<void> {
+  const slot = Math.max(Date.now(), guardianNext);
+  guardianNext = slot + 1100;
+  if (slot > Date.now()) await new Promise((r) => setTimeout(r, slot - Date.now()));
+}
+
 /** The IST dates (YYYY-MM-DD) from `since` to now, newest first. */
 function istDates(since: number): string[] {
   const out: string[] = [];
@@ -278,13 +312,26 @@ export async function gatherAll(sources: Source[], sinceHours: number): Promise<
     }
     return p;
   };
+  const guardianKey = process.env.GUARDIAN_API_KEY;
   const lists = await mapLimit(sources, 10, async (s) => {
+    // The Guardian's API when we have its key; its RSS feed otherwise.
+    const api = s.kind === "guardian" && !!guardianKey;
+    const url = s.kind === "guardian" && !api ? s.fallback : s.url;
+    if (!url) {
+      stats.failed.push({ id: s.id, status: 0, note: "no API key and no fallback feed" });
+      return [];
+    }
     // A feed whose site bars readers like us is skipped, never fetched.
-    if (!(await allowedByRobots(s.url))) {
+    if (!api && !(await allowedByRobots(url))) {
       stats.failed.push({ id: s.id, status: 0, note: "robots.txt disallows it; not fetched" });
       return [];
     }
-    const res = await get(s.url);
+    if (api) await guardianTurn();
+    const res = await get(
+      api
+        ? `${url}&order-by=newest&page-size=200&from-date=${new Date(since).toISOString().slice(0, 10)}&show-fields=trailText,bodyText,thumbnail&api-key=${guardianKey}`
+        : url,
+    );
     if (!res.ok) {
       stats.failed.push({ id: s.id, status: res.status, note: res.status ? "" : res.text.slice(0, 80) });
       return [];
@@ -306,7 +353,8 @@ export async function gatherAll(sources: Source[], sinceHours: number): Promise<
             if (r.ok) items.push(...parseSitemap(r.text, s).items);
           }
         }
-      } else items = parseFeed(res.text, s);
+      } else if (api) items = parseGuardian(res.text, s);
+      else items = parseFeed(res.text, s);
     } catch (e) {
       stats.failed.push({ id: s.id, status: res.status, note: `parse error: ${(e as Error).message.slice(0, 60)}` });
       return [];
@@ -316,7 +364,7 @@ export async function gatherAll(sources: Source[], sinceHours: number): Promise<
       return [];
     }
     stats.feedsOk++;
-    const pages = s.fetchPages !== false && (await allowedByRobots(items[0].link, { ai: true }));
+    const pages = s.fetchPages !== false && (await allowedByRobots(items[0].link));
     for (const it of items) it.pages = pages;
     return items;
   });

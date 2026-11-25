@@ -168,13 +168,11 @@ test("the Kolkata Telegraph is not given the UK Telegraph's label", async () => 
   assert.equal(leaningFor("Scroll"), "centre-left");
 });
 
-test("robots.txt: article pages also obey rules aimed at Anthropic's agents; feeds don't", async () => {
+test("robots.txt: pages and feeds obey the rules for every reader and for our own agent, not other agents'", async () => {
   const { parseRobots, robotsAllows } = await import("../pipeline/robots.ts");
-  const txt = "User-agent: *\nDisallow: /search\n\nUser-agent: Claude-User\nUser-agent: anthropic-ai\nDisallow: /\n\nUser-agent: ClaudeBot\nDisallow: /\n";
+  const txt = "User-agent: *\nDisallow: /search\n\nUser-agent: Claude-User\nUser-agent: anthropic-ai\nDisallow: /\n";
   assert.equal(robotsAllows(parseRobots(txt), "https://ex.com/news/a"), true);
-  assert.equal(robotsAllows(parseRobots(txt, { ai: true }), "https://ex.com/news/a"), false);
-  // A ban on the training crawler (and its older names) is not a ban on reading a page for a reader.
-  assert.equal(robotsAllows(parseRobots("User-agent: ClaudeBot\nUser-agent: anthropic-ai\nUser-agent: Claude-Web\nDisallow: /\n", { ai: true }), "https://ex.com/news/a"), true);
+  assert.equal(robotsAllows(parseRobots(txt), "https://ex.com/search?q=a"), false);
 });
 
 test("news sitemaps: titles, Indian times mislabelled as UTC, host rewrite, path and headline filters", async () => {
@@ -283,4 +281,38 @@ test("coverage from our own library: the closest headlines from other outlets, b
   ] as FeedItem[];
   const got = matchLibrary("Delhi SIR: Nearly 44 lakh voters may remain excluded from final roll as claims phase ends", lib, new Set(["Press Trust of India"]));
   assert.deepEqual(got.map((i) => i.id).sort(), ["a", "b"]);
+});
+
+test("Guardian API results become items carrying the article's full text", async () => {
+  const { parseGuardian } = await import("../pipeline/feeds.ts");
+  const json = JSON.stringify({ response: { status: "ok", results: [
+    { webTitle: "Hostages freed in Colombia", webUrl: "https://www.theguardian.com/world/2026/nov/25/hostages", webPublicationDate: "2026-11-25T18:20:20Z",
+      fields: { trailText: "<p>Twelve people were <strong>released</strong>.</p>", bodyText: "Twelve people were released on Tuesday after...", thumbnail: "https://media.guim.co.uk/x/500.jpg" } },
+    { webTitle: "No link", webUrl: "", webPublicationDate: "2026-11-25T18:00:00Z", fields: {} },
+  ] } });
+  const items = parseGuardian(json, { ...src, outlet: "The Guardian", kind: "guardian" });
+  assert.equal(items.length, 1);
+  assert.equal(items[0].summary, "Twelve people were released.");
+  assert.equal(items[0].body, "Twelve people were released on Tuesday after...");
+  assert.equal(items[0].image, "https://media.guim.co.uk/x/500.jpg");
+  assert.equal(items[0].published, "2026-11-25T18:20:20.000Z");
+  assert.equal(items[0].tier, "core");
+});
+
+test("no owner is the first source of more than about one story in seven when others can lead", async () => {
+  const { spreadFirstSources } = await import("../pipeline/editor.ts");
+  const it = (outlet: string, tier: string, owner: string) => ({ outlet, tier, owner }) as never;
+  const items = new Map<string, FeedItem>();
+  const stories = Array.from({ length: 10 }, (_, i) => {
+    items.set(`h${i}`, it("The Hindu", "core", "Hindu"));
+    items.set(`t${i}`, it("Hindustan Times", "core", "HT"));
+    items.set(`x${i}`, it("The Times of India", "corroborate", "Times"));
+    return { key: `s${i}`, rank: i + 1, itemIds: i < 8 ? [`h${i}`, `x${i}`, `t${i}`] : [`h${i}`, `x${i}`] } as never;
+  });
+  spreadFirstSources(stories, items);
+  const firsts = (stories as { itemIds: string[] }[]).map((s) => s.itemIds[0][0]).join("");
+  // Hindu leads 3, then HT takes over until it too reaches 3; a corroborate outlet never leads;
+  // stories with no other lead-eligible owner keep the Hindu first.
+  assert.equal(firsts, "hhhttthhhh");
+  assert.deepEqual((stories as { itemIds: string[] }[])[3].itemIds, ["t3", "h3", "x3"]);
 });

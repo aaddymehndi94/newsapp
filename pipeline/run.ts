@@ -128,7 +128,7 @@ async function main() {
     const readable = linkRepublished(items.filter((it) => isMostlyLatin(it.title) && it.title.split(/\s+/).length >= 4));
     log(`${readable.filter((i) => i.alt).length} headline-only items have a full republished copy we may read`);
     // Everything readable stays in a library for finding other reports of picked stories.
-    const library = readable.filter((it) => it.pages !== false || it.alt);
+    const library = readable.filter((it) => it.pages !== false || it.alt || it.body);
     gathered = {
       items: budgetItems(readable.filter((it) => !SEARCH_ONLY.has(it.sourceId))),
       library,
@@ -183,20 +183,25 @@ async function main() {
   const pageCache = new Map<string, PageInfo>(Object.entries(readJson<Record<string, PageInfo>>(pagesFile) ?? {}));
   const toRead = [...new Set(picks.flatMap((p) => p.itemIds))]
     .map((id) => items.get(id)!)
-    .filter((it) => it && (it.alt || (it.pages !== false && !NO_PAGES.has(it.sourceId))) && !pageCache.has(it.id));
+    .filter((it) => it && (it.body || it.alt || (it.pages !== false && !NO_PAGES.has(it.sourceId))) && !pageCache.has(it.id));
   log(`reading ${toRead.length} article pages…`);
   await mapLimit(toRead, 8, async (it) => {
-    pageCache.set(it.id, await readPage(it.alt ?? it.link));
+    const page = it.body && it.pages === false ? { ok: false, status: 0 } : await readPage(it.alt ?? it.link);
+    // Full text that came with the item (the Guardian's API) beats a page we couldn't parse.
+    if (it.body && (page.text?.length ?? 0) < it.body.length * 0.8) {
+      Object.assign(page, { ok: true, text: it.body.length > 14_000 ? it.body.slice(0, 14_000) + " …" : it.body });
+    }
+    pageCache.set(it.id, page);
   });
   writeJson(pagesFile, Object.fromEntries(pageCache));
 
-  // 3b. Stories with fewer than two full texts to write from: find other outlets' reports of the
+  // 3b. Stories with fewer than three full texts to write from: find other outlets' reports of the
   // same event (pipeline/coverage.ts) and read those we may. Saved, so a re-run doesn't repeat it.
   let coverage = cached<{ items: FeedItem[]; added: Record<string, string[]> }>("coverage.json");
   if (!coverage) {
     coverage = { items: [], added: {} };
     const fullTexts = (p: SlatePick) => p.itemIds.filter((id) => (pageCache.get(id)?.text?.length ?? 0) >= 800).length;
-    const needMore = picks.filter((p) => fullTexts(p) < 2).slice(0, 45);
+    const needMore = picks.filter((p) => fullTexts(p) < 3);
     log(`searching for more coverage of ${needMore.length} stories…`);
     const stopAt = Date.now() + 12 * 60e3; // never let the search hold up the edition
     for (const p of needMore) {
@@ -218,7 +223,7 @@ async function main() {
       });
       for (const f of found) {
         coverage.items.push(f.item);
-        pageCache.set(f.item.id, pages.get(f.item.alt ?? f.item.link)!);
+        pageCache.set(f.item.id, pages.get(f.item.alt ?? f.item.link) ?? { ok: true, status: 200, text: f.text });
         (coverage.added[p.key] ??= []).push(f.item.id);
       }
     }
@@ -351,9 +356,11 @@ async function main() {
         developing: w.developing,
         image: img,
         video: v ? { youtubeId: v.youtubeId, title: v.title, channel: v.channel } : undefined,
+        // One entry per outlet: a second report from the same outlet is not a second source.
         sources: p.itemIds
           .map((id) => items.get(id))
           .filter((x): x is FeedItem => !!x)
+          .filter((x, i, all) => all.findIndex((y) => canonicalOutlet(y.outlet) === canonicalOutlet(x.outlet)) === i)
           .map((x) => ({ outlet: canonicalOutlet(x.outlet), title: x.title, url: x.link, leaning: leaningFor(x.outlet) ?? x.leaning })),
         tags: w.tags,
         readingMinutes: Math.max(1, Math.round(words / 220)),

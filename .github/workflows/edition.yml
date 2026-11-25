@@ -44,7 +44,9 @@ jobs:
         env:
           A: ${{ secrets.ANTHROPIC_API_KEY }}
           C: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          G: ${{ secrets.GUARDIAN_API_KEY }}
         run: |
+          [ -n "$G" ] || echo "::warning::No GUARDIAN_API_KEY secret: the Guardian is read from RSS"
           [ -n "$A" ] || { echo "::error::Add the ANTHROPIC_API_KEY repo secret"; exit 1; }
           [ -n "$C" ] || { echo "::error::Add the CLOUDFLARE_API_TOKEN repo secret"; exit 1; }
           # Listing models is free and proves the Anthropic key works.
@@ -79,6 +81,9 @@ jobs:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           # Optional: TMDB key for film listings with TMDB's popularity instead of Wikipedia's.
           TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+          # The Guardian's Content API (free developer key): full text of its reports. Without it
+          # the Guardian is read from its RSS feeds.
+          GUARDIAN_API_KEY: ${{ secrets.GUARDIAN_API_KEY }}
           # Lifts GitHub's API rate limit for the "New on GitHub" list.
           GITHUB_TOKEN: ${{ github.token }}
           TZ: Asia/Kolkata

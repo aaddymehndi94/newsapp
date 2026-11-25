@@ -1,11 +1,11 @@
 // Finding the same story elsewhere. When the editor's sources for a story give the writer too
 // little to read (headline-only wire copy, outlets that bar AI readers), we look for other
 // outlets' reports of the same event: first in our own library (every recent item we gathered,
-// plus search-only news sitemaps), then through GDELT's free news search when it answers (it
-// asks for one request every five seconds and often refuses with 429). Only outlets we know,
-// only pages robots.txt allows, and only pages that are about the story.
+// plus search-only news sitemaps), then the Guardian's own search (full text comes with each
+// result), then GDELT's free news search when it answers (it asks for one request every five
+// seconds and often refuses with 429). Only outlets we know, and only reports about the story.
 import { type Leaning, outletInfo, leaningFor } from "../config/sources.ts";
-import type { FeedItem } from "./feeds.ts";
+import { type FeedItem, guardianTurn, parseGuardian } from "./feeds.ts";
 import { fetchText, hash, log } from "./util.ts";
 
 /** Outlets we accept from a search, by web address. Unknown sites are never used. */
@@ -41,10 +41,10 @@ export function outletForUrl(url: string): string | undefined {
 const STOP = new Set("a an the and or but of in on at to for from by with as is are was were be been may might will would can could should has have had its it this that these those after before over under into about amid against than then there their they he she his her who what when where why how not no new says said say also more most up out off all any just nearly remain remains likely despite first major ahead among during while being other still again today latest report reports update live amid over".split(" "));
 
 /**
- * Six search terms (GDELT needs all of them): names, acronyms and figures first (quoted), then
- * other long words. In a Title Case headline capitals say nothing, so only acronyms count there.
+ * Search terms, most distinctive first: names, acronyms and figures (quoted), then other long
+ * words. In a Title Case headline capitals say nothing, so only acronyms count there.
  */
-export function gdeltQuery(headline: string): string {
+export function searchTerms(headline: string): string[] {
   const words = headline.replace(/[‘’“”"'.,:;!?()[\]]/g, " ").split(/\s+/).filter(Boolean);
   const titleCase = words.filter((w) => /^[A-Z]/.test(w)).length > words.length * 0.6;
   const special: string[] = [];
@@ -57,15 +57,24 @@ export function gdeltQuery(headline: string): string {
     else if (/^[A-Z]{2,}$/.test(w) || (!titleCase && /^[A-Z][\p{L}-]{2,}$/u.test(w))) special.push(`"${w}"`);
     else if (w.length >= 5) plain.push(lw);
   }
-  const terms = [...special.slice(0, 4), ...plain].slice(0, 6);
-  return `${terms.join(" ")} sourcelang:english`;
+  return [...special.slice(0, 4), ...plain];
 }
 
+/** GDELT needs every term: six of them. */
+export const gdeltQuery = (headline: string) => `${searchTerms(headline).slice(0, 6).join(" ")} sourcelang:english`;
+
 /** Distinctive words of a headline: long words, figures and acronyms ("SIR", "MEA"). */
-const keyWords = (t: string) => [
-  ...t.toLowerCase().replace(/[^\p{L}\p{N} ]+/gu, " ").split(/\s+/).filter((w) => (w.length >= 4 || /^\d+$/.test(w)) && !STOP.has(w)),
-  ...(t.match(/\b[A-Z]{2,3}\b/g) ?? []).map((a) => a.toLowerCase()),
-];
+const keyWords = (t: string) =>
+  [
+    ...t.toLowerCase().replace(/(\d),(\d)/g, "$1$2").replace(/[^\p{L}\p{N} ]+/gu, " ").split(/\s+/).filter((w) => (w.length >= 4 || /^\d+$/.test(w)) && !STOP.has(w)),
+    ...(t.match(/\b[A-Z]{2,3}\b/g) ?? []).map((a) => a.toLowerCase()),
+  ].map((w) => (w.length > 4 && /[^s]s$/.test(w) ? w.slice(0, -1) : w)); // "tariffs" = "tariff"
+
+/** How many key words two headlines share. */
+export const sharedWords = (a: string, b: string) => {
+  const kb = new Set(keyWords(b));
+  return [...new Set(keyWords(a))].filter((w) => kb.has(w)).length;
+};
 
 /** Whether a page is about this story: at least half of the headline's key words (and two) appear. */
 export function relevant(text: string, headline: string): boolean {
@@ -116,6 +125,22 @@ async function gdelt(query: string): Promise<{ url: string; title: string; seend
  * Other outlets' reports of a story, as items the writer can use. `have` holds the outlets the
  * story already uses; `read` fetches a page (it obeys robots.txt). At most `max` are returned.
  */
+/** The Guardian's reports from the last three days that use the headline's key words. */
+async function guardianSearch(headline: string, like: Pick<FeedItem, "region" | "sectionHint">): Promise<FeedItem[]> {
+  const key = process.env.GUARDIAN_API_KEY;
+  const words = [...new Set(searchTerms(headline))].slice(0, 3);
+  if (!key || words.length < 3) return [];
+  await guardianTurn();
+  const from = new Date(Date.now() - 3 * 86400_000).toISOString().slice(0, 10);
+  const q = encodeURIComponent(words.join(" AND "));
+  const r = await fetchText(
+    `https://content.guardianapis.com/search?q=${q}&from-date=${from}&order-by=relevance&page-size=3&show-fields=trailText,bodyText,thumbnail&api-key=${key}`,
+    { timeoutMs: 20_000, accept: "application/json" },
+  );
+  if (!r.ok) return [];
+  return parseGuardian(r.text, { id: "coverage-search", outlet: "The Guardian", url: "", region: like.region, section: like.sectionHint, leaning: "left" });
+}
+
 export async function findCoverage(
   headline: string,
   like: Pick<FeedItem, "region" | "sectionHint">,
@@ -135,6 +160,16 @@ export async function findCoverage(
     if (!text || text.length < 800 || !relevant(text, headline)) continue;
     seenOutlets.add(it.outlet);
     out.push({ text, item: { ...it, region: like.region, sectionHint: like.sectionHint } });
+  }
+  if (out.length < max && !seenOutlets.has("The Guardian")) {
+    // A report on the same event: not a live blog, a headline sharing two key words, text about it.
+    const g = (await guardianSearch(headline, like).catch(() => [])).find(
+      (it) => it.body && it.body.length >= 800 && !/\/live\//.test(it.link) && sharedWords(it.title, headline) >= 2 && relevant(it.body, headline),
+    );
+    if (g) {
+      seenOutlets.add(g.outlet);
+      out.push({ item: g, text: g.body!.slice(0, 14_000) });
+    }
   }
   if (out.length < max) for (const a of await gdelt(gdeltQuery(headline))) {
     if (out.length >= max || reads >= 6) break;
