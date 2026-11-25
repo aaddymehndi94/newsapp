@@ -143,3 +143,11 @@ tokens with the API's countTokens endpoint is free and allowed). Node 24:
 - Open for the owner: (1) strict robots option; (2) Guardian API key unused (terms); (3) GDELT
   answered "one request every 5 seconds" during testing even when paced: watch the run's log for
   "coverage search added N reports"; (4) newspaper4k/Readability extraction comparison.
+- 00:33 IST — 26 Nov edition made by run 45678395787 (success, deployed): 67 stories, $1.08,
+  141 feeds ok, 10,194 items seen, 119 pages read. No story led by a corroborate-tier outlet (TOI
+  was first on 14 stories the day before; now cited 4 times, never first). Four court stories in
+  India. Kolkata got 2 stories. New concentration: The Hindu first on 19/67 (28%), sole source on 8
+  — the part 2 owner cap (15%) is meant for this. Some stories list one outlet twice.
+- After the run, for 27 Nov: UNI wire, library search (+ Business Standard, Outlook, Deccan Herald
+  sitemaps), GDELT circuit breaker, TNM/Newslaundry sitemaps. Part 2 design drafted:
+  docs/superpowers/specs/2026-11-26-selection-design.md (needs approval).
