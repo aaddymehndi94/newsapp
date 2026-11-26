@@ -41,7 +41,9 @@ export function frontLayout(ed: Edition): { lead: Story[]; sections: RenderSecti
   let lead = ed.lead.map((id) => map.get(id)).filter((s): s is Story => Boolean(s) && !isCity(s!.section));
   if (lead.length === 0) lead = ranked.filter((s) => !isCity(s.section)).slice(0, 4);
   lead = lead.slice(0, 5);
-  const shown = new Set(lead.map((s) => s.id));
+  // The daily under-reported piece gets its own block after the top stories, shown to everyone.
+  const special = ranked.find((s) => s.special && !lead.includes(s));
+  const shown = new Set([...lead, ...(special ? [special] : [])].map((s) => s.id));
 
   const sections: RenderSection[] = ed.sections.map((sec) => {
     const stories: Story[] = [];
@@ -79,6 +81,7 @@ export function frontLayout(ed: Edition): { lead: Story[]; sections: RenderSecti
     return i < 0 ? SECTION_ORDER.length : i;
   };
   sections.sort((a, b) => order(a.id) - order(b.id));
+  if (special) sections.unshift({ id: "under-reported", name: "Under-reported", stories: [special] });
   if (more.length) sections.push({ id: "more", name: "More stories", stories: more });
   return { lead, sections: sections.filter((s) => s.stories.length > 0 || panelOf(ed, s.id)) };
 }
@@ -189,7 +192,7 @@ function sectionBlock(ed: Edition, sec: RenderSection): string {
   if (sec.groups) return citySection(ed, sec);
   const panel = panelOf(ed, sec.id);
   const stories = sec.stories.length ? storiesBlock(ed, sec) : "";
-  const count = sec.stories.length ? plural(sec.stories.length, "story", "stories") : panel ? `Updated ${istClock(panel.fetchedAt)}` : "";
+  const count = sec.id === "under-reported" ? "A story the big outlets haven’t run" : sec.stories.length ? plural(sec.stories.length, "story", "stories") : panel ? `Updated ${istClock(panel.fetchedAt)}` : "";
   const panelHtml = panel ? panel.html() : "";
   return `<section class="section" id="${esc(sec.id)}" aria-labelledby="h-${esc(sec.id)}">
 <header class="section-head">

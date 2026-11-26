@@ -289,7 +289,8 @@ export function cardMeta(story: Story, section?: string): string {
   if (section) parts.push(`<span class="meta-section">${esc(section)}</span>`);
   if (story.developing) parts.push(`<span class="developing"><i class="dot" aria-hidden="true"></i>Developing</span>`);
   const n = outletCount(story);
-  if (n > 0) parts.push(`<span>${plural(n, "outlet")}</span>`);
+  if (story.special) parts.push(`<span class="meta-special">${esc(story.special.label)}</span>`, `<span>Based on ${esc(story.special.basedOn.join(", "))}</span>`);
+  else if (n > 0) parts.push(`<span>${plural(n, "outlet")}</span>`);
   parts.push(`<span>${Math.max(1, Math.round(story.readingMinutes))} min read</span>`);
   return `<p class="meta">${parts.join("")}</p>`;
 }

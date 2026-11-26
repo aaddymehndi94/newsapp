@@ -71,6 +71,8 @@ export interface Story {
   readingGrade?: number;
   /** The daily under-reported piece: an analysis built on one outlet's reporting. */
   special?: { kind: "under-reported"; label: string; basedOn: string[] };
+  /** The under-reported piece: what we could not check ourselves. */
+  notChecked?: string;
   perspectives?: Perspective[];
   dateline?: string;
   developing?: boolean;

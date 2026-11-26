@@ -91,6 +91,18 @@ function disclosure(s: Story): string {
   return has(s.disclosure) ? `<p class="disclosure">${esc(s.disclosure)} <a href="/standards/">How we work</a></p>` : "";
 }
 
+/** The under-reported piece: whose reporting it rests on and what we could not check. */
+function analysisNote(s: Story): string {
+  if (!s.special) return "";
+  const src = s.sources[0];
+  const href = src ? safeHttpUrl(src.url) : null;
+  const outlets = s.special.basedOn.map(esc).join(", ");
+  return `<aside class="analysis-note" aria-label="About this story">
+<p><strong>${esc(s.special.label)}.</strong> A story the big outlets haven’t run, built on reporting by ${href ? `<a href="${esc(href)}" ${EXTERNAL}>${outlets}</a>` : outlets} and checked against it.</p>
+${has(s.notChecked) ? `<p>${esc(s.notChecked)}</p>` : ""}
+</aside>`;
+}
+
 function framing(s: Story): string {
   const ps = (s.perspectives ?? []).filter((p) => has(p.label) && has(p.summary));
   if (!ps.length) return "";
@@ -153,6 +165,7 @@ export function renderArticle(ed: Edition, s: Story, ctx: SiteCtx): string {
   const { next, more } = keepReading(ed, s);
   const metaParts = [
     `<span class="meta-section">${esc(sec)}</span>`,
+    s.special ? `<span class="meta-special">${esc(s.special.label)}</span>` : "",
     s.developing ? `<span class="developing"><i class="dot" aria-hidden="true"></i>Developing</span>` : "",
     has(s.dateline) ? `<span class="place">${esc(placeName(s.dateline))}</span>` : "",
     `<time datetime="${esc(ed.publishedAt)}">${esc(shortDate(ed.date))}, ${istClock(ed.publishedAt)}</time>`,
@@ -168,6 +181,7 @@ ${has(s.dek) ? `<p class="dek">${esc(s.dek)}</p>` : ""}
 <p class="meta story-meta">${metaParts.join("")}</p>
 </header>
 <div class="story-grid">
+${analysisNote(s)}
 ${keyFacts(s)}
 ${storySoFar(s)}
 <div class="story-body">

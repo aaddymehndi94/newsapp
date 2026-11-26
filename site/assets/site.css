@@ -572,6 +572,15 @@ main:focus { outline: none; }
 .video-src .sep::before { content: "·"; margin: 0 6px; }
 
 .ctx { margin-top: 30px; }
+.meta-special { color: var(--accent); font-weight: 700; }
+.analysis-note {
+  margin: 20px 0 0; padding: 14px 18px;
+  border: 1px solid var(--rule-strong); border-radius: 12px;
+  font: 400 0.9375rem/1.5 var(--sans); color: var(--ink-2);
+}
+.analysis-note p + p { margin-top: 6px; }
+.analysis-note strong { color: var(--ink); }
+.analysis-note a { color: var(--accent); text-underline-offset: 2px; }
 .sofar {
   margin: 0 0 26px; padding: 18px 20px 4px;
   border: 1px solid var(--rule-strong); border-radius: 12px;

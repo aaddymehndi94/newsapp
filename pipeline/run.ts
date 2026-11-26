@@ -13,6 +13,7 @@ import { type WrittenStory, buildRevisionRequest, buildWriterRequest, sourceDocs
 import { CostMeter, type JsonResult, callJson, runBatch } from "./llm.ts";
 import { ABOUT_ANTHROPIC, DISCLOSURE, findAiTells, findCopyProblems, readingGrade } from "./style.ts";
 import { contextBlock, matchPast, pastStories, wikiLead } from "./context.ts";
+import { type UnderReported, underReported } from "./underreported.ts";
 import { type ImageCandidate, type StoryImage, chooseOutletImage, wikimediaImage } from "./images.ts";
 import { type VideoItem, gatherVideos } from "./videos.ts";
 import { gatherPanels } from "./panels/index.ts";
@@ -267,6 +268,26 @@ async function main() {
   picks = picks.filter((p) => material(p) >= 500);
   writeJson(pagesFile, Object.fromEntries(pageCache));
 
+  // 4a. The daily under-reported piece (part 4) runs alongside the writing. Saved, "none" too.
+  const urFile = path.join(WORK, "underreported.json");
+  const urSaved = cached<UnderReported | { none: true }>("underreported.json");
+  const urRun: Promise<UnderReported | undefined> = urSaved
+    ? Promise.resolve("none" in urSaved ? undefined : urSaved)
+    : underReported({
+        library: gathered.library ?? [],
+        picks,
+        items,
+        read: readPage,
+        meter,
+        batch: useBatch,
+        deadline: new Date(Math.max(publishAt.getTime() - 10 * 60e3, Date.now() + 40 * 60e3)),
+        workDir: WORK,
+        editionLabel,
+      }).then((r) => {
+        writeJson(urFile, r ?? { none: true });
+        return r;
+      });
+
   // 4. Write
   const storiesDir = path.join(WORK, "stories");
   fs.mkdirSync(storiesDir, { recursive: true });
@@ -381,6 +402,15 @@ async function main() {
   });
   writeJson(imagesFile, Object.fromEntries(images));
 
+  const ur = await urRun;
+  let urImage: StoryImage | undefined;
+  if (ur) {
+    const cands: ImageCandidate[] = [];
+    if (ur.page.ogImage) cands.push({ url: ur.page.ogImage, outlet: ur.item.outlet, sourceUrl: ur.item.link, declaredWidth: ur.page.ogImageWidth, from: "og" });
+    if (ur.item.image) cands.push({ url: ur.item.image, outlet: ur.item.outlet, sourceUrl: ur.item.link, from: "rss" });
+    urImage = (await chooseOutletImage(cands, ur.piece.imageAlt || ur.piece.headline)) ?? (await wikimediaImage(ur.piece.imageQuery, ur.piece.imageAlt || ur.piece.headline));
+  }
+
   // 7. Data panels (weather, markets, AI & software lists, charts)
   let panels = cached<Panels>("panels.json");
   if (!panels) {
@@ -433,8 +463,43 @@ async function main() {
           .map((x) => ({ outlet: canonicalOutlet(x.outlet), title: x.title, url: x.link, leaning: leaningFor(x.outlet) ?? x.leaning })),
         tags: w.tags,
         readingMinutes: Math.max(1, Math.round(words / 220)),
+        special: undefined as { kind: "under-reported"; label: string; basedOn: string[] } | undefined,
+        notChecked: undefined as string | undefined,
       };
     });
+  if (ur) {
+    const w = ur.piece;
+    let id = slugify(w.headline);
+    while (usedSlugs.has(id)) id += "-2";
+    const outlet = canonicalOutlet(ur.item.outlet);
+    stories.push({
+      id,
+      key: "under-reported",
+      section: ur.section,
+      rank: stories.length + 1,
+      lead: false,
+      headline: w.headline,
+      dek: w.dek,
+      summary: w.summary,
+      body: w.body,
+      keyFacts: w.keyFacts,
+      background: w.background,
+      storySoFar: false,
+      whatNext: w.whatNext,
+      disclosure: undefined,
+      readingGrade: readingGrade(w.body.join(" ")),
+      perspectives: [],
+      dateline: w.dateline,
+      developing: false,
+      image: urImage,
+      video: undefined,
+      sources: [{ outlet, title: ur.item.title, url: ur.item.link, leaning: leaningFor(ur.item.outlet) ?? ur.item.leaning }],
+      tags: w.tags,
+      readingMinutes: Math.max(1, Math.round(w.body.join(" ").split(/\s+/).length / 220)),
+      special: { kind: "under-reported", label: "Measured Edition analysis", basedOn: [outlet] },
+      notChecked: w.notChecked,
+    });
+  }
 
   const lead = stories.filter((s) => s.lead).sort((a, b) => a.rank - b.rank).map((s) => s.id);
   const sections = SECTION_IDS.map((sid) => ({

@@ -400,3 +400,20 @@ test("Wikipedia leads: the first section's paragraphs without styles or referenc
   const past = [{ date: "2026-11-25", headline: "US set to announce new tariffs on India, China, EU and 13 other economies" }, { date: "2026-11-25", headline: "Heavy rain in Chennai" }];
   assert.deepEqual(matchPast("US proposes tariffs of up to 25% on India and 13 other economies", past).map((p) => p.headline), [past[0].headline]);
 });
+
+test("under-reported candidates: independent outlets' reports no mainstream outlet ran and the edition didn't pick", async () => {
+  const { findCandidates } = await import("../pipeline/underreported.ts");
+  const it = (id: string, outlet: string, title: string, link = `https://example.in/india/${id}`) =>
+    ({ id, outlet, title, link, summary: "", region: "india", sectionHint: "india", published: "2026-11-25T10:00:00Z" }) as FeedItem;
+  const library = [
+    it("w1", "The Wire", "RTI reply shows 40% of Bihar flood relief funds were never released to districts"),
+    it("w2", "Scroll", "Supreme Court asks Centre to explain delay in Great Nicobar forest clearance"),
+    it("h1", "The Hindu", "Supreme Court asks Centre to explain Great Nicobar forest clearance delay"),
+    it("w3", "The Quint", "Opinion: Why the flood relief debate misses the point entirely for Bihar"),
+    it("w4", "ThePrint", "Volume of EU legal text has more than doubled since 2010, study shows", "https://theprint.in/world/eu-legal-text/1/"),
+    it("w5", "LiveLaw", "Kerala High Court orders audit of temple board accounts after RTI disclosures"),
+  ];
+  const picks = [{ key: "k", workingHeadline: "Kerala High Court orders audit of temple board accounts", itemIds: ["x"] }] as never;
+  const ids = findCandidates(library, picks, new Map()).map((c) => c.item.id);
+  assert.deepEqual(ids, ["w1"], "w2 is in The Hindu, w3 is opinion, w4 is world news, w5 is already in the edition");
+});
