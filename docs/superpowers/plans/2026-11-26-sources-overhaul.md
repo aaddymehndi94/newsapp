@@ -113,7 +113,13 @@ tokens with the API's countTokens endpoint is free and allowed). Node 24:
 
 ## Results
 
-(fill in)
+- 26 Nov morning edition (run 45716286569, started 04:18 IST by a push because none of GitHub's
+  three scheduled starts had fired; still none by 05:50): 70 stories, $1.23, 162 of 179 feeds,
+  12,400 items, 194 pages read, 45 outlets cited, The Hindu first on 13 (was 19), no outlet twice
+  in a story. Every story has a picture.
+- From the laptop at 05:47 the same config reads 178 of 179 feeds (Bar & Bench's RSS has no items),
+  so about 16 feeds fail only on GitHub's runner. From 27 Nov the edition JSON lists them
+  (`stats.feedsFailed`), with the coverage search's additions (`stats.coverageAdded`).
 
 ## Progress
 
