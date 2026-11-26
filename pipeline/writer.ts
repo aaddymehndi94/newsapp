@@ -12,7 +12,9 @@ export interface WrittenStory {
   body: string[];
   keyFacts: string[];
   background: string;
-  whyItMatters: string;
+  /** Older stories only: folded into paragraph 2 since part 3. */
+  whyItMatters?: string;
+  whatNext: string;
   perspectives: { label: string; summary: string; outlets: string[] }[];
   dateline: string;
   developing: boolean;
@@ -25,7 +27,7 @@ export const STORY_SCHEMA = {
   type: "object",
   additionalProperties: false,
   required: [
-    "headline", "dek", "summary", "body", "keyFacts", "background", "whyItMatters",
+    "headline", "dek", "summary", "body", "keyFacts", "background", "whatNext",
     "perspectives", "dateline", "developing", "tags", "imageQuery", "imageAlt",
   ],
   properties: {
@@ -35,7 +37,7 @@ export const STORY_SCHEMA = {
     body: { type: "array", items: { type: "string" } },
     keyFacts: { type: "array", items: { type: "string" } },
     background: { type: "string" },
-    whyItMatters: { type: "string" },
+    whatNext: { type: "string" },
     perspectives: {
       type: "array",
       items: {
@@ -75,7 +77,7 @@ export function sourceDocs(pick: SlatePick, items: Map<string, FeedItem>, pages:
     docs.push(
       `<source n="${i + 1}" outlet="${it.outlet}" leaning="${it.leaning}" published="${it.published ?? "unknown"}">
 TITLE: ${it.title}
-${summary ? `SUMMARY: ${summary}\n` : ""}${text ? `TEXT:\n${text}` : "(full text not available — headline/summary only)"}
+${summary ? `SUMMARY: ${summary}\n` : ""}${text ? `TEXT:\n${text}` : "(headline and summary only)"}
 </source>`,
     );
   });
@@ -97,17 +99,17 @@ export function storyCustomId(key: string): string {
   return `story_${key}`.slice(0, 64);
 }
 
-export function buildWriterRequest(pick: SlatePick, docs: string, editionLabel: string): JsonRequest {
+export function buildWriterRequest(pick: SlatePick, docs: string, editionLabel: string, context = ""): JsonRequest {
   const user = `ASSIGNMENT
 Edition: ${editionLabel} (India Standard Time)
 Section: ${SECTION_NAMES[pick.section]}
 Working headline: ${pick.workingHeadline}
 Angle: ${pick.angle}
-contested=${pick.contested}${SECTION_NOTES[pick.section] ? `\nSection note: ${SECTION_NOTES[pick.section]}` : ""}
+contested=${pick.contested}${pick.saga ? `\nRunning story (${pick.saga}): write background as "The story so far".` : ""}${SECTION_NOTES[pick.section] ? `\nSection note: ${SECTION_NOTES[pick.section]}` : ""}
 
 SOURCE MATERIAL
 ${docs}
-
+${context ? `\nCONTEXT (for who's who and what came before only; never for facts about today's event)\n${context}\n` : ""}
 Write the story.`;
   return {
     customId: storyCustomId(pick.key),
@@ -120,16 +122,16 @@ Write the story.`;
   };
 }
 
-export function buildRevisionRequest(pick: SlatePick, story: WrittenStory, tells: string[], docs: string, editionLabel: string): JsonRequest {
-  const base = buildWriterRequest(pick, docs, editionLabel);
+export function buildRevisionRequest(pick: SlatePick, story: WrittenStory, tells: string[], docs: string, editionLabel: string, context = ""): JsonRequest {
+  const base = buildWriterRequest(pick, docs, editionLabel, context);
   return {
     ...base,
     customId: `revise_${pick.key}`.slice(0, 64),
     effort: "low",
     user: `${base.user}
 
-A draft of this story was written, but an editor flagged wording that reads as machine-written or editorialising: ${tells.join("; ")}.
-Rewrite the affected sentences in plain, specific newsroom language (keep everything else the same unless it also breaks the style rules). Return the full corrected story.
+A draft of this story was written, but an editor flagged these problems: ${tells.join("; ")}.
+Fix them in plain, specific newsroom language (keep everything else the same unless it also breaks the style rules). Return the full corrected story.
 
 DRAFT
 ${JSON.stringify(story, null, 1)}`,
@@ -137,5 +139,5 @@ ${JSON.stringify(story, null, 1)}`,
 }
 
 export function storyText(s: WrittenStory): string {
-  return [s.dek, s.summary, ...s.body, s.background, s.whyItMatters, ...s.keyFacts].join("\n");
+  return [s.dek, s.summary, ...s.body, s.background, s.whatNext ?? "", s.whyItMatters ?? "", ...s.keyFacts].join("\n");
 }

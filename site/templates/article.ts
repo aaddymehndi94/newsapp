@@ -73,11 +73,22 @@ function video(s: Story): string {
 </figure>`;
 }
 
+/** On a running story: who's who and what came before, ahead of today's news. */
+function storySoFar(s: Story): string {
+  if (!s.storySoFar || !has(s.background)) return "";
+  return `<section class="sofar" aria-labelledby="sofar-h"><h2 class="box-title" id="sofar-h">The story so far</h2>${paragraphs(s.background)}</section>`;
+}
+
 function context(s: Story): string {
   const parts: string[] = [];
-  if (has(s.background)) parts.push(`<section class="ctx" aria-labelledby="bg-h"><h2 class="sub-title" id="bg-h">Background</h2>${paragraphs(s.background)}</section>`);
+  if (has(s.whatNext)) parts.push(`<section class="ctx" aria-labelledby="next-h"><h2 class="sub-title" id="next-h">What’s next</h2>${paragraphs(s.whatNext)}</section>`);
+  if (has(s.background) && !s.storySoFar) parts.push(`<section class="ctx" aria-labelledby="bg-h"><h2 class="sub-title" id="bg-h">Background</h2>${paragraphs(s.background)}</section>`);
   if (has(s.whyItMatters)) parts.push(`<section class="ctx" aria-labelledby="wim-h"><h2 class="sub-title" id="wim-h">Why it matters</h2>${paragraphs(s.whyItMatters)}</section>`);
   return parts.join("\n");
+}
+
+function disclosure(s: Story): string {
+  return has(s.disclosure) ? `<p class="disclosure">${esc(s.disclosure)} <a href="/standards/">How we work</a></p>` : "";
 }
 
 function framing(s: Story): string {
@@ -158,9 +169,11 @@ ${has(s.dek) ? `<p class="dek">${esc(s.dek)}</p>` : ""}
 </header>
 <div class="story-grid">
 ${keyFacts(s)}
+${storySoFar(s)}
 <div class="story-body">
 ${s.body.filter(has).map((p) => `<p>${inline(p)}</p>`).join("\n")}
 </div>
+${disclosure(s)}
 ${video(s)}
 ${context(s)}
 ${framing(s)}

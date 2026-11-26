@@ -140,12 +140,13 @@ function footer(ctx: SiteCtx): string {
 <div class="wrap foot-grid">
 <p class="foot-mark">Measured Edition</p>
 <div class="foot-note">
-<p>Stories on Measured Edition are written by AI from the reporting of the outlets credited on each story, and edited for balance across outlets of different leanings. Pictures belong to their credited owners and link to where they were published.</p>
+<p>Stories on Measured Edition are written and edited with Claude, an AI made by Anthropic, from the reporting of the outlets credited on each story, and balanced across outlets of different leanings. Pictures belong to their credited owners and link to where they were published.</p>
 <p>No ads and no cookies. We count visits with Cloudflare Web Analytics, which doesn’t identify you. Which stories you have read is remembered only in this browser.</p>
 </div>
 <nav class="foot-nav" aria-label="Site">
 <a href="/">Latest edition</a>
 <a href="/archive/">All editions</a>
+<a href="/standards/">How we work</a>
 </nav>
 </div>
 </footer>`;

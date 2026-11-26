@@ -55,7 +55,14 @@ export const StorySchema = z.looseObject({
   body: z.array(z.string()).default([]),
   keyFacts: z.array(z.string()).default([]),
   background: z.string().optional(),
+  storySoFar: z.boolean().optional().catch(undefined),
   whyItMatters: z.string().optional(),
+  whatNext: z.string().optional(),
+  disclosure: z.string().optional().catch(undefined),
+  special: z
+    .looseObject({ kind: z.literal("under-reported"), label: z.string().min(1), basedOn: z.array(z.string()).default([]) })
+    .optional()
+    .catch(undefined),
   perspectives: z.array(PerspectiveSchema).optional().catch(undefined),
   dateline: z.string().optional(),
   developing: z.boolean().optional(),

@@ -376,3 +376,27 @@ test("consistency check: stories that share an item are the same story", async (
   const o = overlap({ stories: [s(["a", "b"], true), s(["c"], true), s(["d"])] }, { stories: [s(["b", "z"], true), s(["c"]), s(["q"])] });
   assert.deepEqual(o, { leads: 1, leadsOf: 2, stories: 2, storiesOf: 3 });
 });
+
+test("copy checks: talk about sources, an outlet named over and over, copying, crowded figures", async () => {
+  const { findCopyProblems, copiedRuns, readingGrade } = await import("../pipeline/style.ts");
+  const src = "The court on Tuesday asked the state government to file a detailed report on the steps taken to protect the lake from encroachment before the next hearing in January";
+  assert.deepEqual(copiedRuns(`Judges asked the state government to file a detailed report on the steps taken to protect the lake from encroachment, officials said.`, [src]).length, 1);
+  assert.deepEqual(copiedRuns(`The judges told "the state government to file a detailed report on the steps taken" quickly.`, [src]), [], "quotes are the speaker's words");
+  const p = findCopyProblems("According to reports, the plan was approved. The Hindu said. The Hindu added. The Hindu noted. The Hindu said again.", [], ["The Hindu"]);
+  assert.ok(p.some((x) => x.startsWith("mentions the sources")) && p.some((x) => x.startsWith("names The Hindu 4 times")));
+  assert.ok(findCopyProblems("Prices rose 4.1% in 2024, 5.2% in 2025, 6.3% in 2026, 7 points and 8 states.", [], []).some((x) => x.startsWith("too many figures")));
+  assert.deepEqual(findCopyProblems("The minister said the plan would cost ₹400 crore.", [src], ["The Hindu"]), []);
+  assert.ok(readingGrade("The cat sat. The dog ran.") < 3 && readingGrade("Institutional constitutional considerations notwithstanding, administrative reorganisation necessitates deliberation.") > 14);
+});
+
+test("Wikipedia leads: the first section's paragraphs without styles or references; disambiguation pages give nothing", async () => {
+  const { wikiLeadFromHtml, matchPast } = await import("../pipeline/context.ts");
+  const page = `<div id="mw-content-text"><div class="mw-content-ltr mw-parser-output"><section id="mwAQ"><p class="mw-empty-elt"></p><table class="infobox"><tr><td>x</td></tr></table><p><b>Jane Doe</b> (<style>.x{font-size:85%}</style>born 1960) is an Indian politician who is the chief minister of Somewhere.<sup class="reference">[1]</sup></p><p>She leads the Example Party, which she founded in 1998 after leaving Congress.</p></section><section><h2>Early life</h2><p>Not this.</p></section></div></div>`;
+  const lead = wikiLeadFromHtml(page)!;
+  assert.match(lead, /^Jane Doe \(born 1960\) is an Indian politician/);
+  assert.match(lead, /Example Party/);
+  assert.doesNotMatch(lead, /font-size|\[1\]|Not this/);
+  assert.equal(wikiLeadFromHtml(`<div class="mw-parser-output"><p>Mercury may refer to: a planet, an element and many other things here.</p></div>`), undefined);
+  const past = [{ date: "2026-11-25", headline: "US set to announce new tariffs on India, China, EU and 13 other economies" }, { date: "2026-11-25", headline: "Heavy rain in Chennai" }];
+  assert.deepEqual(matchPast("US proposes tariffs of up to 25% on India and 13 other economies", past).map((p) => p.headline), [past[0].headline]);
+});

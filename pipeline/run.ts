@@ -11,7 +11,8 @@ import { type PageInfo, readPage } from "./enrich.ts";
 import { type Slate, type SlatePick, CITY_SECTIONS, SECTION_IDS, SECTION_NAMES, buildEditorRequest, cleanSlate, planEdition, unalias } from "./editor.ts";
 import { type WrittenStory, buildRevisionRequest, buildWriterRequest, sourceDocs, storyCustomId, storyText } from "./writer.ts";
 import { CostMeter, type JsonResult, callJson, runBatch } from "./llm.ts";
-import { findAiTells } from "./style.ts";
+import { ABOUT_ANTHROPIC, DISCLOSURE, findAiTells, findCopyProblems, readingGrade } from "./style.ts";
+import { contextBlock, matchPast, pastStories, wikiLead } from "./context.ts";
 import { type ImageCandidate, type StoryImage, chooseOutletImage, wikimediaImage } from "./images.ts";
 import { type VideoItem, gatherVideos } from "./videos.ts";
 import { gatherPanels } from "./panels/index.ts";
@@ -275,8 +276,26 @@ async function main() {
     if (s) written.set(p.key, s);
   }
   const docsFor = (p: SlatePick) => sourceDocs(p, items, pageCache);
+
+  // Context for who's who and what came before (part 3): our own stories from the last two weeks
+  // and the Wikipedia leads the editor asked for. Saved, so a re-run doesn't fetch them again.
+  const contextFile = path.join(WORK, "context.json");
+  const wiki = new Map<string, string>(Object.entries(readJson<Record<string, string>>(contextFile) ?? {}));
+  const names = [...new Set(picks.flatMap((p) => (p.contextNames ?? []).slice(0, 3)).map((n) => n.trim()).filter((n) => n && !wiki.has(n)))];
+  if (names.length) log(`reading ${names.length} Wikipedia leads for context…`);
+  await mapLimit(names, 4, async (n) => {
+    wiki.set(n, (await wikiLead(n).catch(() => undefined)) ?? "");
+  });
+  writeJson(contextFile, Object.fromEntries(wiki));
+  const past = pastStories(EDITIONS, date);
+  const contextFor = (p: SlatePick) =>
+    contextBlock(
+      matchPast(p.workingHeadline, past),
+      (p.contextNames ?? []).slice(0, 3).map((n) => ({ title: n.trim(), text: wiki.get(n.trim()) ?? "" })).filter((w) => w.text),
+    );
+
   const todo = picks.filter((p) => !written.has(p.key));
-  const reqs = todo.map((p) => buildWriterRequest(p, docsFor(p), editionLabel));
+  const reqs = todo.map((p) => buildWriterRequest(p, docsFor(p), editionLabel, contextFor(p)));
   log(`writing ${reqs.length} stories (${useBatch ? "batch" : "direct"})…`);
   let results: Map<string, JsonResult<WrittenStory>>;
   if (useBatch) {
@@ -300,22 +319,45 @@ async function main() {
   }
   log(`written ${written.size}/${picks.length}, cost so far $${meter.total.toFixed(3)}`);
 
-  // 5. Style check → one revision for stories with AI tells
-  const revise = picks.filter((p) => written.has(p.key) && findAiTells(storyText(written.get(p.key)!)).length > 0);
-  if (revise.length) log(`revising ${revise.length} stories for style…`);
-  await mapLimit(revise, 4, async (p) => {
-    const draft = written.get(p.key)!;
-    const tells = findAiTells(storyText(draft));
-    const r = await callJson<WrittenStory>(buildRevisionRequest(p, draft, tells, docsFor(p), editionLabel), meter);
-    if (r.ok) {
-      const left = findAiTells(storyText(r.data));
-      log(`revised ${p.key}: [${tells.join(", ")}] → [${left.join(", ")}]`);
-      if (left.length <= tells.length) {
-        written.set(p.key, r.data);
-        writeJson(path.join(storiesDir, `${p.key}.json`), r.data);
-      }
+  // 5. Style and copy checks → one revision for stories with problems (machine-sounding words,
+  // talk about sources, an outlet named over and over, copied wording, crowded figures). At most
+  // 25 a day, the worst first, so a bad day can't double the bill.
+  const problems = (p: SlatePick, w: WrittenStory) => {
+    const srcs = p.itemIds.map((id) => pageCache.get(id)?.text ?? "").filter(Boolean);
+    const outlets = p.itemIds.map((id) => canonicalOutlet(items.get(id)?.outlet ?? "")).filter(Boolean);
+    return [...findAiTells(storyText(w)), ...findCopyProblems(w.body.join("\n"), srcs, outlets)];
+  };
+  const flagged = picks
+    .filter((p) => written.has(p.key) && !fs.existsSync(path.join(storiesDir, `${p.key}.revised`)))
+    .map((p) => ({ p, tells: problems(p, written.get(p.key)!) }))
+    .filter((x) => x.tells.length)
+    .sort((a, b) => b.tells.length - a.tells.length);
+  const revise = flagged.slice(0, 25);
+  if (flagged.length) log(`revising ${revise.length} of ${flagged.length} stories with style or copy problems…`);
+  const revReqs = revise.map(({ p, tells }) => buildRevisionRequest(p, written.get(p.key)!, tells, docsFor(p), editionLabel, contextFor(p)));
+  let revised: Map<string, JsonResult<WrittenStory>>;
+  if (useBatch && revReqs.length) {
+    revised = await runBatch<WrittenStory>(revReqs, meter, {
+      deadline: new Date(Math.max(publishAt.getTime() - 5 * 60e3, Date.now() + 30 * 60e3)),
+      stateFile: path.join(WORK, "batch-revise.json"),
+    });
+  } else {
+    revised = new Map();
+    await mapLimit(revReqs, 4, async (r) => {
+      revised.set(r.customId, await callJson<WrittenStory>(r, meter));
+    });
+  }
+  for (const [i, { p, tells }] of revise.entries()) {
+    const r = revised.get(revReqs[i].customId);
+    if (!r?.ok) continue;
+    const left = problems(p, r.data);
+    log(`revised ${p.key}: [${tells.join("; ")}] → [${left.join("; ")}]`);
+    fs.writeFileSync(path.join(storiesDir, `${p.key}.revised`), "");
+    if (left.length <= tells.length) {
+      written.set(p.key, r.data);
+      writeJson(path.join(storiesDir, `${p.key}.json`), r.data);
     }
-  });
+  }
 
   // 6. Pictures
   const imagesFile = path.join(WORK, "images.json");
@@ -355,7 +397,7 @@ async function main() {
       let id = slugify(w.headline);
       while (usedSlugs.has(id)) id += "-2";
       usedSlugs.add(id);
-      const words = [...w.body, w.background, w.whyItMatters].join(" ").split(/\s+/).length;
+      const words = [...w.body, w.background, w.whatNext ?? ""].join(" ").split(/\s+/).length;
       const v = p.videoId ? videoById.get(p.videoId) : undefined;
       const sourceUrls = new Set(p.itemIds.map((id) => items.get(id)?.link).filter(Boolean));
       // Writers are told links aren't needed; any that appear must point at one of this story's sources.
@@ -373,7 +415,11 @@ async function main() {
         body: w.body.map(unlink),
         keyFacts: w.keyFacts,
         background: w.background,
-        whyItMatters: w.whyItMatters,
+        // On a running story the background is "The story so far", shown before the body.
+        storySoFar: !!p.saga && !!w.background?.trim(),
+        whatNext: w.whatNext ?? "",
+        disclosure: ABOUT_ANTHROPIC.test(`${w.headline}\n${w.body.join("\n")}`) ? DISCLOSURE : undefined,
+        readingGrade: readingGrade(w.body.join(" ")),
         perspectives: p.contested && w.perspectives.length >= 2 ? w.perspectives : [],
         dateline: w.dateline,
         developing: w.developing,
@@ -416,6 +462,7 @@ async function main() {
       feedsTried: gathered.stats.feedsTried,
       feedsFailed: (gathered.stats.failed ?? []).map((f) => `${f.id} (${[f.status || "", f.note].filter(Boolean).join(" ")})`),
       windowHours: gathered.stats.windowHours,
+      readingGrade: Math.round((stories.reduce((n, s) => n + s.readingGrade, 0) / Math.max(1, stories.length)) * 10) / 10,
       coverageAdded: Object.fromEntries(picks.filter((p) => coverage.added[p.key]?.length).map((p) => [p.workingHeadline.slice(0, 80), coverage.added[p.key].map((id) => items.get(id)?.outlet ?? id)])),
     },
   };

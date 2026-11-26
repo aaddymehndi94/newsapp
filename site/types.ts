@@ -61,7 +61,16 @@ export interface Story {
   body: string[];
   keyFacts: string[];
   background?: string;
+  /** The background is "The story so far" on a running story, shown before the body. */
+  storySoFar?: boolean;
+  /** Older stories only (folded into paragraph 2 since 2026-11-26). */
   whyItMatters?: string;
+  whatNext?: string;
+  /** A note shown on stories about Anthropic, which makes the AI that writes this site. */
+  disclosure?: string;
+  readingGrade?: number;
+  /** The daily under-reported piece: an analysis built on one outlet's reporting. */
+  special?: { kind: "under-reported"; label: string; basedOn: string[] };
   perspectives?: Perspective[];
   dateline?: string;
   developing?: boolean;

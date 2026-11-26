@@ -14,6 +14,7 @@ import { parseEdition } from "./schema.ts";
 import { renderArticle } from "./templates/article.ts";
 import { renderArchive, renderNotFound } from "./templates/archive.ts";
 import { renderFront } from "./templates/front.ts";
+import { renderStandards } from "./templates/standards.ts";
 import type { SiteCtx } from "./templates/layout.ts";
 import { editionPath, esc, storyPath } from "./templates/helpers.ts";
 import { ANALYTICS_REPORT, ANALYTICS_SCRIPT, HEAD_SCRIPT, SITE_ORIGIN } from "./templates/layout.ts";
@@ -152,7 +153,7 @@ ${html}
 function sitemapFile(editions: Edition[], latest: Edition): string {
   const url = (p: string, ed: Edition) =>
     `  <url><loc>${esc(SITE_ORIGIN + p)}</loc><lastmod>${new Date(ed.publishedAt).toISOString()}</lastmod></url>`;
-  const urls = [url("/", latest), url("/archive/", latest)];
+  const urls = [url("/", latest), url("/archive/", latest), url("/standards/", latest)];
   for (const ed of editions) {
     if (ed.id !== latest.id) urls.push(url(editionPath(ed.id), ed));
     for (const s of ed.stories) urls.push(url(storyPath(ed.id, s.id), ed));
@@ -198,6 +199,7 @@ export async function buildSite(opts: BuildOptions): Promise<BuildResult> {
   }
   await put("index.html", renderFront(latest, ctx));
   await put(path.join("archive", "index.html"), renderArchive(ctx));
+  await put(path.join("standards", "index.html"), renderStandards(ctx));
   await put("404.html", renderNotFound(ctx));
   // Fixture builds (invented stories) stay out of search; real editions are open to it.
   const robots = sample ? "User-agent: *\nDisallow: /\n" : `User-agent: *\nAllow: /\n\nSitemap: ${SITE_ORIGIN}/sitemap.xml\n`;
