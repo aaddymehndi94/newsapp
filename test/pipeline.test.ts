@@ -316,3 +316,63 @@ test("no owner is the first source of more than about one story in seven when ot
   assert.equal(firsts, "hhhttthhhh");
   assert.deepEqual((stories as { itemIds: string[] }[])[3].itemIds, ["t3", "h3", "x3"]);
 });
+
+test("events: reports of one event group together; loose links and stock words don't chain stories", async () => {
+  const { groupEvents } = await import("../pipeline/events.ts");
+  const t = "2026-11-25T10:00:00Z";
+  const it = (id: string, outlet: string, title: string) => ({ id, outlet, title, published: t, region: "india", sectionHint: "india", owner: outlet }) as FeedItem;
+  const filler = Array.from({ length: 30 }, (_, i) => it(`f${i}`, `Paper${i}`, `Unrelated report number ${i} about topic${i} and thing${i}`));
+  const ev = groupEvents([
+    it("a", "The Hindu", "Supreme Court agrees to hear contempt plea against Tamil Nadu over Deepam row"),
+    it("b", "Hindustan Times", "SC to hear contempt plea against Tamil Nadu govt in Deepam row"),
+    it("c", "Business Standard", "Deepam row: SC agrees to hear contempt plea against Tamil Nadu"),
+    it("d", "The Hindu", "Farmer found dead near Katpadi"),
+    it("e", "NDTV", "Border Security Force Constable Missing Near Bangladesh Border Found Dead"),
+    it("p1", "Press Trust of India", "Kerala govt assures HC on MSC Elsa-3 wreck"),
+    it("p2", "Press Trust of India", "Kerala govt assures HC on MSC Elsa-3 wreck"),
+    ...filler,
+  ]);
+  const of = (id: string) => ev.find((e) => e.items.some((x) => x.id === id))!;
+  assert.deepEqual(of("a").items.map((x) => x.id).sort(), ["a", "b", "c"]);
+  assert.equal(of("a").outlets, 3);
+  assert.equal(of("d").items.length, 1, "stock words (found, dead, near) are not a match");
+  assert.equal(ev.filter((e) => e.items.some((x) => x.id.startsWith("p"))).flatMap((e) => e.items).length, 1, "one copy of a repeated headline");
+});
+
+test("selection: scores rank the edition, sections stay in range, two per saga, accountability floor", async () => {
+  const { selectStories, RANGES } = await import("../pipeline/editor.ts");
+  const items = new Map<string, FeedItem>();
+  let n = 0;
+  const cand = (section: string, total: number, extra: Record<string, unknown> = {}) => {
+    const id = `x${n++}`;
+    items.set(id, { id, outlet: `O${n}`, owner: `O${n}`, tier: "core" } as FeedItem);
+    const q = Math.floor(total / 4);
+    const scores = { consequence: q + (total % 4 > 0 ? 1 : 0), india: q + (total % 4 > 1 ? 1 : 0), newness: q + (total % 4 > 2 ? 1 : 0), publicInterest: q };
+    return { key: id, section, rank: n, lead: false, workingHeadline: id, angle: "", itemIds: [id], contested: false, videoId: "", scores, underCovered: false, saga: "", beat: "other", beyondMetros: false, contextNames: [], ...extra } as never;
+  };
+  const cands = [
+    ...Array.from({ length: 14 }, (_, i) => cand("india", 11 - (i % 6))),
+    ...Array.from({ length: 3 }, () => cand("world", 12, { saga: "iran-war" })),
+    ...Array.from({ length: 9 }, () => cand("world", 6)),
+    cand("india", 2, { beat: "court", beyondMetros: true }),
+    cand("india", 1, { beat: "rights" }),
+    cand("india", 0, { beat: "press-freedom" }),
+    ...Array.from({ length: 3 }, () => cand("sports", 3)),
+  ];
+  const { stories, reserves } = selectStories(cands, items);
+  const count = (sec: string) => stories.filter((s) => s.section === sec).length;
+  assert.ok(count("india") <= RANGES.india[1], `india ${count("india")}`);
+  assert.equal(stories.filter((s) => s.saga === "iran-war").length, 2);
+  assert.ok(stories.some((s) => s.beat === "court") && stories.some((s) => s.beat === "rights") && stories.some((s) => s.beat === "press-freedom"));
+  assert.equal(count("sports"), 3, "low scores still fill a section's minimum");
+  assert.ok(reserves.length > 0 && reserves.every((r) => !stories.includes(r)));
+  const totals = stories.filter((s) => s.section === "world").map((s) => s.scores!.consequence + s.scores!.india + s.scores!.newness + s.scores!.publicInterest);
+  assert.deepEqual(totals, [...totals].sort((a, b) => b - a), "best first");
+});
+
+test("consistency check: stories that share an item are the same story", async () => {
+  const { overlap } = await import("../pipeline/consistency.ts");
+  const s = (ids: string[], lead = false) => ({ key: ids[0], itemIds: ids, lead }) as never;
+  const o = overlap({ stories: [s(["a", "b"], true), s(["c"], true), s(["d"])] }, { stories: [s(["b", "z"], true), s(["c"]), s(["q"])] });
+  assert.deepEqual(o, { leads: 1, leadsOf: 2, stories: 2, storiesOf: 3 });
+});

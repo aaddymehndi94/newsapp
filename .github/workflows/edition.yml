@@ -105,3 +105,20 @@ jobs:
           git commit -m "Edition $(TZ=Asia/Kolkata date +%F-%H%M)" || exit 0
           git pull --rebase --autostash origin main
           git push
+      # Sundays: run the editor a second time on the same menu and record how far the two choices
+      # agree (docs/superpowers/specs/2026-11-26-selection-design.md). About $0.25; never fails the run.
+      - name: Weekly consistency check
+        if: ${{ !inputs.test_only && steps.done.outputs.skip != 'true' }}
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TZ: Asia/Kolkata
+        run: |
+          [ "$(date +%u)" = 7 ] || exit 0
+          ed=$(ls data/work | grep "^$(date +%F)-" | head -1)
+          [ -n "$ed" ] || exit 0
+          node pipeline/consistency.ts --edition "$ed" --batch
+          git add data/consistency
+          git commit -m "Consistency check $ed" || exit 0
+          git pull --rebase --autostash origin main
+          git push

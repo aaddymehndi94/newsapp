@@ -163,7 +163,11 @@ async function main() {
     writeJson(path.join(WORK, "slate.raw.json"), res.data);
     slate = cleanSlate(unalias(res.data, aliases), items, new Set(videoById.keys()));
     writeJson(path.join(WORK, "slate.json"), slate);
-    log(`editor: ${slate.stories.length} stories, cost so far $${meter.total.toFixed(3)}`);
+    log(`editor: ${res.data.stories.length} candidates, ${slate.stories.length} chosen, ${slate.reserves?.length ?? 0} reserves, cost so far $${meter.total.toFixed(3)}`);
+    const chosen = slate.stories;
+    log(`sections: ${SECTION_IDS.map((sid) => `${sid} ${chosen.filter((s) => s.section === sid).length}`).join(", ")}`);
+    const acc = chosen.filter((s) => s.beat && s.beat !== "other").map((s) => `${s.key} (${s.beat}${s.beyondMetros ? ", beyond metros" : ""})`);
+    log(`accountability: ${acc.length ? acc.join(", ") : "none: the floor was not met"}`);
   }
   {
     // Visibility: contested stories whose sources all sit on one side of centre.
@@ -236,12 +240,31 @@ async function main() {
   const okPages = [...pageCache.values()].filter((p) => p.ok && p.text).length;
   log(`pages with text: ${okPages}/${pageCache.size}`);
 
-  // Drop stories whose material is too thin to write responsibly.
-  picks = picks.filter((p) => {
-    const material = p.itemIds.reduce((n, id) => n + (pageCache.get(id)?.text?.length ?? 0) + (items.get(id)?.summary.length ?? 0), 0);
-    if (material < 500) log(`dropping thin story ${p.key} (${material} chars of material)`);
-    return material >= 500;
-  });
+  // Drop stories whose material is too thin to write responsibly. A reserve from the same section
+  // takes the place of each: its pages are read first, and it must pass the same test.
+  const material = (p: SlatePick) => p.itemIds.reduce((n, id) => n + (pageCache.get(id)?.text?.length ?? 0) + (items.get(id)?.summary.length ?? 0), 0);
+  const reserves = [...(slate.reserves ?? [])];
+  for (const p of picks.filter((x) => material(x) < 500)) {
+    log(`dropping thin story ${p.key} (${material(p)} chars of material)`);
+    for (;;) {
+      const r = reserves.findIndex((x) => x.section === p.section);
+      if (r < 0) break;
+      const reserve = reserves.splice(r, 1)[0];
+      const unread = reserve.itemIds.map((id) => items.get(id)).filter((it): it is FeedItem => !!it && !pageCache.has(it.id) && !!(it.body || it.alt || (it.pages !== false && !NO_PAGES.has(it.sourceId))));
+      await mapLimit(unread, 4, async (it) => {
+        const page = it.body && it.pages === false ? { ok: false, status: 0 } : await readPage(it.alt ?? it.link);
+        if (it.body && (page.text?.length ?? 0) < it.body.length * 0.8) Object.assign(page, { ok: true, text: it.body.slice(0, 14_000) });
+        pageCache.set(it.id, page);
+      });
+      if (material(reserve) >= 500) {
+        log(`reserve ${reserve.key} replaces ${p.key}`);
+        picks[picks.indexOf(p)] = { ...reserve, rank: p.rank, lead: false };
+        break;
+      }
+    }
+  }
+  picks = picks.filter((p) => material(p) >= 500);
+  writeJson(pagesFile, Object.fromEntries(pageCache));
 
   // 4. Write
   const storiesDir = path.join(WORK, "stories");

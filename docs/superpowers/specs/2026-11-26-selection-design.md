@@ -1,6 +1,6 @@
 # Part 2: how stories are chosen — design for approval
 
-Status: **draft, waiting for the owner's approval.** Part 1 (sources) shipped on 2026-11-26.
+Status: **approved by the owner on 2026-11-26** ("i approve all parts"). Part 1 (sources) shipped on 2026-11-26.
 Evidence: `docs/retro/2026-11-25-editorial-retrospective.md` (selection desk findings).
 
 ## Why

@@ -64,7 +64,7 @@ export function searchTerms(headline: string): string[] {
 export const gdeltQuery = (headline: string) => `${searchTerms(headline).slice(0, 6).join(" ")} sourcelang:english`;
 
 /** Distinctive words of a headline: long words, figures and acronyms ("SIR", "MEA"). */
-const keyWords = (t: string) =>
+export const keyWords = (t: string) =>
   [
     ...t.toLowerCase().replace(/(\d),(\d)/g, "$1$2").replace(/[^\p{L}\p{N} ]+/gu, " ").split(/\s+/).filter((w) => (w.length >= 4 || /^\d+$/.test(w)) && !STOP.has(w)),
     ...(t.match(/\b[A-Z]{2,3}\b/g) ?? []).map((a) => a.toLowerCase()),
