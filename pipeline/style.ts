@@ -75,7 +75,7 @@ Balance
 - No adjectives that judge (shocking, controversial, historic, landmark, brutal, stunning) unless inside a quote.
 
 Shape
-- First paragraph: the single most important new fact — who did what, where, when — in one sentence of 20–30 words.
+- First paragraph: the single most important new fact — who did what, where, when — in one sentence of 20–30 words. Count them: never more than 30. Details that don't fit go in later paragraphs.
 - Second paragraph: why it matters to a reader in India — who is affected and how, from the sources. Then the details that matter most, then reaction, then context.
 - Say who people are the first time they appear (post, party, organisation).
 - Plain sentences a 15-year-old could follow: mostly short, one idea each, everyday words; explain any technical or legal term in a few words.
@@ -138,7 +138,13 @@ export function findCopyProblems(body: string, sources: string[], outlets: strin
     if (o.length > 3 && count >= 4) found.push(`names ${o} ${count} times: attribute to the people who spoke`);
   }
   // Copying, not shared names: a run of 20+ words, or over a fifth of the story in runs of 8+.
-  const copied = copiedRuns(body, sources);
+  // A run that is mostly names, titles and figures ("a bench of Justices B V Nagarathna and…")
+  // can't be said another way; only prose counts.
+  const capital = new Set((unquoted.match(/(?<![.!?]\s)\b(\p{Lu}[\p{L}'’-]*|\d[\d,.]*)/gu) ?? []).map((w) => words(w)[0]).filter(Boolean));
+  const copied = copiedRuns(body, sources).filter((run) => {
+    const ws = run.split(" ");
+    return ws.filter((w) => capital.has(w)).length / ws.length < 0.4;
+  });
   const share = copied.reduce((n, c) => n + c.split(" ").length, 0) / Math.max(1, words(unquoted).length);
   const long = copied.filter((c) => c.split(" ").length >= 20);
   if (share > 0.2 || long.length) found.push(`copies a source's wording (${(long.length ? long : copied).slice(0, 2).map((c) => `"${c}"`).join(", ")}): rewrite in your own words`);

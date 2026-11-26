@@ -125,7 +125,8 @@ export const SOURCES: Source[] = [
   { id: "bbc-india", outlet: "BBC News", url: "https://feeds.bbci.co.uk/news/world/asia/india/rss.xml", region: "india", section: "india", leaning: "centre-left" },
   // Courts.
   { id: "livelaw", outlet: "LiveLaw", url: "https://www.livelaw.in/google_feeds.xml", region: "india", section: "india", leaning: "centre" },
-  { id: "barandbench", outlet: "Bar & Bench", url: "https://www.barandbench.com/stories.rss", region: "india", section: "india", leaning: "centre" },
+  // Its RSS feed carries two items or none; the news sitemap has the day's ~50 news stories.
+  { id: "barandbench", outlet: "Bar & Bench", url: "https://www.barandbench.com/news_sitemap.xml", kind: "sitemap", path: /^\/news\//, region: "india", section: "india", leaning: "centre" },
   // Fact-checkers: what is being falsely claimed, and by whom.
   { id: "altnews", outlet: "Alt News", url: "https://www.altnews.in/feed/", region: "india", section: "india", leaning: "centre-left" },
   { id: "boom", outlet: "BOOM", url: "https://www.boomlive.in/google_feeds.xml", region: "india", section: "india", leaning: "centre" },

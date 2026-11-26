@@ -176,3 +176,13 @@ tokens with the API's countTokens endpoint is free and allowed). Node 24:
 - Open for the owner: GitHub's scheduled starts have now failed two mornings running (6h44m late
   on 25 Nov; not started 54 min after 03:37 on 26 Nov). Proposal: a Cloudflare Worker cron calls
   workflow_dispatch at 03:37; needs a fine-grained GitHub token (this repo, Actions: write).
+- 26 Nov, morning: the owner approved parts 2–4 ("i approve all parts. go ahead fixing
+  everything"). Built and tested the same day (commits 404454a, c75aa9a, 20f0b3a and the fixes
+  after the test). Test edition (10 stories, batch, not deployed, $0.77): editor 97 candidates →
+  68 chosen + 29 reserves, sections within range, 10 court/rights stories; one thin story replaced
+  by a reserve; context from 12 Wikipedia leads; 4 of 10 stories revised. The under-reported piece
+  first failed an over-strict fact-check, then (serious/minor grading) ran: South First's report
+  of three Srikakulam workers dying in a Hyderabad septic tank ($0.07). Ledes still 28–38 words
+  and reading grade 11.6 (targets 20–30 and 9–10): prompt tightened, watch tomorrow. Expected
+  daily cost about $1.70–1.80 (was $1.23): editor scoring +$0.14, revisions up to ~$0.30, the
+  under-reported piece ~$0.07. Bar & Bench moved from its near-empty RSS to its news sitemap.

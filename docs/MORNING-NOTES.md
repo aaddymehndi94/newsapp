@@ -29,11 +29,21 @@ Once a day (owner's choice from 2026-11-24). **GitHub Actions makes it, starting
    Press Journal, NIE…). Each outlet has an owner and a tier: the Times group, NDTV (Adani), News18
    (Reliance), Fox and the NY Post only corroborate, never lead a story; TOI shows at most 4 items
    per city. Each owner gets a budget per section, sampled across the whole window. Also 18 YouTube news channels for video, read through the YouTube Data API only when YOUTUBE_API_KEY is set (YouTube's robots.txt disallows its channel feeds).
-2. **Claude Opus 5.5** (editor) groups reports of the same event, picks a balanced slate with
-   section quotas, and assigns each story 2–6 sources from different outlets and leanings.
-3. **Claude Sonnet 5.5** (writer) writes each story in its own words from those sources, under a
-   wire-service style guide. A checker catches AI-sounding phrases ("amid", "underscores", …)
-   and sends those stories back for one rewrite.
+2. Code groups reports of the same event; **Claude Opus 5.5** (editor) scores each candidate story
+   (consequence, effect on India, newness, public interest) and assigns 2–6 sources from different
+   outlets and leanings. Code then chooses about 68 stories: best scores first, each section within
+   its range, at most two per running story, at least two court or rights stories (one from beyond
+   the big cities), no outlet first on more than ~15%. Unused candidates stand by as reserves for
+   stories that turn out too thin. On Sundays the editor runs twice to measure how stable it is.
+3. **Claude Sonnet 5.5** (writer) writes each story in its own words from those sources, with our
+   own earlier stories and Wikipedia's opening paragraphs for who's who. Short first paragraph, why
+   it matters in the second, "The story so far" on running stories, "What's next". Checks send
+   stories back for one rewrite (at most 25 a day) when they sound machine-written, talk about
+   their sources, copy wording or crowd figures. Stories about Anthropic carry a disclosure.
+   The rules are public at /standards/ ("How we work").
+3b. **The under-reported story:** from independent outlets' reports that no mainstream outlet ran,
+   Opus picks at most one (or none), Sonnet writes it and a fact-check compares it with its source.
+   It runs in its own block after the top stories, labelled "Measured Edition analysis".
 4. Picture: the best outlet photo, credited and linked, else a free Wikimedia Commons photo.
 5. Builds the static site and deploys it to your Cloudflare account (Workers, free plan).
 

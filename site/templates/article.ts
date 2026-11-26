@@ -167,7 +167,7 @@ export function renderArticle(ed: Edition, s: Story, ctx: SiteCtx): string {
     `<span class="meta-section">${esc(sec)}</span>`,
     s.special ? `<span class="meta-special">${esc(s.special.label)}</span>` : "",
     s.developing ? `<span class="developing"><i class="dot" aria-hidden="true"></i>Developing</span>` : "",
-    has(s.dateline) ? `<span class="place">${esc(placeName(s.dateline))}</span>` : "",
+    has(s.dateline) && placeName(s.dateline).toLowerCase() !== sec.toLowerCase() ? `<span class="place">${esc(placeName(s.dateline))}</span>` : "",
     `<time datetime="${esc(ed.publishedAt)}">${esc(shortDate(ed.date))}, ${istClock(ed.publishedAt)}</time>`,
     `<span>${Math.max(1, Math.round(s.readingMinutes))} min read</span>`,
   ].filter(Boolean);

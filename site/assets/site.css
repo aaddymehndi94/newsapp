@@ -672,7 +672,8 @@ a.source-title:hover { text-decoration-color: currentColor; }
 .ed-card .meta { margin-top: 4px; }
 .ed-lead { margin-top: 6px; font: 400 0.96875rem/1.45 var(--serif); color: var(--ink-2); }
 .notfound { padding: 40px 0 8px; }
-.standards { padding: 40px 0 16px; max-width: 46rem; }
+.standards { padding-top: 40px; padding-bottom: 16px; }
+.standards > * { max-width: 46rem; }
 .std-part { margin-top: 30px; }
 .std-part p { font: 400 1.09375rem/1.6 var(--serif); color: var(--ink); max-width: 68ch; }
 .std-part p + p { margin-top: 0.8em; }

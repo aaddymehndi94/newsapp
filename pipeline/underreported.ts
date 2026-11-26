@@ -130,12 +130,25 @@ const CHECK_SCHEMA = {
   properties: {
     unsupported: {
       type: "array",
-      items: { type: "object", additionalProperties: false, required: ["claim", "problem"], properties: { claim: { type: "string" }, problem: { type: "string" } } },
+      items: {
+        type: "object",
+        additionalProperties: false,
+        required: ["claim", "problem", "serious"],
+        properties: {
+          claim: { type: "string" },
+          problem: { type: "string" },
+          serious: { type: "boolean", description: "true for a wrong or unsupported fact about the story; false for an overstatement, a loose generalisation or a wording problem" },
+        },
+      },
     },
   },
 };
 
-const CHECK_SYSTEM = `You are Measured Edition's fact-checker. Compare a draft story with the one source it is built on. List every statement of fact in the draft (headline, dek, summary, body, key facts, background, what next) that the source does not support: a figure, name, date, quote or claim that is missing from the source, stated more strongly than the source states it, or presented as established when the source presents it as a claim. Wording differences are fine; meaning differences are not. An empty list means the draft is fully supported.`;
+const CHECK_SYSTEM = `You are Measured Edition's fact-checker. Compare a draft story with the one source it is built on. List every statement of fact in the draft (headline, dek, summary, body, key facts, background, what next) that the source does not support: a figure, name, date, quote or claim that is missing from the source, stated more strongly than the source states it, or presented as established when the source presents it as a claim. Wording differences are fine; meaning differences are not.
+
+Not problems: statements about the source itself that are true ("the report carries no response from the company"); a plain explanation of a general term ("suo motu, meaning on its own"); widely known facts about who someone is or what a body does, when they agree with the source.
+
+Mark each problem serious (a wrong or unsupported fact about the story: a figure, name, date, quote, allegation or finding) or not (an overstatement, a loose generalisation, a wording problem). An empty list means the draft is fully supported.`;
 
 export type Piece = Omit<WrittenStory, "perspectives" | "developing"> & { notChecked: string };
 
@@ -195,7 +208,7 @@ export async function underReported(opts: {
     const write = (extra = "", n = "write") =>
       ask<Piece>({ customId: `ur_${n}`, model: WRITER_MODEL, system: PIECE_SYSTEM, user: `${brief}${extra}\n\nWrite the piece.`, schema: PIECE_SCHEMA, effort: "medium", maxTokens: 12000 }, opts.meter, opts.batch, opts.deadline, state(n));
     const check = (p: Piece, n: string) =>
-      ask<{ unsupported: { claim: string; problem: string }[] }>(
+      ask<{ unsupported: { claim: string; problem: string; serious: boolean }[] }>(
         { customId: `ur_${n}`, model: WRITER_MODEL, system: CHECK_SYSTEM, user: `${source}\n\nDRAFT\n${JSON.stringify({ headline: p.headline, dek: p.dek, summary: p.summary, body: p.body, keyFacts: p.keyFacts, background: p.background, whatNext: p.whatNext }, null, 1)}\n\nList the unsupported statements.`, schema: CHECK_SCHEMA, effort: "medium", maxTokens: 8000 },
         opts.meter, opts.batch, opts.deadline, state(n),
       );
@@ -208,9 +221,12 @@ export async function underReported(opts: {
       draft = await write(`\n\nA fact-checker found these statements in your draft unsupported by the source. Remove or correct every one:\n${verdict.data.unsupported.map((u) => `- ${u.claim}: ${u.problem}`).join("\n")}\n\nDRAFT\n${JSON.stringify(draft.data, null, 1)}`, "revise");
       if (!draft.ok) return void log(`under-reported: revision failed (${draft.error})`);
       verdict = await check(draft.data, "recheck");
-      if (!verdict.ok || verdict.data.unsupported.length) {
-        return void log(`under-reported: still unsupported after revision (${verdict.ok ? verdict.data.unsupported.map((u) => u.claim).join("; ").slice(0, 200) : verdict.error}); none today`);
+      // Only a serious problem left after the revision stops the piece.
+      const serious = verdict.ok ? verdict.data.unsupported.filter((u) => u.serious) : [];
+      if (!verdict.ok || serious.length) {
+        return void log(`under-reported: still unsupported after revision (${verdict.ok ? serious.map((u) => u.claim).join("; ").slice(0, 200) : verdict.error}); none today`);
       }
+      if (verdict.data.unsupported.length) log(`under-reported: ${verdict.data.unsupported.length} minor points left (${verdict.data.unsupported.map((u) => u.problem).join("; ").slice(0, 200)})`);
     }
     log(`under-reported: "${draft.data.headline}" from ${outlet} (${triage.data.reason.slice(0, 120)})`);
     return { piece: draft.data, item: chosen.item, page, section: triage.data.section, reason: triage.data.reason };
