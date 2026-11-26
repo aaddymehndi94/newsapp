@@ -118,7 +118,7 @@ async function main() {
   log(`edition ${editionId} (${editionLabel}) batch=${useBatch} deploy=${deploy}`);
 
   // 1. Gather
-  let gathered = cached<{ items: FeedItem[]; library?: FeedItem[]; stats: { feedsTried: number; feedsOk: number; itemsSeen: number; gatheredAt?: string; windowHours?: number } }>("items.json");
+  let gathered = cached<{ items: FeedItem[]; library?: FeedItem[]; stats: { feedsTried: number; feedsOk: number; itemsSeen: number; gatheredAt?: string; windowHours?: number; failed?: { id: string; status: number; note: string }[] } }>("items.json");
   if (!gathered) {
     const gatheredAt = new Date().toISOString();
     const hours = windowHours(lastGather());
@@ -389,6 +389,11 @@ async function main() {
       itemsSeen: gathered.stats.itemsSeen,
       pagesRead: okPages,
       costUsd: Math.round(meter.total * 1000) / 1000,
+      // For the morning check: GitHub shows run logs only to signed-in accounts.
+      feedsTried: gathered.stats.feedsTried,
+      feedsFailed: (gathered.stats.failed ?? []).map((f) => `${f.id} (${[f.status || "", f.note].filter(Boolean).join(" ")})`),
+      windowHours: gathered.stats.windowHours,
+      coverageAdded: Object.fromEntries(picks.filter((p) => coverage.added[p.key]?.length).map((p) => [p.workingHeadline.slice(0, 80), coverage.added[p.key].map((id) => items.get(id)?.outlet ?? id)])),
     },
   };
   if (stories.length < 15 && !maxStories) throw new Error(`only ${stories.length} stories written — not publishing`);

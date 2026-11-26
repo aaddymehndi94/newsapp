@@ -86,7 +86,7 @@ export interface Edition {
   lead: string[];
   sections: EditionSection[];
   stories: Story[];
-  stats: { feedsScanned: number; itemsSeen: number; pagesRead: number; costUsd: number };
+  stats: { feedsScanned: number; itemsSeen: number; pagesRead: number; costUsd: number; feedsTried?: number; feedsFailed?: string[]; windowHours?: number; coverageAdded?: Record<string, string[]> };
   /** Data panels (weather, markets, tech lists, charts) shown inside their sections. */
   panels?: Panels;
   /** Fixtures only (not part of the pipeline contract): marks invented sample content. */
