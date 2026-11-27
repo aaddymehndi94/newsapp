@@ -1,0 +1,15 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  // Starts GitHub's Edition run on time (see index.ts). Deploy: npx wrangler deploy -c timer/wrangler.jsonc
+  "name": "measured-edition-timer",
+  "main": "index.ts",
+  "compatibility_date": "2026-11-01",
+  "account_id": "e73d65f54f3eff9b43128f8c7e6e4107",
+  "workers_dev": false,
+  "preview_urls": false,
+  "observability": { "enabled": true },
+  "triggers": {
+    // 03:37 IST, and 04:40 IST as a retry if the first run failed or never started.
+    "crons": ["7 22 * * *", "10 23 * * *"]
+  }
+}

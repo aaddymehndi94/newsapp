@@ -10,8 +10,9 @@ on:
   schedule:
     # One edition a day (owner's choice, 2026-11-24, to keep costs down), made only here: the
     # owner turned the laptop fallback off on 2026-11-25. GitHub can start scheduled jobs late
-    # (6h44m on 2026-11-25), so there are three start times; the first to run makes the edition
-    # and the others find it in the repo and stop before any paid step.
+    # (6h44m on 2026-11-25, about 6h on 26 and 27 Nov), so there are three start times; the first
+    # to run makes the edition and the others find it in the repo and stop before any paid step.
+    # A Cloudflare timer (timer/) also starts the run at 03:37 IST once it has a GitHub token.
     - cron: "7 22 * * *"    # 03:37 IST
     - cron: "47 22 * * *"   # 04:17 IST
     - cron: "27 23 * * *"   # 04:57 IST
@@ -54,10 +55,12 @@ jobs:
           [ "$code" = "200" ] || { echo "::error::ANTHROPIC_API_KEY was refused (HTTP $code)"; exit 1; }
       - uses: actions/checkout@v4
       # Never pay for a second edition in a day. A queued run's checkout can predate the run that
-      # just finished, so look at the branch as it is now, not at the checkout.
+      # just finished, so look at the branch as it is now, not at the checkout. Starts from the
+      # Cloudflare timer (timer/, workflow_dispatch) skip too; only a push of
+      # .github/remake-edition re-makes an edition that exists.
       - name: Skip if today's edition already exists
         id: done
-        if: ${{ github.event_name == 'schedule' }}
+        if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && !inputs.test_only) }}
         run: |
           today="$(TZ=Asia/Kolkata date +%F)"
           git fetch -q --depth=1 origin main

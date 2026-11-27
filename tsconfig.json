@@ -11,5 +11,5 @@
     "erasableSyntaxOnly": true,
     "types": ["node"]
   },
-  "include": ["pipeline", "site", "config", "scripts", "test"]
+  "include": ["pipeline", "site", "config", "scripts", "test", "timer"]
 }
